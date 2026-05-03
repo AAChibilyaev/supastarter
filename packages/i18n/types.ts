@@ -1,7 +1,22 @@
 import type mailMessages from "./translations/en/mail.json";
-import type marketingMessages from "./translations/en/marketing.json";
-import type saasMessages from "./translations/en/saas.json";
 import type sharedMessages from "./translations/en/shared.json";
+
+// saas split
+import type saasAdmin from "./translations/en/saas/admin.json";
+import type saasAuth from "./translations/en/saas/auth.json";
+import type saasCommon from "./translations/en/saas/common.json";
+import type saasOnboarding from "./translations/en/saas/onboarding.json";
+import type saasOrganizations from "./translations/en/saas/organizations.json";
+import type saasProduct from "./translations/en/saas/product.json";
+import type saasSearch from "./translations/en/saas/search.json";
+import type saasSettings from "./translations/en/saas/settings.json";
+
+// marketing split
+import type marketingCompare from "./translations/en/marketing/compare.json";
+import type marketingCore from "./translations/en/marketing/core.json";
+import type marketingFeatures from "./translations/en/marketing/features.json";
+import type marketingIntegrations from "./translations/en/marketing/integrations.json";
+import type marketingSolutions from "./translations/en/marketing/solutions.json";
 
 export interface LocaleDefinition {
 	/**
@@ -35,7 +50,22 @@ export interface I18nConfig {
 	localeCookieName: string;
 }
 
+type AllSaasMessages = typeof saasSearch &
+	typeof saasSettings &
+	typeof saasAdmin &
+	typeof saasOrganizations &
+	typeof saasAuth &
+	typeof saasOnboarding &
+	typeof saasProduct &
+	typeof saasCommon;
+
+type AllMarketingMessages = typeof marketingCore &
+	typeof marketingCompare &
+	typeof marketingFeatures &
+	typeof marketingIntegrations &
+	typeof marketingSolutions;
+
 export type SharedMessages = typeof sharedMessages;
-export type MarketingMessages = typeof marketingMessages & SharedMessages;
-export type SaasMessages = typeof saasMessages & SharedMessages;
+export type SaasMessages = AllSaasMessages & SharedMessages;
+export type MarketingMessages = AllMarketingMessages & SharedMessages;
 export type MailMessages = typeof mailMessages;

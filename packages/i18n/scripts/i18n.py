@@ -26,13 +26,45 @@ from pathlib import Path
 LOCALES = ["en", "de", "es", "fr", "ru"]
 SCOPES = ["saas", "marketing", "shared", "mail"]
 
+# Split file lists
+SAAS_FILES = ["search", "settings", "admin", "organizations", "auth", "onboarding", "product", "common"]
+MARKETING_FILES = ["core", "compare", "features", "integrations", "solutions"]
+
+# Map top-level key → split file name for saas
+_SAAS_KEY_GROUPS: dict[str, list[str]] = {
+    "search": ["search"],
+    "settings": ["settings"],
+    "admin": ["admin"],
+    "organizations": ["organizations"],
+    "auth": ["auth"],
+    "onboarding": ["onboarding", "choosePlan", "checkoutReturn", "start"],
+    "product": ["indexing", "mySearch", "widget", "sdks", "analytics", "feedback", "referral", "pricing"],
+    "common": ["app", "common", "nav", "notFound", "documentation"],
+}
+SAAS_KEY_FILE: dict[str, str] = {}
+for _fname, _keys in _SAAS_KEY_GROUPS.items():
+    for _k in _keys:
+        SAAS_KEY_FILE[_k] = _fname
+
+
+def _marketing_key_to_file(top_key: str) -> str:
+    if "compare" in top_key or "vsAlgolia" in top_key:
+        return "compare"
+    if top_key.startswith("features"):
+        return "features"
+    if top_key.startswith("integrations"):
+        return "integrations"
+    if top_key.startswith("solutions") or top_key.startswith("useCases"):
+        return "solutions"
+    return "core"
+
+
 def find_root() -> Path:
     """Find project root by locating packages/i18n."""
     here = Path(__file__).resolve().parent
     for candidate in [here.parent.parent.parent, here.parent.parent, here.parent]:
         if (candidate / "packages" / "i18n" / "translations").exists():
             return candidate
-    # fallback: use cwd
     cwd = Path(os.getcwd())
     if (cwd / "packages" / "i18n" / "translations").exists():
         return cwd
@@ -45,15 +77,53 @@ TRANSLATIONS = ROOT / "packages" / "i18n" / "translations"
 # ── JSON helpers ─────────────────────────────────────────────────────────────
 
 def load(locale: str, scope: str) -> dict:
+    if scope == "saas":
+        merged: dict = {}
+        for fname in SAAS_FILES:
+            path = TRANSLATIONS / locale / "saas" / f"{fname}.json"
+            with open(path, encoding="utf-8") as f:
+                merged.update(json.load(f))
+        return merged
+    if scope == "marketing":
+        merged = {}
+        for fname in MARKETING_FILES:
+            path = TRANSLATIONS / locale / "marketing" / f"{fname}.json"
+            with open(path, encoding="utf-8") as f:
+                merged.update(json.load(f))
+        return merged
     path = TRANSLATIONS / locale / f"{scope}.json"
     with open(path, encoding="utf-8") as f:
         return json.load(f)
 
+
 def save(data: dict, locale: str, scope: str) -> None:
+    if scope == "saas":
+        file_data: dict[str, dict] = {fname: {} for fname in SAAS_FILES}
+        for top_key, val in data.items():
+            fname = SAAS_KEY_FILE.get(top_key, "common")
+            file_data[fname][top_key] = val
+        for fname, chunk in file_data.items():
+            path = TRANSLATIONS / locale / "saas" / f"{fname}.json"
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(chunk, f, ensure_ascii=False, indent=2)
+                f.write("\n")
+        return
+    if scope == "marketing":
+        file_data = {fname: {} for fname in MARKETING_FILES}
+        for top_key, val in data.items():
+            fname = _marketing_key_to_file(top_key)
+            file_data[fname][top_key] = val
+        for fname, chunk in file_data.items():
+            path = TRANSLATIONS / locale / "marketing" / f"{fname}.json"
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(chunk, f, ensure_ascii=False, indent=2)
+                f.write("\n")
+        return
     path = TRANSLATIONS / locale / f"{scope}.json"
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent="\t")
         f.write("\n")
+
 
 def get_nested(obj: dict, key: str):
     """Get value by dot-path, returns None if missing."""
@@ -102,7 +172,6 @@ def list_keys(obj: dict, prefix: str = "") -> list[str]:
 # ── Commands ─────────────────────────────────────────────────────────────────
 
 def cmd_get(scope: str, key: str) -> None:
-    """Print value for key across all locales."""
     print(f"  key: {scope}.{key}\n")
     found = False
     for locale in LOCALES:
@@ -118,7 +187,6 @@ def cmd_get(scope: str, key: str) -> None:
 
 
 def cmd_set(scope: str, key: str, values: list[str]) -> None:
-    """Set key in all 5 locales."""
     if len(values) != 5:
         die(f"set requires exactly 5 values (en de es fr ru), got {len(values)}")
     for locale, val in zip(LOCALES, values):
@@ -130,7 +198,6 @@ def cmd_set(scope: str, key: str, values: list[str]) -> None:
 
 
 def cmd_del(scope: str, key: str) -> None:
-    """Delete key from all locales."""
     for locale in LOCALES:
         data = load(locale, scope)
         deleted = del_nested(data, key)
@@ -143,7 +210,6 @@ def cmd_del(scope: str, key: str) -> None:
 
 
 def cmd_ls(scope: str, prefix: str = "") -> None:
-    """List all keys (leaf paths) in en locale, optionally filtered by prefix."""
     data = load("en", scope)
     if prefix:
         sub = get_nested(data, prefix)
@@ -161,7 +227,6 @@ def cmd_ls(scope: str, prefix: str = "") -> None:
 
 
 def cmd_check(scope: str, prefix: str = "") -> None:
-    """Find keys missing in any locale."""
     en_data = load("en", scope)
     if prefix:
         sub = get_nested(en_data, prefix)
@@ -172,7 +237,7 @@ def cmd_check(scope: str, prefix: str = "") -> None:
         all_keys = list_keys(en_data)
 
     issues: dict[str, list[str]] = {}
-    for locale in LOCALES[1:]:  # skip en (source of truth)
+    for locale in LOCALES[1:]:
         data = load(locale, scope)
         for k in all_keys:
             if get_nested(data, k) is None:
@@ -191,7 +256,6 @@ def cmd_check(scope: str, prefix: str = "") -> None:
 
 
 def cmd_cp(src_scope: str, src_key: str, dst_scope: str, dst_key: str) -> None:
-    """Copy a key (or subtree) from one path to another across all locales."""
     for locale in LOCALES:
         src_data = load(locale, src_scope)
         val = get_nested(src_data, src_key)
@@ -205,7 +269,6 @@ def cmd_cp(src_scope: str, src_key: str, dst_scope: str, dst_key: str) -> None:
 
 
 def cmd_mv(scope: str, old_key: str, new_key: str) -> None:
-    """Rename a key across all locales (copy + delete)."""
     print(f"  Moving {scope}.{old_key} → {scope}.{new_key}\n")
     for locale in LOCALES:
         data = load(locale, scope)

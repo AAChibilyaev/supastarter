@@ -1,0 +1,152 @@
+{
+  "organizations": {
+    "createForm": {
+      "name": "Name der Organisation",
+      "notifications": {
+        "error": "Es tut uns leid, aber wir konnten deine Organisation nicht erstellen. Bitte versuche es spater noch einmal.",
+        "success": "Deine Organisation wurde erstellt. Du kannst nun Mitglieder einladen."
+      },
+      "submit": "Organisation erstellen",
+      "subtitle": "Gib einen Namen fur deine Organisation ein, um loszulegen. Du kannst den Namen spater in den Organisationseinstellungen andern.",
+      "title": "Erstelle eine Organisation"
+    },
+    "invitationAlert": {
+      "description": "Du bist eingeladen worden, einer Organisation beizutreten. Wenn du dich anmeldest oder registrierst, akzeptierst du automatisch die Einladung und trittst der Organisation bei.",
+      "title": "Einladung der Organisation annehmen"
+    },
+    "invitationModal": {
+      "accept": "Annehmen",
+      "decline": "Ablehnen",
+      "description": "Du wurdest eingeladen, der Organisation {organizationName} beizutreten. Mochtest du die Einladung annehmen und der Organisation beitreten?",
+      "title": "Organisation beitreten",
+      "error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "organizationSelect": {
+      "createNewOrganization": "Neue Organisation erstellen",
+      "organizations": "Organisationen",
+      "personalAccount": "Personliches Konto"
+    },
+    "organizationsGrid": {
+      "createNewOrganization": "Neue Organisation erstellen",
+      "title": "Deine Organisationen"
+    },
+    "roles": {
+      "admin": "Administration",
+      "member": "Mitglied",
+      "owner": "Eigentumer",
+      "viewer": "Betrachter"
+    },
+    "settings": {
+      "changeName": {
+        "title": "Name der Organisation"
+      },
+      "deleteOrganization": {
+        "confirmation": "Bist du sicher, dass du deine Organisation loschen mochtest?",
+        "description": "Losche deine Organisation dauerhaft. Sobald du deine Organisation geloscht hast, gibt es kein Zuruck mehr. Zur Bestatigung gib bitte unten dein Passwort ein:",
+        "submit": "Organisation loschen",
+        "title": "Organisation loschen"
+      },
+      "logo": {
+        "description": "Lade ein Logo fur deine Organisation hoch.",
+        "title": "Logo der Organisation"
+      },
+      "members": {
+        "activeMembers": "Aktive Mitglieder",
+        "description": "Sieh dir alle aktiven Mitglieder und die ausstehenden Einladungen deiner Organisation an.",
+        "invitations": {
+          "empty": "Es wurden noch keine Mitglieder eingeladen.",
+          "expiresAt": "Lauft am {date} ab",
+          "invitationStatus": {
+            "accepted": "Angenommen",
+            "canceled": "Abgebrochen",
+            "pending": "Ausstehend",
+            "rejected": "Abgelehnt"
+          },
+          "revoke": "Einladung widerrufen",
+          "resend": "Einladung erneut senden"
+        },
+        "inviteMember": {
+          "description": "Um ein neues Mitglied einzuladen, sende ihm eine Einladung.",
+          "email": "E-Mail",
+          "notifications": {
+            "error": {
+              "description": "Wir konnten das Mitglied nicht einladen. Bitte versuche es spater noch einmal.",
+              "title": "Mitglied konnte nicht eingeladen werden"
+            },
+            "success": {
+              "description": "Das Mitglied ist eingeladen worden.",
+              "title": "Eingeladenes Mitglied"
+            }
+          },
+          "role": "Rolle",
+          "submit": "Einladen",
+          "title": "Mitglied einladen"
+        },
+        "leaveOrganization": "Organisation verlassen",
+        "notifications": {
+          "removeMember": {
+            "error": {
+              "description": "Das Mitglied konnte nicht aus deiner Organisation entfernt werden. Bitte versuche es erneut."
+            },
+            "loading": {
+              "description": "Mitglied aus der Organisation entfernen..."
+            },
+            "success": {
+              "description": "Das Mitglied wurde erfolgreich aus deiner Organisation entfernt."
+            }
+          },
+          "revokeInvitation": {
+            "error": {
+              "description": "Die Einladung konnte nicht widerrufen werden. Bitte versuche es spater noch einmal."
+            },
+            "loading": {
+              "description": "Widerruf der Einladung..."
+            },
+            "success": {
+              "description": "Die Einladung ist widerrufen worden."
+            }
+          },
+          "updateMembership": {
+            "error": {
+              "description": "Die Mitgliedschaft in der Organisation konnte nicht aktualisiert werden. Bitte versuche es erneut."
+            },
+            "loading": {
+              "description": "Aktualisierung der Mitgliedschaft..."
+            },
+            "success": {
+              "description": "Die Mitgliedschaft wurde erfolgreich aktualisiert"
+            }
+          },
+          "resendInvitation": {
+            "error": {
+              "description": "Die Einladung konnte nicht gesendet werden. Bitte versuche es erneut."
+            },
+            "loading": {
+              "description": "Einladung erneut senden..."
+            },
+            "success": {
+              "description": "Einladung verschickt"
+            }
+          }
+        },
+        "pendingInvitations": "Ausstehende Einladungen",
+        "removeMember": "Mitglied entfernen",
+        "title": "Mitglieder"
+      },
+      "notifications": {
+        "organizationDeleted": "Deine Organisation wurde geloscht.",
+        "organizationNameNotUpdated": "Wir konnten den Namen deiner Organisation nicht aktualisieren. Bitte versuche es spater noch einmal.",
+        "organizationNameUpdated": "Der Name deiner Organisation wurde aktualisiert.",
+        "organizationNotDeleted": "Wir konnten deine Organisation nicht loschen. Bitte versuche es spater noch einmal."
+      },
+      "subtitle": "Verwalte die Einstellungen der Organisation.",
+      "title": "Organisation",
+      "dangerZone": {
+        "title": "Gefahrenzone"
+      }
+    },
+    "start": {
+      "subtitle": "Willkommen auf der Startseite dieser Organisation!"
+    }
+  }
+}

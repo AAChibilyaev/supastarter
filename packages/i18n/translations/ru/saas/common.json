@@ -1,0 +1,72 @@
+{
+  "app": {
+    "menu": {
+      "accountSettings": "Account settings",
+      "admin": "Admin",
+      "navigationTitle": "Menu",
+      "openNavigation": "Open navigation",
+      "organizationSettings": "Organization settings",
+      "search": "Search",
+      "mySearch": "Мой поиск",
+      "start": "Старт"
+    },
+    "userMenu": {
+      "accountSettings": "Account settings",
+      "colorMode": "Color mode",
+      "documentation": "Documentation",
+      "home": "Home",
+      "logout": "Logout"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "No notifications yet.",
+      "markAllRead": "Mark all as read",
+      "fallbackTitle": "Notification",
+      "aria": {
+        "open": "Open notifications"
+      }
+    }
+  },
+  "common": {
+    "confirmation": {
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "actions": {
+      "continue": "Continue",
+      "verify": "Verify"
+    },
+    "colorMode": {
+      "system": "Системная",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    },
+    "passwordCriteria": {
+      "minLength": "Min. 8 characters",
+      "upperAndLowercase": "Upper & lowercase",
+      "number": "Number",
+      "specialCharacter": "Special character"
+    },
+    "close": "Закрыть",
+    "clear": "Очистить",
+    "previous": "Назад",
+    "next": "Далее",
+    "loading": "Загрузка...",
+    "selected": "Выбрано"
+  },
+  "nav": {
+    "geoSearch": "Гео-поиск",
+    "federatedSearch": "Федеративный",
+    "settings": "Настройки",
+    "switchOrganization": "Сменить организацию"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "goToDashboard": "Go to dashboard",
+    "goToHomepage": "На главную"
+  },
+  "documentation": {
+    "title": "Documentation"
+  }
+}

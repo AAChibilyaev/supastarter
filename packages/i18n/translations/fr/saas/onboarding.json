@@ -1,0 +1,75 @@
+{
+  "onboarding": {
+    "account": {
+      "avatar": "Avatar",
+      "avatarDescription": "Cliquez sur le cercle ou déposez une image pour télécharger votre avatar.",
+      "name": "Nom"
+    },
+    "continue": "Continuer",
+    "message": "Quelques étapes rapides pour commencer.",
+    "notifications": {
+      "accountSetupFailed": "Nous sommes désolés, nous n'avons pas pu configurer votre compte. Veuillez réessayer plus tard."
+    },
+    "pricing": {
+      "planSelected": "Votre plan a été sélectionné avec succès.",
+      "skip": "Passer pour le moment"
+    },
+    "step": "Étape {step} / {total}",
+    "title": "Configurez votre compte",
+    "createIndex": {
+      "title": "Créez votre premier index de recherche",
+      "description": "Donnez un nom à votre index. Vous pourrez ajouter des documents et configurer le schéma ensuite.",
+      "nameLabel": "Nom de l'index",
+      "slugLabel": "Slug (identifiant URL)",
+      "slugHint": "Lettres minuscules, chiffres et tirets uniquement",
+      "submit": "Créer l'index",
+      "success": "Index créé avec succès.",
+      "error": "Impossible de créer l'index. Veuillez réessayer.",
+      "noOrg": "Veuillez créer une organisation avant de configurer un index de recherche."
+    },
+    "addDocuments": {
+      "title": "Importez vos premiers documents",
+      "description": "Collez un tableau JSON d'objets pour alimenter votre index. Vous pourrez importer plus de documents ensuite.",
+      "pasteLabel": "Documents (tableau JSON)",
+      "placeholder": "[{\"id\":\"1\",\"title\":\"Bonjour Monde\"}]",
+      "importButton": "Importer des documents",
+      "skip": "Ignorer pour l'instant",
+      "success": "Documents mis en file d'attente pour l'indexation.",
+      "parseError": "JSON invalide. Collez un tableau d'objets valide.",
+      "error": "Impossible d'importer les documents. Veuillez réessayer."
+    },
+    "installWidget": {
+      "title": "Intégrez le widget de recherche",
+      "description": "Copiez l'extrait ci-dessous et collez-le dans le HTML de votre site pour ajouter le widget.",
+      "snippetLabel": "Extrait du widget",
+      "copyButton": "Copier l'extrait",
+      "copied": "Extrait copié !",
+      "next": "Suivant",
+      "skip": "Ignorer pour l'instant"
+    },
+    "apiKey": {
+      "title": "Obtenez votre clé API",
+      "description": "Créez une clé API de recherche pour intégrer AACsearch dans votre application. Copiez-la — elle ne sera plus affichée.",
+      "createButton": "Créer une clé API",
+      "keyLabel": "Votre clé API (affichée une fois)",
+      "copyButton": "Copier la clé",
+      "copied": "Clé API copiée !",
+      "finish": "Aller au tableau de bord",
+      "error": "Impossible de créer la clé API. Veuillez réessayer.",
+      "keyName": "Clé d'intégration"
+    }
+  },
+  "choosePlan": {
+    "title": "Choisissez votre forfait",
+    "description": "Pour continuer, veuillez sélectionner un forfait."
+  },
+  "checkoutReturn": {
+    "title": "Traitement de votre achat",
+    "description": "Veuillez patienter pendant que nous confirmons votre paiement.",
+    "loading": "Confirmation de votre achat en cours, veuillez patienter..."
+  },
+  "start": {
+    "subtitle": "Consultez les dernières statistiques de votre entreprise.",
+    "welcome": "Bienvenue {name} !"
+  }
+}

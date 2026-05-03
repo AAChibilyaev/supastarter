@@ -1,0 +1,152 @@
+{
+  "organizations": {
+    "createForm": {
+      "name": "Nom de l'organisation",
+      "notifications": {
+        "error": "Nous sommes désolés, nous n'avons pas pu créer votre organisation. Veuillez réessayer plus tard.",
+        "success": "Votre organisation a été créée. Vous pouvez maintenant inviter des membres."
+      },
+      "submit": "Créer l'organisation",
+      "subtitle": "Entrez un nom pour votre organisation pour commencer. Vous pourrez modifier le nom plus tard dans les paramètres de l'organisation.",
+      "title": "Créer une organisation"
+    },
+    "invitationAlert": {
+      "description": "Vous devez vous connecter ou créer un compte pour rejoindre l'organisation.",
+      "title": "Vous avez été invité à rejoindre une organisation."
+    },
+    "invitationModal": {
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "description": "Vous avez été invité à rejoindre l'organisation {organizationName}. Souhaitez-vous accepter l'invitation et rejoindre l'organisation ?",
+      "title": "Rejoindre l'organisation",
+      "error": "Une erreur s'est produite. Veuillez réessayer."
+    },
+    "organizationSelect": {
+      "createNewOrganization": "Créer une nouvelle organisation",
+      "organizations": "Organisations",
+      "personalAccount": "Compte personnel"
+    },
+    "organizationsGrid": {
+      "createNewOrganization": "Créer une nouvelle organisation",
+      "title": "Vos organisations"
+    },
+    "roles": {
+      "admin": "Administrateur",
+      "member": "Membre",
+      "owner": "Propriétaire",
+      "viewer": "Observateur"
+    },
+    "settings": {
+      "changeName": {
+        "title": "Nom de l'organisation"
+      },
+      "deleteOrganization": {
+        "confirmation": "Êtes-vous sûr de vouloir supprimer votre organisation ?",
+        "description": "Supprimer définitivement votre organisation. Une fois supprimée, il n'y a pas de retour en arrière possible. Pour confirmer, veuillez entrer votre mot de passe ci-dessous :",
+        "submit": "Supprimer l'organisation",
+        "title": "Supprimer l'organisation"
+      },
+      "logo": {
+        "description": "Téléchargez un logo pour votre organisation.",
+        "title": "Logo de l'organisation"
+      },
+      "members": {
+        "activeMembers": "Membres actifs",
+        "description": "Consultez tous les membres actifs et les invitations en attente de votre organisation.",
+        "invitations": {
+          "empty": "Vous n'avez pas encore invité de membres.",
+          "expiresAt": "Expire le {date}",
+          "invitationStatus": {
+            "accepted": "Acceptée",
+            "canceled": "Annulée",
+            "pending": "En attente",
+            "rejected": "Refusée"
+          },
+          "revoke": "Révoquer l'invitation",
+          "resend": "Renvoyer l'invitation"
+        },
+        "inviteMember": {
+          "description": "Pour inviter un nouveau membre, envoyez-lui une invitation.",
+          "email": "E-mail",
+          "notifications": {
+            "error": {
+              "description": "Impossible d'inviter le membre. Veuillez réessayer plus tard.",
+              "title": "Impossible d'inviter le membre"
+            },
+            "success": {
+              "description": "Le membre a été invité.",
+              "title": "Membre invité"
+            }
+          },
+          "role": "Rôle",
+          "submit": "Inviter",
+          "title": "Inviter un membre"
+        },
+        "leaveOrganization": "Quitter l'organisation",
+        "notifications": {
+          "removeMember": {
+            "error": {
+              "description": "Impossible de retirer le membre de votre organisation. Veuillez réessayer."
+            },
+            "loading": {
+              "description": "Retrait du membre de l'organisation..."
+            },
+            "success": {
+              "description": "Le membre a été retiré avec succès de votre organisation."
+            }
+          },
+          "revokeInvitation": {
+            "error": {
+              "description": "L'invitation n'a pas pu être révoquée. Veuillez réessayer plus tard."
+            },
+            "loading": {
+              "description": "Révocation de l'invitation..."
+            },
+            "success": {
+              "description": "L'invitation a été révoquée."
+            }
+          },
+          "updateMembership": {
+            "error": {
+              "description": "Impossible de mettre à jour l'adhésion à l'organisation. Veuillez réessayer."
+            },
+            "loading": {
+              "description": "Mise à jour de l'adhésion..."
+            },
+            "success": {
+              "description": "L'adhésion a été mise à jour avec succès"
+            }
+          },
+          "resendInvitation": {
+            "loading": {
+              "description": "Renvoyant l'invitation..."
+            },
+            "success": {
+              "description": "Invitation envoyée"
+            },
+            "error": {
+              "description": "Impossible d'envoyer l'invitation. Veuillez réessayer."
+            }
+          }
+        },
+        "pendingInvitations": "Invitations en attente",
+        "removeMember": "Retirer le membre",
+        "title": "Membres"
+      },
+      "notifications": {
+        "organizationDeleted": "Votre organisation a été supprimée.",
+        "organizationNameNotUpdated": "Impossible de mettre à jour le nom de votre organisation. Veuillez réessayer plus tard.",
+        "organizationNameUpdated": "Le nom de votre organisation a été mis à jour.",
+        "organizationNotDeleted": "Impossible de supprimer votre organisation. Veuillez réessayer plus tard."
+      },
+      "subtitle": "Gérez les paramètres de l'organisation.",
+      "title": "Organisation",
+      "dangerZone": {
+        "title": "Zone de danger"
+      }
+    },
+    "start": {
+      "subtitle": "Bienvenue sur la page de démarrage de cette organisation !"
+    }
+  }
+}

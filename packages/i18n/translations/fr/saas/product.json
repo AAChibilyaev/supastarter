@@ -1,0 +1,372 @@
+{
+  "indexing": {
+    "dashboard": {
+      "title": "Gestion des index",
+      "subtitle": "Gérer l'indexation, la réindexation et la synchronisation pour cette collection",
+      "documents": "Documents",
+      "todaySearches": "Aujourd'hui",
+      "size": "Taille",
+      "avgLatency": "Latence moyenne",
+      "liveVersion": "Actif",
+      "indexHealth": "Santé de l'index",
+      "last7Days": "7 derniers jours",
+      "lastFullSync": "Dernière synchro complète",
+      "lastDeltaSync": "Dernière synchro delta",
+      "nextScheduled": "Prochaine planifiée",
+      "indexingProgress": "Progression de l'indexation",
+      "noData": "Aucune donnée d'indexation",
+      "backToCollection": "Retour à la collection"
+    },
+    "delta": {
+      "title": "Synchronisation Delta",
+      "syncNow": "Synchroniser maintenant",
+      "syncing": "Synchronisation...",
+      "confirmTitle": "Lancer la synchronisation delta?",
+      "confirmDescription": "Seuls les documents modifiés depuis la dernière synchronisation seront traités. Les données existantes seront mises à jour sans interruption.",
+      "confirm": "Lancer la synchronisation",
+      "cancel": "Annuler",
+      "lastSync": "Dernière synchronisation delta",
+      "neverSynced": "Jamais synchronisé",
+      "jobPending": "Synchronisation en attente...",
+      "jobRunning": "Synchronisation des documents...",
+      "jobCompleted": "Synchronisation terminée avec succès",
+      "jobFailed": "Échec de la synchronisation",
+      "progress": "{processed} sur {total} documents",
+      "noActiveJob": "Aucun travail de synchronisation actif",
+      "errorExists": "Une synchronisation est déjà en cours pour cette collection",
+      "errorGeneric": "Échec du démarrage de la synchronisation delta",
+      "processed": "Traité",
+      "upserted": "Mis à jour",
+      "deleted": "Supprimé",
+      "remaining": "Restant"
+    },
+    "reindex": {
+      "title": "Réindexation complète",
+      "description": "Déclencher une réindexation complète avec échange d'alias sans interruption. Tous les documents seront retraités via le pipeline d'indexation.",
+      "startReindex": "Lancer la réindexation",
+      "reindexing": "Réindexation en cours...",
+      "advancedOptions": "Options avancées",
+      "detectSchema": "Détecter automatiquement les changements de schéma",
+      "regenerateEmbeddings": "Régénérer les embeddings",
+      "aliasSwap": "Échange d'alias sans interruption",
+      "jobPending": "Réindexation en attente...",
+      "jobRunning": "Réindexation de {processed} sur {total} documents...",
+      "jobCompleted": "Réindexation terminée avec succès",
+      "jobFailed": "Réindexation échouée",
+      "noActiveJob": "Aucun travail de réindexation actif",
+      "errorExists": "Une réindexation est déjà en cours pour cette collection",
+      "errorSchemaRequired": "Le schéma d'index n'a pas de champs configurés",
+      "confirmTitle": "Lancer la réindexation complète ?",
+      "confirmDescription": "Cela créera une nouvelle version d'index, diffusera tous les documents et échangera les alias. Aucune interruption attendue.",
+      "confirm": "Oui, réindexer",
+      "cancel": "Annuler"
+    }
+  },
+  "mySearch": {
+    "title": "Ma Recherche",
+    "subtitle": "Votre espace de recherche personnel — téléchargez des documents, indexez des pages web et recherchez dans tous vos contenus.",
+    "noIndexes": "Aucun index de recherche",
+    "noIndexesDescription": "Créez votre premier index de recherche en téléchargeant des documents ou en ajoutant des URLs. Allez vite — aucune organisation nécessaire.",
+    "createIndex": "Créer un Index",
+    "createNewIndex": "Créer un Nouvel Index de Recherche",
+    "importFiles": "Importer des Fichiers",
+    "emptyStateTitle": "Créez votre premier index",
+    "createFromFiles": "Depuis Fichiers",
+    "createFromUrl": "Depuis URL",
+    "cancel": "Annuler",
+    "creating": "Création en cours...",
+    "indexCreated": "Index créé",
+    "indexCreateError": "Échec de la création de l'index",
+    "indexName": "Nom de l'index",
+    "indexNamePlaceholder": "ex. Mes Documents",
+    "indexSlug": "Slug de l'index",
+    "indexSlugPlaceholder": "ex. mes-documents",
+    "dropZoneLabel": "Zone de téléchargement",
+    "dropZoneText": "Déposez les fichiers ici ou cliquez pour télécharger",
+    "dropZoneFormats": "Pris en charge: PDF, DOCX, TXT, CSV, JSON, MD, EPUB",
+    "dropZoneLimits": "Jusqu'à 100MB par fichier, 1GB total (Free Tier)",
+    "fileTypeNotSupported": "Type de fichier non pris en charge",
+    "fileTooLarge": "Le fichier est trop volumineux (max 100MB)",
+    "totalTooLarge": "La taille totale dépasse la limite (max 1GB)",
+    "urlPlaceholder": "Collez une URL à indexer...",
+    "addUrl": "Ajouter une URL",
+    "urlInvalid": "Format d'URL invalide",
+    "urlInvalidProtocol": "Seules les URLs HTTP et HTTPS sont acceptées",
+    "selectedItems": "Éléments sélectionnés",
+    "uploading": "Téléchargement en cours...",
+    "uploaded": "Téléchargé",
+    "fetching": "Récupération en cours...",
+    "added": "Ajouté",
+    "uploadProgress": "Progression du téléchargement",
+    "estimatedTime": "Temps estimé: quelques secondes",
+    "completed": "Terminé",
+    "failed": "Échoué",
+    "files": {
+      "name": "Nom",
+      "type": "Type",
+      "size": "Taille",
+      "words": "Mots",
+      "uploaded": "Téléchargé",
+      "count": "{{count}} fichiers",
+      "empty": "Pas encore de fichiers. Téléchargez des documents pour commencer la recherche.",
+      "columns": "Colonnes",
+      "toggleColumns": "Afficher/Masquer les colonnes",
+      "delete": "Supprimer",
+      "deleteTitle": "Supprimer le fichier",
+      "deleteDescription": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible.",
+      "deleted": "{{name}} supprimé",
+      "deleteError": "Échec de la suppression du fichier",
+      "cancel": "Annuler",
+      "close": "Fermer",
+      "previewImage": "Cliquez pour ouvrir l'image dans un nouvel onglet",
+      "previewUrl": "Cliquez pour ouvrir la page web",
+      "previewGeneric": "L'aperçu n'est pas disponible pour ce type de fichier"
+    },
+    "searchIndex": "Search Index",
+    "searchPlaceholder": "Search across your documents...",
+    "searchInputLabel": "Search query",
+    "searchPrompt": "Type a query above to start searching.",
+    "noResults": "No results found. Try a different search term.",
+    "resultsCount": "{{count}} results found in {{time}}ms",
+    "filterByType": "Filter by file type",
+    "allTypes": "All types",
+    "score": "Relevance",
+    "openSource": "Open source",
+    "dateFrom": "Du",
+    "dateTo": "Au",
+    "crossSearch": "Recherche croisée",
+    "crossSearchDescription": "Recherchez dans tous vos index personnels à la fois"
+  },
+  "widget": {
+    "voiceDisabled": "La recherche vocale est désactivée",
+    "analyticsWidgetMetrics": "Performance du widget",
+    "analyticsWidgetDesc": "Métriques de recherche depuis l'installation du widget."
+  },
+  "sdks": {
+    "title": "SDKs et bibliothèques clientes",
+    "subtitle": "Installez les SDKs AACSearch dans votre langage préféré pour intégrer la recherche dans votre application.",
+    "install": "Installer",
+    "comingSoon": "Bientôt disponible",
+    "viewDocs": "Voir la doc",
+    "viewSource": "Voir le code",
+    "usageTitle": "Exemple rapide",
+    "usageDescription": "Commencez avec le SDK TypeScript en quelques lignes de code.",
+    "nav": "SDKs"
+  },
+  "analytics": {
+    "totalSearches": "Recherches totales",
+    "totalSessions": "Ouvertures du widget",
+    "ctr": "Taux de clics",
+    "noData": "Pas encore de données d'analyse"
+  },
+  "feedback": {
+    "nps": {
+      "title": "Quelle est la probabilité que vous recommandiez AACsearch ?",
+      "question": "Sur une échelle de 0 à 10, quelle est la probabilité que vous recommandiez AACsearch à un ami ou un collègue ?",
+      "notLikely": "Peu probable",
+      "extremelyLikely": "Extrêmement probable",
+      "followUp": {
+        "detractor": "Que pourrions-nous améliorer ?",
+        "passive": "Qu'est-ce qui vous empêche de nous recommander ?",
+        "promoter": "Qu'est-ce que vous aimez le plus ?"
+      },
+      "placeholder": "Vos commentaires nous aident à progresser...",
+      "submit": "Envoyer votre avis",
+      "dismiss": "Peut-être plus tard",
+      "thankYou": "Merci pour votre retour !",
+      "remindLater": "Me rappeler dans 3 mois"
+    },
+    "csat": {
+      "title": "Comment s'est passée votre expérience de support ?",
+      "question": "À quel point êtes-vous satisfait du support que vous avez reçu ?",
+      "veryDissatisfied": "Très insatisfait",
+      "dissatisfied": "Insatisfait",
+      "neutral": "Neutre",
+      "satisfied": "Satisfait",
+      "verySatisfied": "Très satisfait",
+      "submit": "Envoyer",
+      "thankYou": "Merci pour votre retour !",
+      "skip": "Passer"
+    },
+    "referral": {
+      "program": {
+        "title": "Programme de parrainage",
+        "description": "Invitez des amis et gagnez des crédits de recherche lorsqu'ils passent à une offre payante",
+        "shareLink": "Partager votre lien de parrainage",
+        "yourLink": "Votre lien de parrainage",
+        "copyLink": "Copier le lien",
+        "linkCopied": "Lien copié !",
+        "shareEmail": "Partager par e-mail",
+        "shareTwitter": "Partager sur X",
+        "stats": {
+          "clicks": "Clics",
+          "signups": "Inscriptions",
+          "conversions": "Conversions",
+          "earnings": "Gains",
+          "empty": "Partagez votre lien pour commencer à gagner des crédits"
+        },
+        "reward": "Gagnez 20 % de leur premier mois",
+        "rewardDescription": "Lorsqu'une personne que vous avez parrainée passe à un forfait payant, vous recevez 20 % de son premier mois crédités sur votre compte",
+        "fraudNote": "Maximum 5 parrainages par IP/domaine e-mail pour prévenir les abus",
+        "cta": "Invitez des amis → gagnez des crédits de recherche !",
+        "dashboardBanner": "Vous aimez AACsearch ? Partagez votre enthousiasme ! Parrainez un ami et gagnez 20 % de son premier mois."
+      },
+      "inviteEmail": {
+        "subject": "{name} pense que vous allez adorer AACsearch !",
+        "greeting": "Bonjour,",
+        "intro": "{name} utilise AACsearch et pense que vous allez l'adorer aussi !",
+        "valueProp": "Service de recherche instantané — la qualité Algolia à une fraction du coût.",
+        "giftNote": "Commencez gratuitement, aucune carte bancaire requise.",
+        "cta": "Commencez avec le parrainage de {name}",
+        "signoff": "Bonne recherche !\nL'équipe AACsearch"
+      },
+      "confirmationEmail": {
+        "subject": "Vous avez gagné des crédits de recherche !",
+        "body": "Une personne que vous avez parrainée vient de s'inscrire à AACsearch. Une fois son premier paiement effectué, vous recevrez 20 % crédités sur votre compte.",
+        "cta": "Voir votre tableau de bord de parrainage"
+      },
+      "landing": {
+        "title": "Vous avez été invité à rejoindre AACsearch",
+        "subtitle": "{name} utilise AACsearch et pense que vous allez l'adorer !",
+        "tagline": "Une recherche qui fonctionne — sans serveurs, sans DevOps.",
+        "features": {
+          "instant": "Configuration de recherche instantanée en 5 minutes",
+          "pricing": "Qualité Algolia, 5x moins cher",
+          "trial": "Essai gratuit de 14 jours, sans carte bancaire"
+        },
+        "cta": "Commencer gratuitement",
+        "socialProof": "Reconnu par plus de 100 entreprises dans le monde"
+      }
+    }
+  },
+  "referral": {
+    "program": {
+      "title": "Programme de Parrainage",
+      "description": "Invitez vos amis et gagnez des crédits de recherche lorsqu’ils passent à une offre payante",
+      "shareLink": "Partagez votre lien de parrainage",
+      "yourLink": "Votre lien de parrainage",
+      "copyLink": "Copier le lien",
+      "linkCopied": "Lien copié !",
+      "shareEmail": "Partager par e-mail",
+      "shareTwitter": "Partager sur X",
+      "stats": {
+        "clicks": "Clics",
+        "signups": "Inscriptions",
+        "conversions": "Conversions",
+        "earnings": "Gains",
+        "empty": "Partagez votre lien pour commencer à gagner des crédits"
+      },
+      "reward": "Gagnez 20 % de leur premier mois",
+      "rewardDescription": "Lorsqu’une personne que vous avez parrainée passe à un forfait payant, vous recevez 20 % de son premier mois crédité sur votre compte",
+      "fraudNote": "Max 5 parrainages par domaine IP/e-mail pour éviter les abus",
+      "cta": "Invitez des amis et gagnez des crédits de recherche !",
+      "dashboardBanner": "Vous aimez AACsearch ? Partagez l’amour ! Parrainez un ami et gagnez 20 % de son premier mois."
+    },
+    "inviteEmail": {
+      "subject": "{name} pense que vous allez adorer AACsearch !",
+      "greeting": "Bonjour,",
+      "intro": "{name} utilise AACsearch et pense que vous aussi vous allez adorer !",
+      "valueProp": "Search-as-a-Service instantané — qualité Algolia à une fraction du coût.",
+      "giftNote": "Commencez gratuitement, sans carte de crédit.",
+      "cta": "Commencez avec le parrainage de {name}",
+      "signoff": "Bonne recherche !\nL’équipe AACsearch"
+    },
+    "confirmationEmail": {
+      "subject": "Vous avez gagné des crédits de recherche !",
+      "body": "Quelqu’un que vous avez parrainé vient de s’inscrire sur AACsearch. Dès qu’il effectuera son premier paiement, vous recevrez 20 % crédités sur votre compte.",
+      "cta": "Voir votre tableau de bord de parrainage"
+    },
+    "landing": {
+      "title": "Vous êtes invité sur AACsearch",
+      "subtitle": "{name} utilise AACsearch et pense que vous allez adorer !",
+      "tagline": "Une recherche qui fonctionne simplement — pas de serveurs, pas de DevOps.",
+      "features": {
+        "instant": "Configuration instantanée de la recherche en 5 minutes",
+        "pricing": "Qualité Algolia, 5x moins cher",
+        "trial": "Essai gratuit de 14 jours, sans carte de crédit"
+      },
+      "cta": "Commencez gratuitement",
+      "socialProof": "Approuvé par plus de 100 entreprises dans le monde"
+    }
+  },
+  "pricing": {
+    "products": {
+      "free": {
+        "title": "Gratuit",
+        "description": "Pour les tests et petits projets",
+        "features": {
+          "searches": "50K recherches/mois",
+          "documents": "10K documents",
+          "indexes": "1 index",
+          "apiKeys": "3 clés API",
+          "support": "Support communautaire"
+        }
+      },
+      "starter": {
+        "title": "Starter",
+        "description": "Pour les projets en croissance et startups",
+        "features": {
+          "searches": "1M recherches/mois",
+          "documents": "250K documents",
+          "indexes": "5 index",
+          "apiKeys": "Clés API illimitées",
+          "analytics": "Analytiques de base",
+          "support": "Support par e-mail"
+        }
+      },
+      "pro": {
+        "title": "Pro",
+        "description": "Pour les applications professionnelles",
+        "features": {
+          "searches": "10M recherches/mois",
+          "documents": "2M documents",
+          "indexes": "20 index",
+          "apiKeys": "Clés API illimitées",
+          "analytics": "Analytiques complètes",
+          "synonyms": "Synonymes + curated searches",
+          "branding": "Marque personnalisée",
+          "support": "Support prioritaire"
+        }
+      },
+      "business": {
+        "title": "Business",
+        "description": "Pour les applications à fort volume de production",
+        "features": {
+          "searches": "50M recherches/mois",
+          "documents": "10M documents",
+          "indexes": "Index illimités",
+          "features": "Toutes les fonctions Pro",
+          "support": "Support dédié",
+          "sla": "SLA"
+        }
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "description": "Pour les déploiements à grande échelle",
+        "features": {
+          "searches": "Recherches illimitées",
+          "documents": "Documents illimités",
+          "indexes": "Index illimités",
+          "features": "Toutes les fonctions Business",
+          "cluster": "Cluster dédié",
+          "sso": "SSO/SAML",
+          "sla": "SLA 99,95 %"
+        }
+      },
+      "lifetime": {
+        "title": "À vie",
+        "description": "Paiement unique, fonctions Starter pour toujours",
+        "features": {
+          "searches": "1M recherches/mois",
+          "documents": "250K documents",
+          "indexes": "5 index",
+          "apiKeys": "Clés API illimitées",
+          "analytics": "Analytiques de base",
+          "support": "Support par e-mail",
+          "payment": "Paiement unique"
+        }
+      }
+    },
+    "nextInvoice": "Prochaine facture"
+  }
+}

@@ -1,0 +1,1304 @@
+{
+  "blog": {
+    "description": "Engineering-Notizen vom AACsearch-Team",
+    "title": "AACsearch Blog",
+    "back": "Zurück zum Blog"
+  },
+  "changelog": {
+    "description": "Was wann veröffentlicht wurde — und was sich darunter geändert hat.",
+    "title": "Changelog"
+  },
+  "contact": {
+    "description": "Kontakt zum Team — Abrechnung, Sicherheitsmeldungen, Partnerschaften.",
+    "form": {
+      "email": "E-Mail",
+      "message": "Nachricht",
+      "name": "Name",
+      "notifications": {
+        "error": "Nachricht konnte nicht gesendet werden. Bitte später erneut versuchen.",
+        "success": "Erhalten — wir antworten innerhalb eines Werktages."
+      },
+      "submit": "Nachricht senden"
+    },
+    "title": "Kontakt"
+  },
+  "documentation": {
+    "title": "Dokumentation"
+  },
+  "home": {
+    "hero": {
+      "badge": "v0 — Early Access verfügbar",
+      "title": "Suche, die Ihre Nutzer wirklich spüren.",
+      "subtitle": "Eine gehostete Such-API mit organisationsbezogenen Tokens, Origin-Allowlists pro Key, Rate-Limit und Quota — damit Sie Suche ausliefern, statt Infrastruktur zu betreiben.",
+      "getStarted": "Kostenlos starten",
+      "documentation": "Doku lesen",
+      "codeCaption": "search-client.ts",
+      "new": "NEU",
+      "featureBadge": "Search-as-a-Service",
+      "imageAlt": "AACsearch Dashboard Screenshot"
+    },
+    "howItWorks": {
+      "title": "Drei Aufrufe. Ein Nachmittag.",
+      "step1": {
+        "title": "1. Dokumente hochladen",
+        "description": "Senden Sie Ihre Datensätze an einen Index Ihrer Organisation. Bulk-Import oder Einzel-Upsert — das Schema bestimmen Sie."
+      },
+      "step2": {
+        "title": "2. Such-Token erzeugen",
+        "description": "Stellen Sie einen kurzlebigen Scoped Token vom Dashboard oder Server aus. Gebunden an Index, Origin und TTL."
+      },
+      "step3": {
+        "title": "3. Vom Browser aus suchen",
+        "description": "Nutzen Sie das typisierte Browser-SDK. Einfache Suche, Multi-Search (föderiert), Facet-Filter — unter 50 ms p99."
+      }
+    },
+    "features": {
+      "title": "Was Sie tatsächlich bekommen",
+      "subtitle": "Keine Geheimnisse. Jedes Feature hier ist heute verfügbar.",
+      "items": {
+        "scopedTokens": {
+          "title": "Scoped Tokens",
+          "description": "Pro Nutzer, pro Filter, mit TTL. Server-seitig erzeugt, in den Browser ausgeliefert, automatisch ablaufend."
+        },
+        "originAllowlist": {
+          "title": "Origin-Allowlist pro Key",
+          "description": "Jeden Key an konkrete Origins binden. Ein auf Twitter geleakter Key leert nicht Ihr Kontingent."
+        },
+        "rateLimitQuota": {
+          "title": "Rate-Limit & Quota",
+          "description": "Pro Key pro Minute drosseln, monatliches Org-Kontingent — beides im Dashboard sichtbar, bevor Sie Limits erreichen."
+        },
+        "multiSearch": {
+          "title": "Multi-Search",
+          "description": "Mehrere Queries in einem Roundtrip. Cross-Collection-Autocomplete ohne N Requests."
+        },
+        "reindex": {
+          "title": "Reindex ohne Downtime",
+          "description": "Index gegen neues Schema neu aufbauen, während Live-Traffic weiter den alten trifft. Atomarer Cut-over."
+        },
+        "enterpriseSecurity": {
+          "title": "Enterprise-Sicherheit",
+          "description": "SSO, Audit-Log, IP-Allowlist, dediziertes Cluster und 99,95% SLA. Sicherheitskontrollen von Anfang an — nicht nachträglich."
+        }
+      }
+    },
+    "pricing": {
+      "badge": "Preise",
+      "title": "Sie zahlen für Suchen und indexierte Dokumente. Mehr nicht.",
+      "subtitle": "1 Search-Unit = 1 Suchanfrage ODER 1 indexiertes Dokument. Jederzeit kündbar.",
+      "cta": "Kostenlos starten",
+      "contact": "Vertrieb kontaktieren",
+      "perMonth": "/Monat",
+      "plans": {
+        "free": {
+          "name": "Free",
+          "price": "$0",
+          "description": "Zum Evaluieren, für Hobby-Projekte und Side-Products.",
+          "features": [
+            "10.000 Search-Units / Monat",
+            "1 Index",
+            "3 API-Keys",
+            "Community-Support"
+          ]
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "$29",
+          "description": "Produktionsreif für Indie-SaaS und kleine B2B-Teams.",
+          "features": [
+            "1 Mio. Search-Units / Monat",
+            "10 Indexe",
+            "Unbegrenzte Keys & Scoped Tokens",
+            "Eigene Origin-Allowlist",
+            "E-Mail-Support, 1 Werktag"
+          ],
+          "highlight": "Beliebter Einstieg"
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "Individuell",
+          "description": "Dedizierter Cluster, Audit-Log, 99,95 % SLA.",
+          "features": [
+            "Unbegrenzte Search-Units",
+            "SSO (SAML / OIDC)",
+            "Audit-Log + IP-Allowlist",
+            "Dedizierte Cluster-Region",
+            "99,95 % SLA, signierter DPA"
+          ]
+        }
+      },
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "yearlyDiscount": "17 % sparen",
+      "perYear": "/Jahr"
+    },
+    "cta": {
+      "title": "Bereit, Suche auszuliefern?",
+      "subtitle": "Der Free-Tier reicht für die meisten Side-Projects. Keine Kreditkarte nötig.",
+      "primary": "Konto erstellen",
+      "secondary": "Doku lesen"
+    },
+    "testimonials": {
+      "title": "Real results from real teams",
+      "subtitle": "Hear from customers who transformed their search infrastructure with AACsearch.",
+      "prev": "Previous",
+      "next": "Next",
+      "prevLabel": "Previous testimonial",
+      "nextLabel": "Next testimonial",
+      "dotLabel": "Go to testimonial {number}"
+    },
+    "logos": {
+      "title": "Vertrauen innovative Teams"
+    },
+    "trustBadges": {
+      "g2": "auf G2",
+      "capterra": "auf Capterra",
+      "companies": "Unternehmen"
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Seite nicht gefunden",
+    "goToDashboard": "Zum Dashboard",
+    "goToHomepage": "Zur Startseite"
+  },
+  "common": {
+    "footer": {
+      "blog": "Blog",
+      "features": "Features",
+      "pricing": "Preise",
+      "privacyPolicy": "Datenschutz",
+      "termsAndConditions": "AGB",
+      "tagline": "Search as a Service — Scoped Tokens, Origin-Allowlists und ein typisiertes Browser-SDK.",
+      "legal": "Rechtliches",
+      "status": "Status",
+      "support": "Support",
+      "trust": "Vertrauen",
+      "brand": "Marke"
+    },
+    "menu": {
+      "blog": "Blog",
+      "changelog": "Changelog",
+      "contact": "Kontakt",
+      "dashboard": "Dashboard",
+      "docs": "Doku",
+      "features": "Features",
+      "login": "Anmelden",
+      "pricing": "Preise",
+      "product": "Produkt",
+      "solutions": "Lösungen",
+      "resources": "Ressourcen",
+      "company": "Unternehmen",
+      "enterprise": "Enterprise",
+      "roadmap": "Roadmap",
+      "useCases": "Anwendungsfälle",
+      "integrations": "Integrationen",
+      "customers": "Kunden",
+      "compare": "Vergleich",
+      "aiSearch": "KI-Suche",
+      "developers": "Entwickler",
+      "faq": "FAQ",
+      "glossary": "Glossar",
+      "about": "Über uns",
+      "security": "Sicherheit",
+      "careers": "Karriere",
+      "partners": "Partner",
+      "press": "Presse"
+    },
+    "aria": {
+      "menu": "Menü",
+      "language": "Sprache"
+    },
+    "tableOfContents": {
+      "title": "Auf dieser Seite"
+    },
+    "colorMode": {
+      "system": "System",
+      "light": "Hell",
+      "dark": "Dunkel"
+    }
+  },
+  "pricingPage": {
+    "title": "Einfaches, nutzungsbasiertes Preismodell",
+    "description": "Zahle nur für Suchanfragen und indizierte Dokumente. Keine versteckten Kosten. Jederzeit kündbar."
+  },
+  "securityPage": {
+    "title": "Sicherheit auf jeder Ebene",
+    "description": "API-Keys werden gehasht und nie im Klartext gespeichert. Scoped Tokens, die Rechte einschränken, nie erweitern. Tenant-Isolation bei jeder Anfrage."
+  },
+  "security": {
+    "title": "Defense in Depth",
+    "subtitle": "Jede Anfrage durchläuft Authentifizierung, Rate-Limiting, Quota-Prüfung und Tenant-Isolation.",
+    "items": {
+      "keyHashing": {
+        "title": "API-Key-Hashing",
+        "description": "Alle API-Keys werden mit SHA-256 gehasht und als Digest gespeichert. Der Klartext wird nur einmal angezeigt."
+      },
+      "scopedTokens": {
+        "title": "Scoped Tokens",
+        "description": "HMAC-signierte Tokens sind auf einen bestimmten Index, Origin und TTL beschränkt — Rechte werden nie erweitert."
+      },
+      "originAllowlist": {
+        "title": "Origin-Allowlist",
+        "description": "Jeder API-Key ist an bestimmte Origins gebunden. Ein geleakter Key kann das Kontingent nicht aufbrauchen."
+      },
+      "rateLimiting": {
+        "title": "Rate-Limiting",
+        "description": "Serverseitiges Rate-Limiting pro Key und Minute. Nutzung und Limits sind im Dashboard sichtbar."
+      },
+      "tenantIsolation": {
+        "title": "Tenant-Isolation",
+        "description": "Jede Suchanfrage ist auf deine Organisations-ID beschränkt. Organisationsübergreifende Zugriffe sind architektonisch unmöglich."
+      },
+      "auditLog": {
+        "title": "Audit-Log",
+        "description": "Jede Admin-Aktion wird mit Zeitstempel, Akteur und Änderung protokolliert. Verfügbar in Enterprise-Plänen."
+      }
+    }
+  },
+  "enterprisePage": {
+    "title": "AACsearch für Enterprise",
+    "description": "Dedizierte Infrastruktur, SSO, Audit-Log, 99,95% SLA und unterzeichneter DPA — alles, was Compliance- und Sicherheitsteams benötigen."
+  },
+  "enterprise": {
+    "title": "Für regulierte Teams entwickelt",
+    "subtitle": "Unbegrenzte Suche, dedizierter Cluster, individuelle Integrationen. Kontaktiere uns für ein maßgeschneidertes Angebot.",
+    "items": {
+      "sso": {
+        "title": "SSO (SAML / OIDC)",
+        "description": "Verbinde deinen Identity Provider — Okta, Azure AD, Google Workspace oder jeden SAML 2.0 / OIDC-konformen IdP."
+      },
+      "dedicatedCluster": {
+        "title": "Dedizierter Cluster",
+        "description": "Deine Indizes laufen auf isolierter Infrastruktur in der Region deiner Wahl. Keine geteilten Such-Nodes."
+      },
+      "auditLog": {
+        "title": "Audit-Log + IP-Allowlist",
+        "description": "Jede Admin-Aktion wird zeitgestempelt und einem Nutzer zugeordnet. Zugriff auf bestimmte IP-Bereiche einschränkbar."
+      },
+      "sla": {
+        "title": "99,95% SLA + unterzeichneter DPA",
+        "description": "Vertragliche Uptime-Garantie und ein unterzeichneter Auftragsverarbeitungsvertrag für DSGVO und CCPA."
+      },
+      "prioritySupport": {
+        "title": "Prioritätssupport",
+        "description": "Dedizierter Slack-Kanal. Erste Reaktion unter 4 Stunden. Namentlicher Technical Account Manager für Onboarding und Störfälle."
+      },
+      "customIntegrations": {
+        "title": "Individuelle Integrationen",
+        "description": "Wir binden dein CMS, ERP oder proprietäre Datenquellen ein. Connector API inklusive; benutzerdefinierte Connectors auf Anfrage."
+      }
+    }
+  },
+  "aboutPage": {
+    "title": "Über AACsearch",
+    "description": "Wir bauen die Such-Infrastruktur für die nächste Generation von Webanwendungen.",
+    "mission": {
+      "label": "Unsere Mission",
+      "quote": "Suche sollte schnell, relevant und für jeden Entwickler zugänglich sein.",
+      "body": "AACsearch wurde mit einer einfachen Überzeugung gegründet: Großartige Suche sollte kein Team von Ingenieuren zur Wartung oder ein Vermögen zum Betrieb erfordern."
+    },
+    "stats": {
+      "searches": "10M+",
+      "searchesLabel": "Suchen pro Tag",
+      "companies": "500+",
+      "companiesLabel": "Unternehmen vertrauen uns",
+      "uptime": "99,9%",
+      "uptimeLabel": "Verfügbarkeits-SLA",
+      "latency": "<50ms",
+      "latencyLabel": "Durchschnittliche Latenz"
+    },
+    "why": {
+      "title": "Warum AACsearch",
+      "items": {
+        "speed": {
+          "title": "Blitzschnell",
+          "description": "Suchantworten unter 50 ms in jedem Maßstab, betrieben von unserer verteilten Such-Infrastruktur."
+        },
+        "simple": {
+          "title": "Entwickler zuerst",
+          "description": "Intuitive REST-API, SDKs für alle wichtigen Programmiersprachen und ein übersichtliches Dashboard."
+        },
+        "open": {
+          "title": "Transparente Preise",
+          "description": "Keine versteckten Gebühren, keine Bindung. Zahlen Sie nur für das, was Sie nutzen, mit klaren, vorhersehbaren Preisen."
+        }
+      }
+    }
+  },
+  "about": {
+    "title": "Warum wir AACsearch gebaut haben",
+    "subtitle": "Such-Infrastruktur ist komplex. Managed Services sind teuer und intransparent. Wir haben gebaut, was wir selbst gebraucht hätten.",
+    "items": {
+      "mission": {
+        "title": "Mission",
+        "description": "Professionelle Suche für jedes Team zugänglich machen — von Zwei-Personen-Startups bis hin zu regulierten Unternehmen — ohne dedizierten Such-Ingenieur."
+      },
+      "technology": {
+        "title": "Technologie",
+        "description": "Aufgebaut auf einer blitzschnellen Suchmaschine. Wir ergänzen Multi-Tenancy, API-Key-Management, Analytics und eine gehostete Control Plane."
+      },
+      "openCore": {
+        "title": "Kein Lock-in",
+        "description": "Ihre Daten gehören immer Ihnen. Exportieren Sie Indizes, migrieren Sie zwischen Plänen oder wechseln Sie zum Enterprise-Tier. Kein proprietäres Datenformat, keine Migrationskosten."
+      },
+      "team": {
+        "title": "Team",
+        "description": "Ein kleines, fokussiertes Team. Wir haben Suche bei B2B-SaaS-Unternehmen, E-Commerce-Plattformen und Entwicklertools geliefert. Wir nutzen unser eigenes Produkt."
+      },
+      "values": {
+        "title": "Werte",
+        "description": "Einfachheit vor Cleverness. Dokumentiertes Verhalten statt Magic. Eine API, die ein Junior-Entwickler am ersten Tag nutzen und ein Senior in der Produktion vertrauen kann."
+      },
+      "roadmap": {
+        "title": "Roadmap",
+        "description": "Öffentliche Roadmap, durch Nutzer abgestimmt. Wir liefern inkrementell — keine Big-Bang-Releases. Der Changelog wird mit jedem Deployment aktualisiert."
+      }
+    }
+  },
+  "caseStudiesPage": {
+    "title": "Customer Case Studies",
+    "description": "See how real companies transformed their search with AACsearch — measurable results, real quotes, zero fluff.",
+    "readCaseStudy": "Read case study",
+    "cta": {
+      "title": "Want to be our next case study?",
+      "description": "If you're using AACsearch and seeing great results, we'd love to hear your story."
+    }
+  },
+  "customersPage": {
+    "title": "Geliebt von Entwicklern, vertraut von Unternehmen",
+    "description": "Schließen Sie sich Hunderten von Unternehmen an, die AACsearch nutzen, um schnelle und relevante Sucherlebnisse zu bieten.",
+    "stats": {
+      "companies": "500+",
+      "companiesLabel": "Unternehmen weltweit",
+      "searches": "10M+",
+      "searchesLabel": "Suchen pro Tag",
+      "uptime": "99,9%",
+      "uptimeLabel": "Plattformverfügbarkeit",
+      "rating": "4,9/5",
+      "ratingLabel": "Durchschnittliche Bewertung"
+    },
+    "testimonials": {
+      "title": "Real results from real customers",
+      "items": {
+        "nordikHome": {
+          "quote": "Switching to AACsearch was the easiest infrastructure decision we've made. We cut costs by 5x, our search is faster, and the built-in analytics showed us product gaps we didn't know we had.",
+          "author": "Erik Lindström",
+          "role": "CTO",
+          "company": "NordikHome"
+        },
+        "agencyHub": {
+          "quote": "With AACsearch, we provision a new client's search in 15 minutes. Each client thinks they have their own dedicated search infrastructure — and they do. We just manage it all from one dashboard.",
+          "author": "Marcus Weber",
+          "role": "Technical Director",
+          "company": "AgencyHub"
+        },
+        "devStream": {
+          "quote": "Elasticsearch was eating 20 hours of our engineering team's week. AACsearch gave us better search with zero maintenance. Our team got 20 hours back, literally overnight.",
+          "author": "Priya Sharma",
+          "role": "VP Engineering",
+          "company": "DevStream"
+        }
+      }
+    },
+    "caseStudies": {
+      "title": "Read their full stories",
+      "description": "Dive deep into how each company transformed their search infrastructure with AACsearch — real numbers, real quotes, real migrations.",
+      "readFullStudy": "Read full case study →",
+      "items": {
+        "nordikHome": {
+          "title": "NordikHome: 5x Cost Reduction",
+          "excerpt": "Scandinavian furniture retailer replaced Algolia, cut search costs 5x and boosted product discovery by 34%."
+        },
+        "agencyHub": {
+          "title": "AgencyHub: Multi-Tenant Search",
+          "excerpt": "Digital agency manages search for 12 clients from one AACsearch dashboard, saving $4,000+/month in infrastructure costs."
+        },
+        "devStream": {
+          "title": "DevStream: Zero DevOps, 10x Faster",
+          "excerpt": "B2B SaaS platform eliminated 20 hours/week of Elasticsearch maintenance and cut search latency to 50ms."
+        }
+      }
+    },
+    "logos": {
+      "title": "Vertraut von Teams bei"
+    },
+    "cta": {
+      "title": "Schließen Sie sich Hunderten von Unternehmen an",
+      "description": "Starten Sie noch heute Ihre kostenlose Testversion – keine Kreditkarte erforderlich."
+    }
+  },
+  "customers": {
+    "title": "Vertraut von Entwicklern",
+    "subtitle": "Early Adopters, die Algolia, Elasticsearch oder selbst gebaute Lösungen ersetzt haben — und sich nicht mehr um Such-Infrastruktur kümmern müssen.",
+    "items": {
+      "ecommerce": {
+        "title": "E-Commerce-Plattform",
+        "description": "Nach der dritten unerwarteten Rechnung haben wir Algolia ersetzt. AACsearch kostet jeden Monat einen fixen Betrag. Die Migration dauerte drei Tage. Die Suche ist besser als zuvor.",
+        "role": "CTO, 15-köpfiges E-Commerce-SaaS-Team"
+      },
+      "saasFounder": {
+        "title": "B2B-SaaS-Gründer",
+        "description": "Wir brauchten Tenant-Suche ohne eigene Infrastruktur. Dank AACsearch Scoped Tokens haben wir an einem Wochenende geliefert statt in einem ganzen Sprint.",
+        "role": "Gründer, Projektmanagement-SaaS"
+      },
+      "devTools": {
+        "title": "Entwicklertools-Unternehmen",
+        "description": "Der MCP-Server ermöglicht unseren KI-Features programmatischen Zugriff auf Nutzerdaten. Eine Integration hat drei neue Produktfeatures freigeschaltet.",
+        "role": "VP Engineering, Entwicklertools-Startup"
+      },
+      "enterprise": {
+        "title": "Enterprise-Plattform",
+        "description": "Audit-Log, SSO und dedizierter Cluster waren die Anforderungen. AACsearch Enterprise erfüllte alle drei. Das SLA ist vertraglich fixiert.",
+        "role": "Head of Security, Enterprise-SaaS"
+      },
+      "marketplace": {
+        "title": "Marketplace-Startup",
+        "description": "Multi-Search ermöglicht uns Produkt-, Anbieter- und Inhaltsabfragen in einer Anfrage. Die Analytics zeigen uns genau, wo Nutzer abspringen.",
+        "role": "Lead Engineer, zweiseitiger Marketplace"
+      },
+      "agency": {
+        "title": "Digitalagentur",
+        "description": "Wir setzen AACsearch für Kunden ein. Enterprise-Pläne umfassen dedizierte Infrastruktur für Teams mit strengen Anforderungen an den Datenspeicherort.",
+        "role": "Technical Director, Digitalagentur"
+      }
+    }
+  },
+  "roadmapPage": {
+    "title": "Produkt-Roadmap",
+    "description": "Was geliefert wurde, was in Arbeit ist und was als Nächstes kommt. Nach jedem Sprint aktualisiert."
+  },
+  "roadmap": {
+    "title": "Wohin wir gehen",
+    "subtitle": "Inkrementell, öffentlich und zuverlässig im besten Sinne. Keine Big-Bang-Releases — nur konsequente Lieferung.",
+    "shipped": "Geliefert",
+    "inProgress": "In Arbeit",
+    "planned": "Geplant",
+    "seeChangelog": "Changelog ansehen →",
+    "items": {
+      "searchCore": {
+        "title": "Search Core v0.x",
+        "description": "Einzel-Upsert, Multi-Search, Browser-SDK, Scoped Tokens, Origin-Allowlist, Rate-Limit, Quota, Zero-Downtime-Reindex, DB-First-Ingest.",
+        "status": "shipped"
+      },
+      "marketing": {
+        "title": "Marketing-Website v0.5",
+        "description": "Öffentliche Marketing-Website mit Preisen, Features, Integrationen, Sicherheit, Anwendungsfällen und Enterprise-Seiten in 5 Sprachen.",
+        "status": "shipped"
+      },
+      "connectors": {
+        "title": "CMS-Connectors R2",
+        "description": "PrestaShop 8.x und 1C-Bitrix Module. Connector API mit Handshake, Full/Delta-Sync, Diagnose, Heartbeat.",
+        "status": "shipped"
+      },
+      "knowledge": {
+        "title": "Knowledge-Modul R2.5",
+        "description": "RAG und GraphRAG über Dokumente. 9 oRPC-Prozeduren, 7 Prisma-Modelle, Datei-Ingestion, Chunking, Retrieval.",
+        "status": "shipped"
+      },
+      "metering": {
+        "title": "Search-Units-Metering v0.6",
+        "description": "Tochka-Wallet-Aufladung, planbasierte Search-Unit-Abrechnung, Analytics-Pipeline, Wallet-Dashboard.",
+        "status": "inProgress"
+      },
+      "billing": {
+        "title": "Abrechnung & Zahlungen",
+        "description": "Stripe-Abonnements, Kundenportal, Rechnungen, Multi-Währungs-Unterstützung mit Tochka Bank für russische Zahlungen.",
+        "status": "shipped"
+      },
+      "analytics": {
+        "title": "Analysen & Dashboards",
+        "description": "Echtzeit-Query-Analysen, Nutzungsmetriken, fehlgeschlagene Abfragen, CTR-Tracking und benutzerdefinierte Dashboards.",
+        "status": "inProgress"
+      },
+      "widget": {
+        "title": "Widget & Embed-SDK",
+        "description": "Einsatzbereites Such-Widget mit Cmd+K-Modal, schwebender Blase und Vollbildmodi. React-, Vue-, Angular- und Vanilla-JS-Bundles.",
+        "status": "inProgress"
+      },
+      "aiNlp": {
+        "title": "NLP & KI-Suche",
+        "description": "Rechtschreibkorrektur, Absichtserkennung, KI-Query-Umschreibung und natürlichsprachliche Suche. Zero-Click-KI-Antworten als Nächstes.",
+        "status": "planned"
+      },
+      "docs": {
+        "title": "Öffentliche Doku-Website v0.7",
+        "description": "Vollständige Dokumentationswebsite mit API-Referenz, Schnellstart-Anleitungen und Tutorials.",
+        "status": "planned"
+      },
+      "selfHost": {
+        "title": "Enterprise-Deployment v1.0",
+        "description": "Dediziertes Cluster-Deployment, benutzerdefinierter Datenspeicherort und On-Premises-Optionen für regulierte Branchen.",
+        "status": "planned"
+      },
+      "vectorSearch": {
+        "title": "Vektor- & Hybridsuche",
+        "description": "Semantische Suche über OpenAI-Embeddings. Hybrides BM25 + Vektor-Ranking. Bereits in Prozeduren implementiert.",
+        "status": "shipped"
+      },
+      "shopify": {
+        "title": "Shopify-Integration",
+        "description": "Vollständige Shopify-App mit Produkt- und Variantensynchronisation, Bestandsverfolgung, Echtzeit-Webhooks, Multi-Store-Unterstützung und Dashboard-UI."
+      },
+      "embeddingProviders": {
+        "title": "Azure- und GCP-Embedding-Anbieter",
+        "description": "Azure OpenAI- und GCP Vertex AI-Embedding-Anbieter neben bestehender OpenAI-Unterstützung. OpenAI-kompatible API für benutzerdefinierte Endpunkte."
+      },
+      "searchConfigurator": {
+        "title": "Such-Konfigurator",
+        "description": "Visueller Assistent zum Konfigurieren von Suchkollektionen, Schemafeldern, Ranking-Einstellungen und Facetten. Widget-Builder mit Konfigurator-, Filter- und Install-Tabs."
+      },
+      "upgradeFlows": {
+        "title": "Upgrade- und Downgrade-Abläufe",
+        "description": "Optimiertes Upgrade-Modal mit Pro-rata-Vorschau und Tarifvergleich. Downgrade-Ablauf mit Datenverlustwarnungen und Bestätigung."
+      }
+    },
+    "shippedTitle": "Bereits verfügbar",
+    "inProgressTitle": "In Entwicklung",
+    "plannedTitle": "Geplant",
+    "feedback": {
+      "title": "Haben Sie eine Idee?",
+      "description": "Wir lesen jede Feature-Anfrage. Teilen Sie uns mit, was AACsearch für Sie besser machen würde.",
+      "cta": "Feature vorschlagen"
+    },
+    "vote": "Abstimmen",
+    "voted": "Abgestimmt",
+    "votes": "Stimmen",
+    "emailCapture": {
+      "title": "Gestalten Sie mit, was als Nächstes kommt",
+      "description": "Stimmen Sie für Funktionen und erhalten Sie Early-Access-Updates. Schließen Sie sich 700+ Suchteams an.",
+      "placeholder": "ihre@firma.de",
+      "subscribeAndVote": "Abonnieren & Abstimmen",
+      "skipAndVote": "Nein danke, nur abstimmen",
+      "privacy": "Kein Spam. Jederzeit kündbar.",
+      "success": "Danke! Ihre Stimme wurde gezählt. Prüfen Sie Ihren Posteingang für Updates."
+    }
+  },
+  "careersPage": {
+    "title": "Karriere bei AACsearch",
+    "description": "Ein kleines Team, das Such-Infrastruktur für die nächste Generation von Software-Produkten entwickelt. Remote-First."
+  },
+  "careers": {
+    "title": "An Such-Infrastruktur arbeiten",
+    "subtitle": "Kleines Team, bedeutungsvolle Arbeit. Jeder Ingenieur liefert in die Produktion. Keine Komitees, keine verfehlen Sprints.",
+    "openRoles": "Offene Stellen",
+    "noRoles": "Derzeit keine offenen Stellen — wir sind aber immer an außergewöhnlichen Kandidaten interessiert.",
+    "applyPrompt": "Schreiben Sie uns eine Nachricht an",
+    "applyEmail": "jobs@aacsearch.com",
+    "items": {
+      "culture": {
+        "title": "Kultur",
+        "description": "Remote-First, Async als Standard. Wir schreiben Dinge auf. Meetings sind selten und haben eine Agenda. Ergebnisse zählen, nicht Stunden."
+      },
+      "engineering": {
+        "title": "Engineering",
+        "description": "TypeScript, Next.js, AACsearch core, Prisma, Hono. Der Stack ist modern und dokumentiert. Sie übernehmen Features von Anfang bis Ende."
+      },
+      "growth": {
+        "title": "Wachstum",
+        "description": "Wir sind früh. Sie werden überproportionalen Einfluss haben. Die Codebasis ist sauber — keine Legacy-Schulden, durch die man sich wühlen müsste."
+      },
+      "benefits": {
+        "title": "Benefits",
+        "description": "Wettbewerbsfähiges Gehalt, an Ihren Standort angepasst. Beteiligung. Home-Office-Budget. Kein Mikromanagement."
+      },
+      "learning": {
+        "title": "Weiterbildung",
+        "description": "Konferenzbudget. Bezahlte Bücher und Kurse. Zeit, neue Ideen zu erkunden, die dem Produkt dienen."
+      },
+      "hiring": {
+        "title": "Einstellungsprozess",
+        "description": "Zwei Gespräche und eine bezahlte Hausaufgabe. Wir respektieren Ihre Zeit. Entscheidung innerhalb von zwei Wochen nach dem ersten Kontakt."
+      }
+    }
+  },
+  "partnersPage": {
+    "title": "Partner von AACsearch werden",
+    "description": "Erweitern Sie Ihr Geschäft durch Integration, Weiterverkauf oder Aufbau auf AACsearch. Werden Sie Teil unseres Partner-Ökosystems."
+  },
+  "partners": {
+    "title": "Gemeinsam wachsen",
+    "subtitle": "Wir suchen Agenturen, Berater und Technologieunternehmen, die Suche in ihr Angebot integrieren möchten.",
+    "items": {
+      "technology": {
+        "title": "Technologiepartner",
+        "description": "Native Integrationen für Ihre Plattform erstellen. Co-Marketing, gemeinsame Dokumentation und technischer Support."
+      },
+      "implementation": {
+        "title": "Implementierungspartner",
+        "description": "Agenturen und Berater, die AACsearch für ihre Kunden implementieren. Revenue-Sharing und Deal-Registrierung."
+      },
+      "reseller": {
+        "title": "Reseller",
+        "description": "AACsearch unter Ihrer eigenen Marke weiterverkaufen oder in Ihr Produkt einbündeln. White-Label-Optionen verfügbar."
+      },
+      "cloud": {
+        "title": "Cloud-Marktplatz",
+        "description": "Verfügbar im AWS Marketplace und Azure Marketplace. Abwicklung über Ihr bestehendes Cloud-Budget."
+      },
+      "benefits": {
+        "title": "Partner-Vorteile",
+        "description": "Partnerportal, Co-Marketing-Support, dedizierter Channel-Manager, NFR-Lizenzen und Priority-Support-SLA."
+      },
+      "apply": {
+        "title": "Zum Programm bewerben",
+        "description": "Füllen Sie das Formular aus und ein Partner-Manager antwortet innerhalb von zwei Werktagen. Kein Exklusivitätserfordernis."
+      }
+    }
+  },
+  "developersPage": {
+    "title": "Entwicklerfreundlich von Anfang an",
+    "description": "Eine saubere API, gute Dokumentation und SDKs, die nicht im Weg stehen. AACsearch lässt sich in Minuten integrieren, nicht in Tagen.",
+    "hero": {
+      "badge": "Developer-First",
+      "codeCaption": "Suche in 3 Zeilen einbinden"
+    },
+    "features": {
+      "title": "Alles, was du brauchst, um Suche zu liefern",
+      "api": {
+        "title": "REST API",
+        "description": "Klare, intuitive REST API mit vollständiger OpenAPI 3.1-Spezifikation. Jeder Endpunkt mit Beispielen dokumentiert."
+      },
+      "sdks": {
+        "title": "Offizielle SDKs",
+        "description": "JavaScript- und TypeScript-SDKs. Community-SDKs für Python, Go und PHP."
+      },
+      "browserSdk": {
+        "title": "Browser SDK",
+        "description": "Leichtes 14KB Browser-Widget. Shadow DOM, 5 Sprachen, integrierte Analytics. Ein Script-Tag."
+      },
+      "connectorApi": {
+        "title": "Connector API",
+        "description": "7-Endpunkt-API für CMS-Integrationen. PrestaShop- und Bitrix24-Module direkt inklusive."
+      },
+      "openapi": {
+        "title": "OpenAPI Spezifikation",
+        "description": "Vollständige OpenAPI 3.1-Spezifikation unter /api/v1/openapi.json. Client-Bibliotheken in jeder Sprache automatisch generieren."
+      },
+      "dashboard": {
+        "title": "Analytics Dashboard",
+        "description": "Suchanalysen, Zero-Result-Tracking, Top-Anfragen und CTR — alles in deinem Dashboard."
+      }
+    },
+    "cta": {
+      "title": "In Minuten loslegen",
+      "description": "Kostenloses Kontingent inklusive. Keine Kreditkarte erforderlich."
+    }
+  },
+  "aiSearchPage": {
+    "title": "KI-gestützte Suche",
+    "description": "Gehen Sie über Schlüsselwörter hinaus. AACsearch unterstützt Vektor-, Hybrid- und semantische Suche von Haus aus — ohne ML-Expertise.",
+    "badge": "Jetzt in Produktion",
+    "modes": {
+      "title": "Drei Suchmodi, eine Plattform",
+      "vector": {
+        "title": "Vektorsuche",
+        "description": "Finden Sie semantisch ähnliche Ergebnisse, auch wenn exakte Schlüsselwörter nicht übereinstimmen. Nutzt Embedding-Modelle zum Verstehen von Bedeutungen."
+      },
+      "hybrid": {
+        "title": "Hybridsuche",
+        "description": "Kombinieren Sie Keyword-Präzision mit semantischem Verständnis. Konfigurierbare Gewichte ermöglichen Ihnen, die Relevanz für Ihren Anwendungsfall zu optimieren."
+      },
+      "semantic": {
+        "title": "Semantisches Re-Ranking",
+        "description": "Ordnen Sie Ergebnisse mit KI neu an, um die relevantesten Treffer nach oben zu bringen. Verbessert die CTR ohne Änderungen an Ihrer Indexierung."
+      }
+    },
+    "useCases": {
+      "title": "Für jeden Anwendungsfall gebaut",
+      "ecommerce": {
+        "title": "E-Commerce",
+        "description": "Zeigen Sie relevante Produkte für Suchanfragen wie 'bequeme Laufschuhe' an, auch ohne exakten Keyword-Treffer."
+      },
+      "docs": {
+        "title": "Dokumentation",
+        "description": "Lassen Sie Nutzer mit natürlichsprachigen Fragen Antworten in Ihrer gesamten Wissensdatenbank finden."
+      },
+      "knowledge": {
+        "title": "RAG-Pipelines",
+        "description": "Verbinden Sie AACsearch mit Ihrer RAG-Pipeline für präzise, fundierte KI-Antworten."
+      },
+      "marketplace": {
+        "title": "Marktplatz",
+        "description": "Verknüpfen Sie Käufer und Verkäufer per semantischer Ähnlichkeit statt starrer Keyword-Filter."
+      }
+    },
+    "howItWorks": {
+      "title": "So funktioniert es",
+      "steps": {
+        "upload": {
+          "title": "Daten hochladen",
+          "description": "Verbinden Sie Ihr CMS, Ihre Datenbank oder laden Sie Dateien über die API hoch."
+        },
+        "model": {
+          "title": "Embedding-Modell wählen",
+          "description": "Wählen Sie aus integrierten Modellen oder bringen Sie Ihre eigenen OpenAI-Embeddings mit."
+        },
+        "index": {
+          "title": "Vektoren automatisch generiert",
+          "description": "AACsearch generiert und speichert Vektor-Embeddings während der Indexierung."
+        },
+        "query": {
+          "title": "Mit natürlicher Sprache suchen",
+          "description": "Ihre Nutzer suchen natürlich — AACsearch liefert die semantisch relevantesten Ergebnisse."
+        }
+      }
+    }
+  },
+  "affiliatePage": {
+    "title": "Partnerprogramm",
+    "description": "Verdiene wiederkehrende Provisionen, indem du Entwickler und Unternehmen an AACsearch empfiehlst. Tritt dem Partnerprogramm bei."
+  },
+  "affiliate": {
+    "title": "Mit AACsearch verdienen",
+    "subtitle": "Empfehle AACsearch deiner Zielgruppe und verdiene 20 % wiederkehrende Provision für jeden zahlenden Kunden, den du wirfst.",
+    "items": {
+      "commission": {
+        "title": "20 % wiederkehrende Provision",
+        "description": "Verdiene 20 % der monatlichen Plangebühr für jeden geworbenen Kunden – solange ihr Abonnement besteht. Kein Limit, kein Ablaufdatum."
+      },
+      "tracking": {
+        "title": "Zuverlässige Attribution",
+        "description": "90-Tage-Cookie-Fenster. Affiliate-Attribution wird geräteübergreifend via First-Party-Cookies und UTM-Parameter verfolgt."
+      },
+      "creatives": {
+        "title": "Marketing-Assets",
+        "description": "Banner, E-Mail-Vorlagen, Vergleichstabellen und Code-Beispiele – sofort einsatzbereit für Tutorials, Newsletter und Social Posts."
+      },
+      "payments": {
+        "title": "Monatliche Auszahlungen",
+        "description": "Auszahlungen am 15. jedes Monats per Stripe oder Überweisung. Mindestauszahlungsbetrag: 50 $."
+      },
+      "supportChannel": {
+        "title": "Affiliate-Support",
+        "description": "Dedizierter Affiliate-Manager, früher Zugang zu neuen Funktionen und ein privater Affiliate-Discord-Kanal für Networking."
+      },
+      "apply": {
+        "title": "Jetzt bewerben",
+        "description": "Bewirb dich auf affiliate.aacsearch.com. Wir prüfen Bewerbungen innerhalb von 3 Werktagen. Keine Mindest-Reichweite erforderlich."
+      }
+    }
+  },
+  "brandPage": {
+    "title": "Markenrichtlinien",
+    "description": "Logos, Farben, Typografie und Nutzungsregeln. Alles, was du brauchst, um AACsearch in Integrationen und Co-Marketing korrekt darzustellen."
+  },
+  "brand": {
+    "title": "Unser Erscheinungsbild",
+    "subtitle": "Unsere Marke steht für Klarheit und Geschwindigkeit – dieselben Werte, die wir in die Suche einbringen. Nutze diese Assets, um AACsearch korrekt zu repräsentieren.",
+    "items": {
+      "logo": {
+        "title": "Logo",
+        "description": "Verwende das primäre Logo auf hellen Hintergründen und das invertierte auf dunklen. Mindestgröße 24 px. Niemals strecken, drehen oder umfärben."
+      },
+      "colors": {
+        "title": "Farben",
+        "description": "Primär: #0F172A (Nacht). Akzent: #6366F1 (Indigo-500). Den Akzent sparsam einsetzen – nur für interaktive Elemente und Highlights."
+      },
+      "typography": {
+        "title": "Typografie",
+        "description": "Überschriften und Fließtext: Inter. Monospace: JetBrains Mono. Beide über Google Fonts und Fontsource verfügbar."
+      },
+      "guidelines": {
+        "title": "Nutzungsrichtlinien",
+        "description": "Das AACsearch-Logo darf nicht in einer Weise verwendet werden, die eine Billigung impliziert. Das Logo darf nicht verändert werden."
+      },
+      "assets": {
+        "title": "Asset-Downloads",
+        "description": "Lade das vollständige Brand-Kit herunter: SVG-Logo, Favicon, OG-Image-Vorlage und Farbpalette im ASE-, Sketch- und Figma-Format."
+      },
+      "contact": {
+        "title": "Markenfragen",
+        "description": "Für Co-Marketing-Materialien, Konferenz-Sponsoring oder besondere Nutzungsfragen wende dich an brand@aacsearch.com."
+      }
+    }
+  },
+  "communityPage": {
+    "title": "Community",
+    "description": "Tritt der AACsearch-Community bei – stelle Fragen, teile Projekte, trage Konnektoren bei und gestalte die Roadmap mit."
+  },
+  "community": {
+    "title": "Suche gemeinsam aufbauen",
+    "subtitle": "AACsearch wird öffentlich entwickelt. Die Community stimmt über Features ab, trägt Konnektoren bei und hilft Neulingen, schneller zu liefern.",
+    "items": {
+      "github": {
+        "title": "GitHub",
+        "description": "Gib dem Repo einen Stern, öffne Issues oder trage per PR bei. Alle öffentlichen Roadmap-Einträge werden als GitHub-Issues verfolgt."
+      },
+      "discord": {
+        "title": "Discord",
+        "description": "Echtzeit-Chat für Fragen, Integrationen und Troubleshooting. 500+ Mitglieder, täglich aktiv."
+      },
+      "forum": {
+        "title": "Community-Forum",
+        "description": "Ausführliche Q&A für Architektur-, Integrations- und Feature-Fragen. Vollständig durchsuchbar – betrieben von AACsearch."
+      },
+      "showcase": {
+        "title": "Showcase",
+        "description": "Sieh, was die Community mit AACsearch gebaut hat. Reiche dein Projekt ein, um im monatlichen Newsletter vorgestellt zu werden."
+      },
+      "contribute": {
+        "title": "Beitragen",
+        "description": "Wir akzeptieren Beiträge zu Konnektoren, SDK-Beispielen und Dokumentation. Siehe CONTRIBUTING.md für Richtlinien."
+      },
+      "roadmap": {
+        "title": "Über die Roadmap abstimmen",
+        "description": "Jeder öffentliche Roadmap-Eintrag ist offen für Community-Upvotes. Die meistgewählten Features werden zuerst umgesetzt."
+      }
+    }
+  },
+  "faqPage": {
+    "title": "Häufig gestellte Fragen",
+    "description": "Schnelle Antworten auf die häufigsten Fragen zu AACsearch-Preisen, Setup, Daten und Support."
+  },
+  "faq": {
+    "title": "Häufige Fragen, klare Antworten",
+    "subtitle": "Keine Antwort gefunden? Durchsuche unsere Dokumentation oder frage im Community-Forum.",
+    "items": {
+      "searchUnit": {
+        "title": "Was ist eine Sucheinheit?",
+        "description": "Eine Sucheinheit entspricht einer Suchanfrage ODER einem indizierten Dokument. Dein monatlicher Plan enthält eine bestimmte Anzahl von Sucheinheiten."
+      },
+      "pricing": {
+        "title": "Wie funktioniert die Preisgestaltung?",
+        "description": "AACsearch berechnet eine monatliche Pauschalgebühr pro Plan-Tier. Keine versteckten Gebühren, keine Egress-Kosten."
+      },
+      "scaling": {
+        "title": "Wie skaliert es?",
+        "description": "AACsearch skaliert horizontal. Die gehostete Plattform verarbeitet Traffic-Spitzen automatisch."
+      },
+      "dataResidency": {
+        "title": "Wo werden meine Daten gespeichert?",
+        "description": "Wähle beim Anmelden EU (Frankfurt) oder USA (Nord-Virginia). Daten verlassen deine Region nie."
+      },
+      "migration": {
+        "title": "Kann ich von Algolia migrieren?",
+        "description": "Ja. Die AACsearch-REST-API ist kompatibel mit Algolia-ähnlichen Kollektion-Schemata. Wir bieten einen Migrationsleitfaden."
+      },
+      "selfHost": {
+        "title": "Bieten Sie dediziertes oder On-Premises-Deployment an?",
+        "description": "Ja. Enterprise-Pläne umfassen ein dediziertes Cluster in der von Ihnen gewählten Region. Für regulierte Branchen mit strengen Anforderungen kontaktieren Sie uns für ein benutzerdefiniertes Deployment."
+      }
+    }
+  },
+  "glossaryPage": {
+    "title": "Suchglossar",
+    "description": "Einfache Erklärungen zu Suchkonzepten — von Invertiertem Index bis zur BM25-Ranking-Funktion."
+  },
+  "glossary": {
+    "title": "Suchbegriffe, klar erklärt",
+    "subtitle": "Ein praktisches Glossar für Entwickler, die mit Suchdiensten arbeiten. Kein Jargon ohne Erklärung.",
+    "items": {
+      "invertedIndex": {
+        "title": "Invertierter Index",
+        "description": "Eine Datenstruktur, die jeden Term auf die Dokumente abbildet, in denen er vorkommt. Die Grundlage für schnelle Volltextsuche."
+      },
+      "bm25": {
+        "title": "BM25",
+        "description": "Best Match 25 – die Standard-Ranking-Funktion für Volltextsuche. Berücksichtigt Termhäufigkeit und Dokumentlänge."
+      },
+      "facets": {
+        "title": "Facetten",
+        "description": "Filterattribute mit Zählungen. Zeigen Benutzern, wie viele Ergebnisse für jeden Filterwert verfügbar sind."
+      },
+      "typoTolerance": {
+        "title": "Typo-Toleranz",
+        "description": "Fähigkeit der Such-Engine, Dokumente trotz Rechtschreibfehlern in der Abfrage zu finden."
+      },
+      "synonyms": {
+        "title": "Synonyme",
+        "description": "Äquivalente Terme, die dieselben Suchergebnisse zurückgeben sollten."
+      },
+      "relevanceTuning": {
+        "title": "Relevanz-Tuning",
+        "description": "Der Prozess der Anpassung von Ranking-Signalen und -Gewichten, um Suchergebnisse zu verbessern."
+      },
+      "embedding": {
+        "description": "Eine numerische Vektorrepräsentation von Textsemantik. AACsearch kann Embeddings für semantische und hybride Suche speichern und abfragen.",
+        "title": "Embedding"
+      },
+      "facet": {
+        "description": "Ein filterbares Attribut, das zusammen mit Suchergebnissen mit Dokumentenzählungen zurückgegeben wird. Ermöglicht geführte Navigation ohne zusätzliche API-Aufrufe.",
+        "title": "Facette"
+      },
+      "relevance": {
+        "description": "Wie gut ein Dokument zu einer Anfrage passt. AACsearch kombiniert BM25-Textrelevanz, Vektorähnlichkeit, Feldgewichtungen und benutzerdefinierte Boost-Regeln.",
+        "title": "Relevanz"
+      },
+      "searchIndex": {
+        "description": "Eine Datenstruktur, die für schnellen Textzugriff optimiert ist. AACsearch pflegt eine Suchkollektion pro Index mit automatischem Alias-Management.",
+        "title": "Suchindex"
+      },
+      "searchUnit": {
+        "description": "AACsearch-Abrechnungseinheit. Eine Sucheinheit entspricht einer Suchanfrage oder einem indizierten Dokument. Wird zur Berechnung der monatlichen Plan-Zuteilung verwendet.",
+        "title": "Sucheinheit"
+      }
+    }
+  },
+  "newsletterPage": {
+    "title": "AACsearch-Newsletter",
+    "description": "Monatliche Updates zu Suchengineering, AACsearch-Releases und den Entwickler-Tools, die wir verfolgen."
+  },
+  "newsletter": {
+    "title": "Auf dem Laufenden bleiben",
+    "subtitle": "Der AACsearch-Newsletter erscheint wöchentlich. Produktupdates, Suchtipps und Benchmarks – direkt in deinem Posteingang.",
+    "items": {
+      "productUpdates": {
+        "title": "Produktupdates",
+        "description": "Neue Funktionen, API-Änderungen und Leistungsverbesserungen – erklärt mit Code-Beispielen."
+      },
+      "searchTips": {
+        "title": "Suchtipps",
+        "description": "Praxistipps zu Relevanz-Tuning, Datenmodellierung und Such-UX – zusammengestellt von unserem Ingenieursteam."
+      },
+      "benchmarks": {
+        "title": "Benchmarks",
+        "description": "Monatliche Latenz- und Durchsatz-Benchmarks von unserem Testlabor."
+      },
+      "industry": {
+        "title": "Branchennachrichten",
+        "description": "Die wichtigsten Neuigkeiten aus der Suchwelt: neue Modelle, Papers und Open-Source-Releases."
+      },
+      "showcase": {
+        "title": "Community-Showcase",
+        "description": "Interessante Projekte aus der AACsearch-Community und Gastartikel von Partnern."
+      },
+      "frequency": {
+        "title": "Wöchentlich, kein Spam",
+        "description": "Montags, ca. 08:00 Uhr MEZ. Kein Marketing, keine Werbung. Jederzeit abmeldbar."
+      },
+      "content": {
+        "description": "Artikel zum Such-Engineering, AACsearch-Versionshinweise, Entwickler-Tool-Highlights und ein Community-Spotlight pro Ausgabe.",
+        "title": "Was Sie erhalten"
+      },
+      "past": {
+        "description": "Jeder Newsletter ist in unserem Blog archiviert. Vor dem Abonnieren lesen — Sie wissen genau, worauf Sie sich einlassen.",
+        "title": "Frühere Ausgaben lesen"
+      },
+      "privacy": {
+        "description": "Wir nutzen eine selbst gehostete Newsletter-Plattform. Ihre E-Mail wird nie mit Werbenetzwerken geteilt oder an Datenmakler verkauft.",
+        "title": "Ihre Daten bleiben Ihre"
+      },
+      "social": {
+        "description": "Newsletter-Highlights werden auf LinkedIn gepostet. Dort für kürzere Engineering-Updates folgen.",
+        "title": "Den Highlights folgen"
+      },
+      "unsubscribe": {
+        "description": "Jede E-Mail enthält einen Ein-Klick-Abmeldelink. Keine Dark Patterns, keine Bestätigungsdialoge.",
+        "title": "Ein-Klick-Abmeldung"
+      }
+    }
+  },
+  "pressPage": {
+    "title": "Presse & Medien",
+    "description": "Pressemitteilungen, Pressekit und Medienkontakte für Journalisten und Blogger, die über AACsearch schreiben."
+  },
+  "press": {
+    "title": "AACsearch in der Presse",
+    "subtitle": "Pressemitteilungen, Interviews und Medienmaterial. Journalisten finden hier alles, was sie benötigen.",
+    "items": {
+      "releases": {
+        "title": "Pressemitteilungen",
+        "description": "Alle offiziellen Pressemitteilungen ab 2024 – Produktankündigungen, Partnerschaften und Meilensteine."
+      },
+      "kit": {
+        "title": "Pressekit",
+        "description": "Logo-Paket, Produktscreenshots, Gründerfotos und Unternehmens-Faktenkarte – alles in einem ZIP."
+      },
+      "coverage": {
+        "title": "Medienberichterstattung",
+        "description": "Ausgewählte Artikel aus Fachmedien, Entwicklerblogs und Tech-Publikationen."
+      },
+      "contact": {
+        "title": "Medienkontakt",
+        "description": "Für Interviewanfragen, Produktdemos und Exklusivgeschichten: press@aacsearch.com. Reaktionszeit unter 24 Stunden."
+      },
+      "boilerplate": {
+        "title": "Unternehmens-Boilerplate",
+        "description": "Standardisierter Unternehmenstext für Pressemitteilungen und Artikel."
+      },
+      "founders": {
+        "title": "Gründerbiografien",
+        "description": "Kurzbiografien und Hochauflösungsfotos für Medienartikel und Konferenzprogramme."
+      },
+      "assets": {
+        "description": "Logo in SVG, PNG und Dark/Light-Varianten herunterladen. Nutzungsrichtlinien enthalten — Details auf der Markenseite.",
+        "title": "Marken-Assets"
+      },
+      "mediaKit": {
+        "description": "Logo-Dateien, Produkt-Screenshots, Gründerfotos und Markenrichtlinien in einem einzigen downloadbaren Zip.",
+        "title": "Medienkit"
+      },
+      "pressReleases": {
+        "description": "Offizielle Ankündigungen für Produkteinführungen, Finanzierungsrunden und wichtige Partnerschaften — formatiert und zur Weiterveröffentlichung bereit.",
+        "title": "Pressemitteilungen"
+      }
+    }
+  },
+  "pricingPlansPage": {
+    "title": "Pläne & Preise",
+    "description": "Transparente, nutzungsbasierte Preise. Starte kostenlos. Skaliere, wenn du wächst."
+  },
+  "pricingPlans": {
+    "title": "Der richtige Plan für dein Team",
+    "subtitle": "Alle Pläne beinhalten typolerante Suche, Facetten, Synonyme und Echtzeit-Indizierung. Skaliere, wann immer du bereit bist.",
+    "items": {
+      "free": {
+        "title": "Kostenlos",
+        "description": "10.000 Sucheinheiten/Monat, 1 Index, Community-Support. Ideal für Hobby-Projekte und Tests."
+      },
+      "starter": {
+        "title": "Starter",
+        "description": "100.000 Sucheinheiten/Monat, 5 Indizes, E-Mail-Support. Für kleine Produktionsdienste."
+      },
+      "pro": {
+        "title": "Pro",
+        "description": "1 Mio. Sucheinheiten/Monat, 10 Indizes, Priority-Support, benutzerdefinierte Domain. Für wachsende SaaS-Produkte."
+      },
+      "business": {
+        "title": "Business",
+        "description": "10 Mio. Sucheinheiten/Monat, 50 Indizes, SLA 99,9%, SSO. Für skalensensible Unternehmen."
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "description": "Unbegrenzte Einheiten, dedizierter Cluster, SLA 99,95%, Audit-Log, SCIM-Provisioning. Für unternehmenskritische Workloads."
+      },
+      "overage": {
+        "title": "Überverbrauch",
+        "description": "Überschreitungen werden pro Sucheinheit fakturiert. Kein harter Stopp – dein Dienst bleibt immer online."
+      },
+      "custom": {
+        "description": "Nicht standardmäßige Anforderungen — On-Premise-Deployment, Datenspeichervereinbarungen, White-Labelling — werden als individuelle Verträge abgewickelt.",
+        "title": "Brauchen Sie etwas anderes?"
+      }
+    }
+  },
+  "resourcesPage": {
+    "title": "Ressourcen",
+    "description": "Leitfäden, Tutorials, API-Referenz und Best Practices zum Aufbau von Suche mit AACsearch."
+  },
+  "resources": {
+    "title": "Alles, was du zum Starten brauchst",
+    "subtitle": "Von Schnellstarts bis zu fortgeschrittener Relevanz-Tuning – hier findest du alles.",
+    "items": {
+      "docs": {
+        "title": "Dokumentation",
+        "description": "Vollständige API-Referenz, SDK-Guides und konzeptionelle Erklärungen – von Ersteinrichtung bis zu fortgeschrittenen Themen."
+      },
+      "tutorials": {
+        "title": "Tutorials",
+        "description": "Schritt-für-Schritt-Anleitungen für gängige Setups: E-Commerce-Suche, Wissensdatenbanken und mehrstufige Hierarchien."
+      },
+      "apiRef": {
+        "title": "API-Referenz",
+        "description": "Vollständige REST-API-Dokumentation mit interaktiven Beispielen. In OpenAPI 3.1 generiert."
+      },
+      "sdks": {
+        "title": "SDKs",
+        "description": "Browser-SDK, Node.js-Client und CLI. Alle in TypeScript, alle auf npm veröffentlicht."
+      },
+      "blog": {
+        "title": "Blog",
+        "description": "Technische Artikel zu Such-Engineering, Produkt-Updates und Fallstudien."
+      },
+      "changelog": {
+        "title": "Änderungsprotokoll",
+        "description": "Jedes Release dokumentiert, Upgradepfade klar."
+      },
+      "community": {
+        "description": "Fragen stellen, Integrationen teilen und Peer-Support im AACsearch-Community-Forum und Discord erhalten.",
+        "title": "Community"
+      },
+      "support": {
+        "description": "E-Mail-Support für Starter und höher. Enterprise-Pläne beinhalten einen dedizierten Slack-Kanal und vertragliches SLA.",
+        "title": "Support"
+      }
+    }
+  },
+  "statusPage": {
+    "title": "Systemstatus",
+    "description": "Echtzeit-Verfügbarkeit und Incident-History für alle AACsearch-Dienste."
+  },
+  "status": {
+    "title": "Immer verfügbar",
+    "subtitle": "Echtzeit-Status, Incident-History und Wartungsfenster für alle AACsearch-Dienste.",
+    "items": {
+      "api": {
+        "title": "Such-API",
+        "description": "Verfügbarkeit und Latenz für den primären Such-API-Endpunkt. Aktualisiert jede Minute."
+      },
+      "ingest": {
+        "title": "Ingest-Pipeline",
+        "description": "Status der Dokumenten-Ingest-Pipeline einschließlich Verarbeitungsverzögerung."
+      },
+      "dashboard": {
+        "title": "Dashboard",
+        "description": "Verfügbarkeit der SaaS-Steuerungsebene: Login, Index-Management und Analytik."
+      },
+      "incidents": {
+        "title": "Incident-History",
+        "description": "Vollständige Incident-History der letzten 90 Tage mit Root-Cause-Analyse."
+      },
+      "maintenance": {
+        "title": "Geplante Wartung",
+        "description": "Geplante Wartungsfenster werden 72 Stunden im Voraus bekannt gegeben."
+      },
+      "subscribe": {
+        "title": "Status-Abonnement",
+        "description": "Abonniere E-Mail- oder SMS-Benachrichtigungen für Incidents, die deinen Plan betreffen."
+      },
+      "analytics": {
+        "description": "Suchereigniserfassung, Aggregation und Dashboard-Updates. Typischerweise 60-90 Sekunden hinter der Echtzeit.",
+        "title": "Analytics-Pipeline"
+      }
+    }
+  },
+  "supportPage": {
+    "title": "Support",
+    "description": "Erhalte Hilfe zu AACsearch. Dokumentation, Community-Forum, E-Mail-Support und Enterprise-SLA."
+  },
+  "support": {
+    "title": "Wir sind für dich da",
+    "subtitle": "Von Self-Service-Dokumentation bis hin zu dedizierten Ingenieuren – für jede Stufe der Reife gibt es einen Supportweg.",
+    "items": {
+      "docs": {
+        "title": "Dokumentation",
+        "description": "Vollständige API-Referenz, Konzeptleitfäden und Tutorials. Durchsucht von AACsearch."
+      },
+      "community": {
+        "title": "Community-Forum",
+        "description": "Stelle öffentliche Fragen, tausche dich mit anderen Entwicklern aus und sieh vergangene Lösungen."
+      },
+      "email": {
+        "title": "E-Mail-Support",
+        "description": "Für Starter-Plan und höher. Reaktionszeit unter 24 Stunden. Für kritische Probleme selber Tag."
+      },
+      "sla": {
+        "title": "Enterprise-SLA",
+        "description": "99,95 % Uptime-Garantie, dedizierter Customer Success Manager und 4-Stunden-Reaktionszeit für Blocker."
+      },
+      "onboarding": {
+        "title": "Onboarding-Unterstützung",
+        "description": "Geführtes Onboarding für Pro- und Enterprise-Kunden. Wir helfen beim Schema-Design und der Migrationsstrategie."
+      },
+      "status": {
+        "title": "Systemstatus",
+        "description": "Überprüfe status.aacsearch.com für Echtzeit-Verfügbarkeit und Incident-History."
+      },
+      "chat": {
+        "description": "In-Dashboard-Live-Chat für Pro- und Business-Plan-Kunden. Verbindet direkt mit dem AACsearch-Support-Team während der Geschäftszeiten.",
+        "title": "Live-Chat"
+      },
+      "documentation": {
+        "description": "Vollständige API-Referenz, SDK-Leitfäden und Integrations-Tutorials. Versioniert, durchsuchbar und mit jedem Release aktualisiert.",
+        "title": "Dokumentation"
+      },
+      "slack": {
+        "description": "Enterprise-Kunden erhalten einen gemeinsamen Slack-Connect-Kanal mit dem AACsearch-Engineering- und Support-Team.",
+        "title": "Dedizierter Slack-Kanal"
+      }
+    }
+  },
+  "trustPage": {
+    "title": "Vertrauen & Sicherheit",
+    "description": "Wie AACsearch Kundendaten schützt: Verschlüsselung, Zugangskontrolle, Datenresidenz und Compliance-Zertifizierungen."
+  },
+  "trust": {
+    "title": "Sicherheit als Grundlage",
+    "subtitle": "AACsearch wurde mit Security by Default gebaut. Alle Maßnahmen, Zertifizierungen und Richtlinien sind hier dokumentiert.",
+    "items": {
+      "encryption": {
+        "title": "Verschlüsselung",
+        "description": "Daten werden im Ruhezustand (AES-256) und bei der Übertragung (TLS 1.3) verschlüsselt. Schlüssel werden in einem HSM verwaltet."
+      },
+      "accessControl": {
+        "title": "Zugangskontrolle",
+        "description": "API-Keys, scoped Tokens, IP-Allow-Lists und SCIM-Provisioning. Jede Aktion wird geloggt."
+      },
+      "dataResidency": {
+        "title": "Datenresidenz",
+        "description": "Wähle EU (Frankfurt) oder USA (Nord-Virginia) beim Anmelden. Keine gebietsübergreifende Replikation ohne Zustimmung."
+      },
+      "soc2": {
+        "title": "SOC 2 Typ II (geplant)",
+        "description": "Das SOC 2-Audit ist für Q4 2025 geplant. Bestehende Sicherheitskontrollen entsprechen dem SOC 2 Trust Services Criteria."
+      },
+      "gdpr": {
+        "title": "DSGVO",
+        "description": "AACsearch ist als Datenverarbeiter tätig. Ein Auftragsverarbeitungsvertrag (DPA) ist im Enterprise-Plan verfügbar."
+      },
+      "pentest": {
+        "title": "Penetrationstests",
+        "description": "Jährliche Penetrationstests durch einen unabhängigen Dritten. Ergebnisse auf Anfrage an Enterprise-Kunden."
+      },
+      "auditLog": {
+        "description": "Jede Admin-Aktion — Index-Erstellung, Schlüsselausstellung, Mitglieder-Einladung — wird mit Akteur-Identität, Zeitstempel und Org-Kontext protokolliert.",
+        "title": "Audit-Log"
+      },
+      "disclosure": {
+        "description": "Sicherheitslücke gefunden? E-Mail an security@aacsearch.com. Wir befolgen einen 90-tägigen koordinierten Offenlegungszeitplan und nennen alle Melder.",
+        "title": "Verantwortungsvolle Offenlegung"
+      }
+    }
+  },
+  "allPagesPage": {
+    "title": "Alle Seiten",
+    "description": "Ein vollständiges Verzeichnis aller AACsearch-Seiten — Marketing-Website, Funktionen, Integrationen und die Anwendung.",
+    "marketingTitle": "Marketing-Website",
+    "appTitle": "Anwendung",
+    "saasNote": "Anwendungsrouten auf {base}",
+    "sections": {
+      "core": "Kernseiten",
+      "features": "Funktionen",
+      "useCases": "Anwendungsfälle",
+      "integrations": "Integrationen",
+      "compare": "Vergleiche",
+      "solutions": "Lösungen",
+      "company": "Unternehmen",
+      "auth": "Authentifizierung",
+      "account": "Konto",
+      "organization": "Organisation",
+      "admin": "Admin",
+      "misc": "Sonstiges"
+    }
+  },
+  "connectorsPage": {
+    "title": "CMS-Konnektoren",
+    "description": "Native PHP-Module für PrestaShop und 1C-Bitrix. REST Connector API für alles andere.",
+    "comingSoon": "Demnächst",
+    "comingSoonTitle": "Weitere Konnektoren folgen",
+    "comingSoonSubtitle": "WooCommerce- und Shopify-Unterstützung ist in Entwicklung. Nutzen Sie die Connector API, um Ihren eigenen zu erstellen.",
+    "comingSoonItems": {
+      "woocommerce": {
+        "title": "WooCommerce",
+        "description": "WordPress + WooCommerce-Plugin. Synchronisierung von Produkten, Kategorien und Bestellungen."
+      },
+      "shopify": {
+        "title": "Shopify",
+        "description": "Shopify-App mit Produkt-, Varianten- und Metafeld-Synchronisierung. Widget-Einbettung inklusive."
+      }
+    }
+  },
+  "tutorialsPage": {
+    "title": "Video-Tutorials",
+    "description": "Sehen Sie sich Schritt-für-Schritt-Anleitungen an, um das Beste aus AACsearch herauszuholen — vom 5-minütigen Setup bis zu fortgeschrittenen Integrationen.",
+    "videos": {
+      "quickstart": {
+        "title": "5-Minuten Schnellstart",
+        "description": "Erstellen Sie ein Konto, laden Sie Daten hoch, betten Sie ein Such-Widget ein und gehen Sie live — alles in unter 5 Minuten."
+      },
+      "ecommerce": {
+        "title": "E-Commerce-Suche einrichten",
+        "description": "Konfigurieren Sie die Produktsuche mit facettierter Navigation, bereichsspezifischen Tokens pro Shop und Analysen."
+      },
+      "blog": {
+        "title": "Content-/Blog-Suche",
+        "description": "Fügen Sie Ihrem Blog oder Ihrer Dokumentation sofortige Volltextsuche mit Tippfehlertoleranz hinzu."
+      },
+      "app": {
+        "title": "SaaS-App-Suche",
+        "description": "Erstellen Sie eine mandantenfähige Suche für Ihre SaaS-App mit mandantenspezifischer Isolierung und bereichsspezifischen API-Schlüsseln."
+      }
+    }
+  }
+}

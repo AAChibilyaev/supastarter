@@ -103,8 +103,6 @@ export function WidgetAnalyticsPanel({ organizationId }: WidgetAnalyticsPanelPro
 			) : (
 				<SearchAnalyticsCards
 					organizationId={organizationId}
-					period="last7"
-					indexId={selectedIndex?.id}
 				/>
 			)}
 

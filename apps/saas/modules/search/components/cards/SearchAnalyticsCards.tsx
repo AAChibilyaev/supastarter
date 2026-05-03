@@ -372,6 +372,63 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 				</Card>
 			)}
 
+			{/* CTR by Query table */}
+			{ctrTrendData?.byQuery && ctrTrendData.byQuery.length > 0 && (
+				<Card>
+					<CardHeader>
+						<CardTitle>
+							{t("search.analytics.ctrLabel")} {t("search.analytics.byQuery")}
+						</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<Table>
+							<TableHeader>
+								<TableRow>
+									<TableHead>{t("search.analytics.queryColumn")}</TableHead>
+									<TableHead className="text-right">
+										{t("search.analytics.searchesColumn")}
+									</TableHead>
+									<TableHead className="text-right">
+										{t("search.analytics.clicksColumn")}
+									</TableHead>
+									<TableHead className="text-right">
+										{t("search.analytics.ctrColumn")}
+									</TableHead>
+								</TableRow>
+							</TableHeader>
+							<TableBody>
+								{ctrTrendData.byQuery.map(
+									(
+										row: {
+											query: string;
+											searches: number;
+											clicks: number;
+											ctr: number;
+										},
+										index: number,
+									) => (
+										<TableRow key={row.query + index}>
+											<TableCell className="font-mono text-sm max-w-xs truncate">
+												{row.query}
+											</TableCell>
+											<TableCell className="text-right tabular-nums">
+												{format.number(row.searches)}
+											</TableCell>
+											<TableCell className="text-right tabular-nums">
+												{format.number(row.clicks)}
+											</TableCell>
+											<TableCell className="text-right tabular-nums">
+												{(row.ctr * 100).toFixed(1)}%
+											</TableCell>
+										</TableRow>
+									),
+								)}
+							</TableBody>
+						</Table>
+					</CardContent>
+				</Card>
+			)}
+
 			{/* Top 10 queries table */}
 			<Card>
 				<CardHeader>

@@ -11,6 +11,9 @@ interface TypesenseSearchParams {
 	per_page?: number;
 	page?: number;
 	highlight_fields?: string;
+	text_match_type?: "all" | "any" | "max_score";
+	search_cutoff_ms?: number;
+	use_cache?: boolean;
 }
 
 export interface SearchDocumentsInput {
@@ -24,6 +27,12 @@ export interface SearchDocumentsInput {
 	perPage?: number;
 	page?: number;
 	highlightFields?: string;
+	/** How query tokens should match: 'all' (AND), 'any' (OR), or 'max_score'. */
+	textMatchType?: "all" | "any" | "max_score";
+	/** Abort search after N milliseconds and return partial results. */
+	searchCutoffMs?: number;
+	/** Cache identical search requests within the cache_ttl window. */
+	useCache?: boolean;
 }
 
 export interface SearchDocumentsResult {
@@ -60,6 +69,9 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		per_page: perPage,
 		page: input.page ?? 1,
 		highlight_fields: input.highlightFields,
+		text_match_type: input.textMatchType,
+		search_cutoff_ms: input.searchCutoffMs,
+		use_cache: input.useCache,
 	};
 
 	const response = await client.collections(input.alias).documents().search(params);
@@ -103,6 +115,9 @@ export async function multiSearchDocuments(
 			per_page: perPage,
 			page: entry.page ?? 1,
 			highlight_fields: entry.highlightFields,
+			text_match_type: entry.textMatchType,
+			search_cutoff_ms: entry.searchCutoffMs,
+			use_cache: entry.useCache,
 		};
 	});
 

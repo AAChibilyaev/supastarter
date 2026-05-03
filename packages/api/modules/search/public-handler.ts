@@ -17,6 +17,9 @@ const publicSearchInput = z.object({
 	perPage: z.number().int().min(1).max(100).optional(),
 	page: z.number().int().min(1).max(1000).optional(),
 	highlightFields: z.string().optional(),
+	textMatchType: z.enum(["all", "any", "max_score"]).optional(),
+	searchCutoffMs: z.number().int().min(1).optional(),
+	useCache: z.boolean().optional(),
 });
 
 const multiSearchInput = z.object({

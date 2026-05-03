@@ -25,6 +25,12 @@ export interface SearchParams {
 	perPage?: number;
 	page?: number;
 	highlightFields?: string;
+	/** How query tokens should match: 'all' (AND), 'any' (OR), or 'max_score'. */
+	textMatchType?: "all" | "any" | "max_score";
+	/** Abort search after N milliseconds and return partial results. */
+	searchCutoffMs?: number;
+	/** Cache identical search requests within the cache_ttl window. */
+	useCache?: boolean;
 }
 
 export interface SearchHit {

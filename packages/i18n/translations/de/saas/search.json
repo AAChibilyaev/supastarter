@@ -2093,7 +2093,17 @@
 			"allTests": "Alle Tests",
 			"activeTests": "Aktive Tests",
 			"name": "Name",
-			"status": "Status"
+			"status": "Status",
+			"results": "Ergebnisse",
+			"variantA": "Variante A",
+			"variantB": "Variante B",
+			"searches": "Suchanfragen",
+			"clicks": "Klicks",
+			"ctr": "CTR",
+			"zeroResults": "Null Ergebnisse",
+			"variantALeading": "Variante A führt um {diff}% CTR",
+			"variantBLeading": "Variante B führt um {diff}% CTR",
+			"variantsTied": "Varianten sind gleichauf"
 		}
 	}
 }

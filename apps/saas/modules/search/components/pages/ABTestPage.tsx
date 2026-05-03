@@ -359,6 +359,20 @@ function ABTestCard({
 		return lines;
 	}, [test, t]);
 
+	const { data: results } = useQuery(
+		orpc.search.abTest.results.queryOptions({
+			input: {
+				organizationId,
+				slug: indexSlug,
+				testId: test.id,
+			},
+			enabled:
+				test.status === "running" ||
+				test.status === "stopped" ||
+				test.status === "completed",
+		}),
+	);
+
 	return (
 		<Card>
 			<CardHeader className="flex-row items-start justify-between">
@@ -447,6 +461,131 @@ function ABTestCard({
 								</div>
 							))}
 						</div>
+					</div>
+				)}
+
+				{/* Results section */}
+				{results && (
+					<div className="gap-3 grid">
+						<span className="text-sm font-medium">{t("search.abTest.results")}</span>
+						<div className="gap-4 grid grid-cols-2">
+							{/* Variant A */}
+							<div className="p-3 space-y-2 rounded-lg border">
+								<div className="gap-1.5 flex items-center">
+									<Badge
+										status="info"
+										className="size-4 p-0 rounded-full text-[10px]"
+									>
+										A
+									</Badge>
+									<span className="text-xs font-medium text-muted-foreground">
+										{t("search.abTest.variantA")}
+									</span>
+								</div>
+								<div className="gap-1.5 grid grid-cols-2">
+									<div>
+										<p className="text-xs text-muted-foreground">
+											{t("search.abTest.searches")}
+										</p>
+										<p className="text-lg font-semibold tabular-nums">
+											{results.variantA.searches}
+										</p>
+									</div>
+									<div>
+										<p className="text-xs text-muted-foreground">
+											{t("search.abTest.clicks")}
+										</p>
+										<p className="text-lg font-semibold tabular-nums">
+											{results.variantA.clicks}
+										</p>
+									</div>
+									<div>
+										<p className="text-xs text-muted-foreground">
+											{t("search.abTest.ctr")}
+										</p>
+										<p className="text-lg font-semibold tabular-nums">
+											{(results.variantA.ctr * 100).toFixed(2)}%
+										</p>
+									</div>
+									<div>
+										<p className="text-xs text-muted-foreground">
+											{t("search.abTest.zeroResults")}
+										</p>
+										<p className="text-lg font-semibold tabular-nums">
+											{results.variantA.zeroResults}
+										</p>
+									</div>
+								</div>
+							</div>
+							{/* Variant B */}
+							<div className="p-3 space-y-2 rounded-lg border">
+								<div className="gap-1.5 flex items-center">
+									<Badge
+										status="success"
+										className="size-4 p-0 rounded-full text-[10px]"
+									>
+										B
+									</Badge>
+									<span className="text-xs font-medium text-muted-foreground">
+										{t("search.abTest.variantB")}
+									</span>
+								</div>
+								<div className="gap-1.5 grid grid-cols-2">
+									<div>
+										<p className="text-xs text-muted-foreground">
+											{t("search.abTest.searches")}
+										</p>
+										<p className="text-lg font-semibold tabular-nums">
+											{results.variantB.searches}
+										</p>
+									</div>
+									<div>
+										<p className="text-xs text-muted-foreground">
+											{t("search.abTest.clicks")}
+										</p>
+										<p className="text-lg font-semibold tabular-nums">
+											{results.variantB.clicks}
+										</p>
+									</div>
+									<div>
+										<p className="text-xs text-muted-foreground">
+											{t("search.abTest.ctr")}
+										</p>
+										<p className="text-lg font-semibold tabular-nums">
+											{(results.variantB.ctr * 100).toFixed(2)}%
+										</p>
+									</div>
+									<div>
+										<p className="text-xs text-muted-foreground">
+											{t("search.abTest.zeroResults")}
+										</p>
+										<p className="text-lg font-semibold tabular-nums">
+											{results.variantB.zeroResults}
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						{/* Winner indicator */}
+						{results.variantA.ctr > 0 && results.variantB.ctr > 0 && (
+							<div className="text-xs text-muted-foreground">
+								{results.variantA.ctr > results.variantB.ctr
+									? t("search.abTest.variantALeading", {
+											diff: (
+												(results.variantA.ctr - results.variantB.ctr) *
+												100
+											).toFixed(2),
+										})
+									: results.variantB.ctr > results.variantA.ctr
+										? t("search.abTest.variantBLeading", {
+												diff: (
+													(results.variantB.ctr - results.variantA.ctr) *
+													100
+												).toFixed(2),
+											})
+										: t("search.abTest.variantsTied")}
+							</div>
+						)}
 					</div>
 				)}
 

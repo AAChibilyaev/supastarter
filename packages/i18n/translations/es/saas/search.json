@@ -2133,7 +2133,17 @@
 			"allTests": "Todas las pruebas",
 			"activeTests": "Pruebas activas",
 			"name": "Nombre",
-			"status": "Estado"
+			"status": "Estado",
+			"results": "Resultados",
+			"variantA": "Variante A",
+			"variantB": "Variante B",
+			"searches": "Búsquedas",
+			"clicks": "Clics",
+			"ctr": "CTR",
+			"zeroResults": "Cero resultados",
+			"variantALeading": "Variante A lidera por {diff}% CTR",
+			"variantBLeading": "Variante B lidera por {diff}% CTR",
+			"variantsTied": "Variantes empatadas"
 		}
 	}
 }

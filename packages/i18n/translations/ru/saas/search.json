@@ -2093,7 +2093,17 @@
 			"allTests": "Все тесты",
 			"activeTests": "Активные тесты",
 			"name": "Название",
-			"status": "Статус"
+			"status": "Статус",
+			"results": "Результаты",
+			"variantA": "Вариант A",
+			"variantB": "Вариант B",
+			"searches": "Поисков",
+			"clicks": "Кликов",
+			"ctr": "CTR",
+			"zeroResults": "Нулевых результатов",
+			"variantALeading": "Вариант A лидирует на {diff}% CTR",
+			"variantBLeading": "Вариант B лидирует на {diff}% CTR",
+			"variantsTied": "Варианты равны"
 		}
 	}
 }

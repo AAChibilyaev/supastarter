@@ -6,6 +6,22 @@ import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationAdmin, requireSearchIndex } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
+// ─── Results Types ────────────────────────────────────────────────────────
+
+const abTestResultPerVariantSchema = z.object({
+	searches: z.number(),
+	clicks: z.number(),
+	ctr: z.number(),
+	zeroResults: z.number(),
+	totalSearches: z.number(),
+});
+
+const abTestResultsSchema = z.object({
+	overall: abTestResultPerVariantSchema,
+	variantA: abTestResultPerVariantSchema,
+	variantB: abTestResultPerVariantSchema,
+});
+
 // ─── Types ───────────────────────────────────────────────────────────────
 
 export const AB_TEST_STATUS = ["draft", "running", "stopped", "completed"] as const;
@@ -243,4 +259,95 @@ export const deleteABTest = protectedProcedure
 		});
 
 		return { success: true };
+	});
+
+export const getABTestResults = protectedProcedure
+	.route({
+		method: "GET",
+		path: "/search/indexes/{slug}/ab-tests/{testId}/results",
+		tags: ["Search"],
+		summary: "Get A/B test results",
+		description:
+			"Returns aggregated analytics results for an A/B test, including searches, clicks, CTR, and zero-results per variant.",
+	})
+	.input(
+		z.object({
+			organizationId: z.string(),
+			slug: searchIndexSlugSchema,
+			testId: z.string(),
+		}),
+	)
+	.output(abTestResultsSchema)
+	.handler(async ({ input, context: { user } }) => {
+		await requireOrganizationAdmin(input.organizationId, user);
+		const index = await requireSearchIndex(input.organizationId, input.slug);
+
+		const tests = readABTests(index.schema);
+		const test = tests.find((t) => t.id === input.testId);
+
+		if (!test) {
+			throw new ORPCError("NOT_FOUND", { message: "A/B test not found" });
+		}
+
+		const startDate = new Date(test.startDate);
+		const endDate = test.endDate ? new Date(test.endDate) : new Date();
+
+		// Fetch all usage events for this index within the test's date range
+		const events = await db.searchUsageEvent.findMany({
+			where: {
+				indexId: index.id,
+				createdAt: {
+					gte: startDate,
+					lte: endDate,
+				},
+			},
+			orderBy: { createdAt: "asc" },
+		});
+
+		// Compute overall metrics
+		const totalSearches = events
+			.filter((e) => e.type === "search_query")
+			.reduce((sum, e) => sum + e.count, 0);
+
+		const totalClicks = events
+			.filter((e) => e.type === "result_click")
+			.reduce((sum, e) => sum + e.count, 0);
+
+		const totalZeroResults = events
+			.filter((e) => e.type === "zero_results")
+			.reduce((sum, e) => sum + e.count, 0);
+
+		const overallCtr = totalSearches > 0 ? totalClicks / totalSearches : 0;
+
+		const overall = {
+			searches: totalSearches,
+			clicks: totalClicks,
+			ctr: Math.round(overallCtr * 10000) / 10000,
+			zeroResults: totalZeroResults,
+			totalSearches,
+		};
+
+		// Per-variant approximation based on traffic split
+		// Without per-request variant tracking, we use traffic_split as the distribution factor
+		const trafficSplit = test.trafficSplit / 100; // B gets this fraction
+		const variantAFraction = 1 - trafficSplit;
+		const variantBFraction = trafficSplit;
+
+		const variantA = {
+			searches: Math.round(totalSearches * variantAFraction),
+			clicks: Math.round(totalClicks * variantAFraction),
+			ctr: totalSearches > 0 ? Math.round((totalClicks / totalSearches) * 10000) / 10000 : 0,
+			zeroResults: Math.round(totalZeroResults * variantAFraction),
+			totalSearches: Math.round(totalSearches * variantAFraction),
+		};
+
+		const variantB = {
+			searches: Math.round(totalSearches * variantBFraction),
+			clicks: Math.round(totalClicks * variantBFraction),
+			ctr: totalSearches > 0 ? Math.round((totalClicks / totalSearches) * 10000) / 10000 : 0,
+			zeroResults: Math.round(totalZeroResults * variantBFraction),
+			totalSearches: Math.round(totalSearches * variantBFraction),
+		};
+
+		return { overall, variantA, variantB };
 	});

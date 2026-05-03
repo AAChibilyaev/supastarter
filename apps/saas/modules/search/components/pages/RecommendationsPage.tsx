@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
+import { PersonalizationOverviewCard } from "../recommendations/PersonalizationOverviewCard";
 import { RecommendationsDashboardCards } from "../recommendations/RecommendationsDashboardCards";
 import { RecommendationsGraphRAG } from "../recommendations/RecommendationsGraphRAG";
 import { RecommendationsPersonalizedAnalytics } from "../recommendations/RecommendationsPersonalizedAnalytics";
@@ -75,6 +76,7 @@ export function RecommendationsPage({ organizationId }: RecommendationsPageProps
 			</TabsList>
 
 			<TabsContent value="dashboard" className="mt-6 space-y-6">
+				<PersonalizationOverviewCard organizationId={organizationId} />
 				<RecommendationsDashboardCards organizationId={organizationId} />
 			</TabsContent>
 

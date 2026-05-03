@@ -90,7 +90,9 @@ export const getConfig = adminProcedure
 			typesenseConfigured: Boolean(
 				process.env.TYPESENSE_HOST && process.env.TYPESENSE_ADMIN_API_KEY,
 			),
-			tochkaConfigured: Boolean(process.env.TOCHKA_API_BASE_URL && process.env.TOCHKA_JWT_TOKEN),
+			tochkaConfigured: Boolean(
+				process.env.TOCHKA_API_BASE_URL && process.env.TOCHKA_JWT_TOKEN,
+			),
 			mailConfigured: Boolean(
 				process.env.PLUNK_API_KEY ||
 				process.env.RESEND_API_KEY ||

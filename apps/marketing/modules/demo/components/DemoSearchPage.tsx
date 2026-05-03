@@ -186,7 +186,9 @@ export function DemoSearchPage() {
 										}`}
 									>
 										<span>{cat.value}</span>
-										<span className="text-xs text-muted-foreground">{cat.count}</span>
+										<span className="text-xs text-muted-foreground">
+											{cat.count}
+										</span>
 									</button>
 								))}
 							</div>
@@ -195,9 +197,12 @@ export function DemoSearchPage() {
 						{/* Stats */}
 						<div className="p-4 text-sm rounded-lg border border-border bg-muted/30 text-muted-foreground">
 							<p>
-								<strong className="text-foreground">{results.found}</strong> products found
+								<strong className="text-foreground">{results.found}</strong>{" "}
+								products found
 							</p>
-							<p className="mt-1">Search took {results.search_time_ms.toFixed(0)}ms</p>
+							<p className="mt-1">
+								Search took {results.search_time_ms.toFixed(0)}ms
+							</p>
 						</div>
 
 						{/* CTA */}
@@ -219,7 +224,9 @@ export function DemoSearchPage() {
 						{results.hits.length === 0 ? (
 							<div className="py-16 text-center">
 								<SearchIcon className="size-12 mb-4 mx-auto text-muted-foreground/40" />
-								<p className="text-lg font-medium mb-1 text-foreground">No products found</p>
+								<p className="text-lg font-medium mb-1 text-foreground">
+									No products found
+								</p>
 								<p className="text-sm text-muted-foreground">
 									Try a different search term or browse all categories.
 								</p>
@@ -247,7 +254,9 @@ export function DemoSearchPage() {
 															{product.name?.charAt(0) ?? "?"}
 														</span>
 													</div>
-													<p className="text-xs text-muted-foreground">No image</p>
+													<p className="text-xs text-muted-foreground">
+														No image
+													</p>
 												</div>
 											)}
 										</div>

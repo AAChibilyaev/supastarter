@@ -36,7 +36,11 @@ export default async function IntegrationsPrestashopPage(props: {
 				</div>
 			</section>
 			<PrestashopGrid />
-			<IntegrationSetupSteps namespace="integrationsPrestashopSetup" stepCount={5} ctaHref="#" />
+			<IntegrationSetupSteps
+				namespace="integrationsPrestashopSetup"
+				stepCount={5}
+				ctaHref="#"
+			/>
 			<IntegrationFaq namespace="integrationsPrestashopFaq" />
 			<CtaFooter />
 		</>

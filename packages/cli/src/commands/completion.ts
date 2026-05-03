@@ -14,48 +14,52 @@ export const completionCommand = new Command("completion")
 	.argument("[shell]", "Shell type: bash, zsh, fish (default: auto-detect)")
 	.option("--install", "Install completions to the default location")
 	.option("--print", "Print completion script to stdout")
-	.action(async (shellArg: string | undefined, options: { install?: boolean; print?: boolean }) => {
-		const shell = shellArg ?? detectShell();
-		const validShells = ["bash", "zsh", "fish"];
+	.action(
+		async (shellArg: string | undefined, options: { install?: boolean; print?: boolean }) => {
+			const shell = shellArg ?? detectShell();
+			const validShells = ["bash", "zsh", "fish"];
 
-		if (!validShells.includes(shell)) {
-			console.error(`Error: Unsupported shell "${shell}". Supported: ${validShells.join(", ")}`);
-			process.exit(1);
-		}
+			if (!validShells.includes(shell)) {
+				console.error(
+					`Error: Unsupported shell "${shell}". Supported: ${validShells.join(", ")}`,
+				);
+				process.exit(1);
+			}
 
-		const script = generateCompletionScript(shell);
+			const script = generateCompletionScript(shell);
 
-		if (options.print) {
+			if (options.print) {
+				console.log(script);
+				return;
+			}
+
+			if (options.install) {
+				await installCompletion(shell, script);
+				return;
+			}
+
+			// Interactive mode
+			console.log(`AACsearch shell completions for ${shell}`);
+			console.log("");
 			console.log(script);
-			return;
-		}
+			console.log("");
 
-		if (options.install) {
-			await installCompletion(shell, script);
-			return;
-		}
+			const rl = createInterface({
+				input: process.stdin,
+				output: process.stdout,
+			});
+			const answer = await rl.question("Install to default location? [y/N]: ");
+			rl.close();
 
-		// Interactive mode
-		console.log(`AACsearch shell completions for ${shell}`);
-		console.log("");
-		console.log(script);
-		console.log("");
-
-		const rl = createInterface({
-			input: process.stdin,
-			output: process.stdout,
-		});
-		const answer = await rl.question("Install to default location? [y/N]: ");
-		rl.close();
-
-		if (answer.toLowerCase() === "y" || answer.toLowerCase() === "yes") {
-			await installCompletion(shell, script);
-		} else {
-			console.log(
-				`To use, add the output to your ${shell} config (e.g. source <(aacsearch completion ${shell})).`,
-			);
-		}
-	});
+			if (answer.toLowerCase() === "y" || answer.toLowerCase() === "yes") {
+				await installCompletion(shell, script);
+			} else {
+				console.log(
+					`To use, add the output to your ${shell} config (e.g. source <(aacsearch completion ${shell})).`,
+				);
+			}
+		},
+	);
 
 function detectShell(): string {
 	const shellEnv = process.env.SHELL ?? "";

@@ -42,7 +42,9 @@ describe("searchDocuments", () => {
 			queryBy: "title",
 			filterBy: "category:=books && in_stock:=true",
 		});
-		expect(capturedParams.filter_by).toBe("tenant_id:=org1 && (category:=books && in_stock:=true)");
+		expect(capturedParams.filter_by).toBe(
+			"tenant_id:=org1 && (category:=books && in_stock:=true)",
+		);
 	});
 
 	it("clamps perPage to maxPerPage", async () => {

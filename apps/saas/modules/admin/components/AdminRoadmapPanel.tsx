@@ -131,7 +131,10 @@ function RoadmapItemCard({
 					<div className="gap-2 flex items-center">
 						<StatusIcon className="size-4 text-muted-foreground" />
 						<span className="font-medium text-sm truncate">{item.title}</span>
-						<Badge status={statusBadgeVariant[item.status]} className="px-1.5 py-0 text-[10px]">
+						<Badge
+							status={statusBadgeVariant[item.status]}
+							className="px-1.5 py-0 text-[10px]"
+						>
 							{item.status}
 						</Badge>
 						<span className="text-[11px] text-muted-foreground">{item.quarter}</span>
@@ -142,7 +145,12 @@ function RoadmapItemCard({
 				</div>
 
 				<div className="gap-1 flex shrink-0 items-center">
-					<Button variant="ghost" size="icon" className="size-7" onClick={() => onEdit(item)}>
+					<Button
+						variant="ghost"
+						size="icon"
+						className="size-7"
+						onClick={() => onEdit(item)}
+					>
 						<PencilIcon className="size-3.5" />
 					</Button>
 					<Button
@@ -223,7 +231,9 @@ function RoadmapItemForm({
 					<Label htmlFor="status">{t("form.status")}</Label>
 					<Select
 						value={form.status}
-						onValueChange={(v: "shipped" | "inProgress" | "planned") => onChange({ status: v })}
+						onValueChange={(v: "shipped" | "inProgress" | "planned") =>
+							onChange({ status: v })
+						}
 					>
 						<SelectTrigger id="status">
 							<SelectValue />
@@ -388,7 +398,9 @@ export function AdminRoadmapPanel() {
 		<div className="gap-6 grid grid-cols-1">
 			{/* Toolbar */}
 			<div className="gap-2 flex items-center justify-between">
-				<p className="text-sm text-muted-foreground">{t("itemsCount", { count: items.length })}</p>
+				<p className="text-sm text-muted-foreground">
+					{t("itemsCount", { count: items.length })}
+				</p>
 				<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 					<DialogTrigger asChild>
 						<Button onClick={handleAdd}>
@@ -398,7 +410,9 @@ export function AdminRoadmapPanel() {
 					</DialogTrigger>
 					<DialogContent className="sm:max-w-lg">
 						<DialogHeader>
-							<DialogTitle>{editingItem ? t("editTitle") : t("createTitle")}</DialogTitle>
+							<DialogTitle>
+								{editingItem ? t("editTitle") : t("createTitle")}
+							</DialogTitle>
 							<DialogDescription>
 								{editingItem ? t("editDescription") : t("createDescription")}
 							</DialogDescription>

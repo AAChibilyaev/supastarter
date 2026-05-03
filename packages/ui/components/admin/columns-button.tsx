@@ -126,7 +126,8 @@ export const ColumnsSelector = ({ children }: ColumnsSelectorProps) => {
 
 	// on first mount, we don't have the container yet, so we wait for it
 	useEffect(() => {
-		if (container && typeof document !== "undefined" && document.body.contains(container)) return;
+		if (container && typeof document !== "undefined" && document.body.contains(container))
+			return;
 		// look for the container in the DOM every 100ms
 		const interval = setInterval(() => {
 			const target = document.getElementById(elementId);

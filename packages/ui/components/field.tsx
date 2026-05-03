@@ -95,7 +95,10 @@ function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
 	return (
 		<div
 			data-slot="field-content"
-			className={cn("group/field-content gap-1.5 leading-snug flex flex-1 flex-col", className)}
+			className={cn(
+				"group/field-content gap-1.5 leading-snug flex flex-1 flex-col",
+				className,
+			)}
 			{...props}
 		/>
 	);
@@ -197,7 +200,9 @@ function FieldError({
 
 		return (
 			<ul className="ml-4 gap-1 flex list-disc flex-col">
-				{errors.map((error, index) => error?.message && <li key={index}>{error.message}</li>)}
+				{errors.map(
+					(error, index) => error?.message && <li key={index}>{error.message}</li>,
+				)}
 			</ul>
 		);
 	}, [children, errors]);

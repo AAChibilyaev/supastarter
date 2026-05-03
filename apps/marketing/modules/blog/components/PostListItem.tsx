@@ -70,7 +70,9 @@ export function PostListItem({ post, priorityImage = false }: PostListItemProps)
 				)}
 
 				<div className="mr-0 ml-auto">
-					<p className="text-sm opacity-30">{Intl.DateTimeFormat(locale).format(new Date(date))}</p>
+					<p className="text-sm opacity-30">
+						{Intl.DateTimeFormat(locale).format(new Date(date))}
+					</p>
 				</div>
 			</div>
 		</div>

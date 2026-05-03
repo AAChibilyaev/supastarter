@@ -82,7 +82,9 @@ export function ShopifyStoreSettings({
 				<div className="mt-6 space-y-6">
 					{/* Collections to index */}
 					<div className="space-y-3">
-						<p className="text-sm font-medium">{t("search.connectors.shopify.collectionsLabel")}</p>
+						<p className="text-sm font-medium">
+							{t("search.connectors.shopify.collectionsLabel")}
+						</p>
 						<div className="space-y-2">
 							{SHOPIFY_COLLECTIONS.map((col) => (
 								<div key={col} className="gap-2 flex items-center">
@@ -91,7 +93,10 @@ export function ShopifyStoreSettings({
 										checked={selectedCollections.has(col)}
 										onCheckedChange={() => toggleCollection(col)}
 									/>
-									<Label htmlFor={`shopify-col-${col}`} className="text-sm capitalize">
+									<Label
+										htmlFor={`shopify-col-${col}`}
+										className="text-sm capitalize"
+									>
 										{col}
 									</Label>
 									{col === "products" && (
@@ -107,7 +112,9 @@ export function ShopifyStoreSettings({
 					{/* Auto-sync toggle */}
 					<div className="gap-3 flex items-center justify-between">
 						<div className="space-y-0.5">
-							<p className="text-sm font-medium">{t("search.connectors.shopify.autoSync")}</p>
+							<p className="text-sm font-medium">
+								{t("search.connectors.shopify.autoSync")}
+							</p>
 							<p className="text-xs text-muted-foreground">
 								{t("search.connectors.shopify.autoSyncDesc")}
 							</p>

@@ -28,23 +28,19 @@ const results = await client.search({
 const FAQ_ITEMS = [
 	{
 		question: "Why switch from Algolia to AACsearch?",
-		answer:
-			"AACsearch offers native multi-tenancy, scoped API tokens, simpler flat pricing, and zero vendor lock-in with full Typesense data export. Cost savings are typically 3-5x.",
+		answer: "AACsearch offers native multi-tenancy, scoped API tokens, simpler flat pricing, and zero vendor lock-in with full Typesense data export. Cost savings are typically 3-5x.",
 	},
 	{
 		question: "How does AACsearch pricing compare to Algolia?",
-		answer:
-			"AACsearch uses flat per-index pricing with unlimited search operations — no per-record or per-query charges. For 100k documents and 500k searches/month, AACsearch is $99/mo compared to Algolia's ~$499/mo (Growth plan).",
+		answer: "AACsearch uses flat per-index pricing with unlimited search operations — no per-record or per-query charges. For 100k documents and 500k searches/month, AACsearch is $99/mo compared to Algolia's ~$499/mo (Growth plan).",
 	},
 	{
 		question: "Is migration from Algolia to AACsearch difficult?",
-		answer:
-			"Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes. Most teams complete migration in an afternoon.",
+		answer: "Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes. Most teams complete migration in an afternoon.",
 	},
 	{
 		question: "Can I use AACsearch if I need Algolia-specific features?",
-		answer:
-			"AACsearch covers core search, geo-search, typo tolerance, faceted search, relevance tuning, synonyms, and curations. For Algolia-specific features like AB testing or AI recommendations, evaluate if the 5x cost savings offset those needs.",
+		answer: "AACsearch covers core search, geo-search, typo tolerance, faceted search, relevance tuning, synonyms, and curations. For Algolia-specific features like AB testing or AI recommendations, evaluate if the 5x cost savings offset those needs.",
 	},
 ];
 

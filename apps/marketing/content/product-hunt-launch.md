@@ -12,14 +12,14 @@
 Screenshots need to be captured from the live app. Instructions for whoever captures:
 
 1. **Dashboard Overview** — /en/dashboard: collections list, search stats widget, API key management card
-   - Dark theme, show the sidebar + main content area
+    - Dark theme, show the sidebar + main content area
 2. **Search Results Page** — Search results with faceted filters, highlighting, typo tolerance
-   - Show a real query result with filters sidebar
+    - Show a real query result with filters sidebar
 3. **Analytics Dashboard** — /en/analytics: query volume chart, popular searches table, latency, CTR
-   - Show the analytics page with data populated
+    - Show the analytics page with data populated
 4. **Connectors View** — Connectors page showing Next.js, PrestaShop, Bitrix options
 5. **Widget Preview** — Embedded search widget on a demo storefront
-   - Can mock this by embedding the widget on a test page
+    - Can mock this by embedding the widget on a test page
 
 **TODO:** Take screenshots from live app once logged in. Use 1600x900 viewport.
 

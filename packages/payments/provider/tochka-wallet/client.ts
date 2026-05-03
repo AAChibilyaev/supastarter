@@ -44,7 +44,9 @@ export async function tochkaRequest<T>(opts: TochkaRequestOptions): Promise<T> {
 
 	const text = await response.text();
 	if (!response.ok) {
-		throw new Error(`Tochka API ${opts.method} ${opts.path} failed: ${response.status} ${text}`);
+		throw new Error(
+			`Tochka API ${opts.method} ${opts.path} failed: ${response.status} ${text}`,
+		);
 	}
 
 	try {

@@ -53,7 +53,10 @@ export function SearchUsageCards({ organizationId }: SearchUsageCardsProps) {
 		);
 	}
 
-	const searchesPercent = Math.min(Math.round((data.searchesUsed / data.searchesLimit) * 100), 100);
+	const searchesPercent = Math.min(
+		Math.round((data.searchesUsed / data.searchesLimit) * 100),
+		100,
+	);
 	const documentsPercent = Math.min(
 		Math.round((data.documentsIndexed / data.documentsLimit) * 100),
 		100,

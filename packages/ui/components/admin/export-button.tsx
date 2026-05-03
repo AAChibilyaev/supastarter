@@ -70,7 +70,8 @@ export const ExportButton = (props: ExportButtonProps) => {
 			getData({ maxResults, meta })
 				.then(
 					(data) =>
-						exporter && exporter(data, fetchRelatedRecords(dataProvider), dataProvider, resource),
+						exporter &&
+						exporter(data, fetchRelatedRecords(dataProvider), dataProvider, resource),
 				)
 				.catch((error) => {
 					console.error(error);
@@ -84,7 +85,12 @@ export const ExportButton = (props: ExportButtonProps) => {
 	);
 
 	return (
-		<Button variant="outline" onClick={handleClick} disabled={total === 0} className={className}>
+		<Button
+			variant="outline"
+			onClick={handleClick}
+			disabled={total === 0}
+			className={className}
+		>
 			{icon}
 			{label}
 		</Button>

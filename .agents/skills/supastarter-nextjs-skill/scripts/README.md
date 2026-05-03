@@ -16,9 +16,9 @@ python3 scripts/generate_module.py <module-name> [--type public|protected|admin]
 
 - **module-name** (positional) — Lowercase, alphanumeric; hyphens allowed (e.g. `feedback`, `audit-log`, `user-settings`).
 - **--type** — Procedure type. One of:
-  - `public` (default) — no auth, no `context.user`
-  - `protected` — requires session; `context.user` available
-  - `admin` — requires session AND `user.role === "admin"`
+    - `public` (default) — no auth, no `context.user`
+    - `protected` — requires session; `context.user` available
+    - `admin` — requires session AND `user.role === "admin"`
 
 ### What it creates
 
@@ -35,12 +35,12 @@ The generated procedure throws `NOT_IMPLEMENTED` until you replace the body.
 1. Implement the create handler in `procedures/create.ts` (call into `@repo/database` queries).
 2. Mount the router in `packages/api/orpc/router.ts`:
 
-   ```ts
-   import { <camelName>Router } from "../modules/<name>/router";
-   // Inside the router object: <camelName>: <camelName>Router,
-   ```
+    ```ts
+    import { <camelName>Router } from "../modules/<name>/router";
+    // Inside the router object: <camelName>: <camelName>Router,
+    ```
 
-   The script prints the exact import line for you. `<camelName>` is `feedbackRouter`, `auditLogRouter`, etc.
+    The script prints the exact import line for you. `<camelName>` is `feedbackRouter`, `auditLogRouter`, etc.
 
 3. Add list/get/update/delete procedures as additional files under `procedures/` and add them to the router object.
 

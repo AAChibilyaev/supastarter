@@ -44,7 +44,9 @@ export async function notifyTopupPaid(input: {
 					message: `${amountRub} ₽ credited`,
 				},
 				link,
-			}).catch((err: unknown) => logger.error("notifyTopupPaid: createNotification failed", err)),
+			}).catch((err: unknown) =>
+				logger.error("notifyTopupPaid: createNotification failed", err),
+			),
 		),
 	);
 }
@@ -89,7 +91,9 @@ export async function notifyTopupFailed(input: {
 					message: input.reason ?? "Please try again or contact support.",
 				},
 				link,
-			}).catch((err: unknown) => logger.error("notifyTopupFailed: createNotification failed", err)),
+			}).catch((err: unknown) =>
+				logger.error("notifyTopupFailed: createNotification failed", err),
+			),
 		),
 	);
 }

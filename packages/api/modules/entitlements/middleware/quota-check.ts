@@ -94,14 +94,20 @@ export async function quotaCheck(
 				};
 			}
 			// ── Hard cap: quota exceeded with no overage budget ──────────────
-			const errCode = resource === "search" ? "search_quota_exceeded" : "ingest_quota_exceeded";
+			const errCode =
+				resource === "search" ? "search_quota_exceeded" : "ingest_quota_exceeded";
 			return {
 				allowed: false,
 				status: 429,
 				error: errCode,
 				errorPayload: {
 					error: errCode,
-					message: quotaExceededMessage(resource, quota.planName, quota.current, quota.limit),
+					message: quotaExceededMessage(
+						resource,
+						quota.planName,
+						quota.current,
+						quota.limit,
+					),
 					plan: quota.planName,
 					plan_id: quota.planId,
 					limit: quota.limit,

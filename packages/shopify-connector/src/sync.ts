@@ -180,7 +180,9 @@ async function fetchProductPage(
 		products,
 		hasNextPage,
 		nextPageUrl:
-			hasNextPage && products.length > 0 ? `since_id=${products[products.length - 1].id}` : null,
+			hasNextPage && products.length > 0
+				? `since_id=${products[products.length - 1].id}`
+				: null,
 	};
 }
 
@@ -320,7 +322,8 @@ export async function runFullSync(
 					result.itemsCount += docs.length;
 				} catch (productError) {
 					result.failuresCount++;
-					const msg = productError instanceof Error ? productError.message : "Unknown error";
+					const msg =
+						productError instanceof Error ? productError.message : "Unknown error";
 					result.errors.push(`Product ${product.id}: ${msg}`);
 					logger.error("Shopify product sync failed", {
 						productId: product.id,
@@ -485,7 +488,8 @@ export async function runDeltaSync(
 					result.itemsCount += docs.length;
 				} catch (productError) {
 					result.failuresCount++;
-					const msg = productError instanceof Error ? productError.message : "Unknown error";
+					const msg =
+						productError instanceof Error ? productError.message : "Unknown error";
 					result.errors.push(`Product ${product.id}: ${msg}`);
 					logger.error("Shopify delta product sync failed", {
 						productId: product.id,

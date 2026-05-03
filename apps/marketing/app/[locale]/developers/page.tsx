@@ -67,7 +67,9 @@ console.log(results.hits);`;
 								<span className="size-2.5 bg-red-500/70 rounded-full" />
 								<span className="size-2.5 bg-amber-500/70 rounded-full" />
 								<span className="size-2.5 bg-emerald-500/70 rounded-full" />
-								<span className="ml-3 text-xs font-mono text-muted-foreground">search.ts</span>
+								<span className="ml-3 text-xs font-mono text-muted-foreground">
+									search.ts
+								</span>
 							</div>
 							<pre className="p-5 font-mono leading-relaxed overflow-x-auto bg-muted/10 text-[13px] text-foreground/90">
 								<code>{codeSample}</code>

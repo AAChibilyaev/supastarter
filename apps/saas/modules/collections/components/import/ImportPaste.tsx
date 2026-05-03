@@ -96,7 +96,11 @@ export function ImportPaste({ onParse, disabled }: ImportPasteProps) {
 			{error && <p className="text-xs text-destructive">{error}</p>}
 
 			<div className="gap-2 flex justify-end">
-				<Button variant="primary" onClick={handleParse} disabled={disabled || !pastedText.trim()}>
+				<Button
+					variant="primary"
+					onClick={handleParse}
+					disabled={disabled || !pastedText.trim()}
+				>
 					<ClipboardPasteIcon className="size-4" />
 					{t("search.import.parsePaste") || "Parse Data"}
 				</Button>

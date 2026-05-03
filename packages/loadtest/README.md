@@ -43,8 +43,8 @@ pnpm --filter @repo/loadtest all  # run sequentially
 **Target:** 1 000 requests/second, p99 < 100ms.
 
 - Two concurrent scenarios:
-  - **ramp_up**: ramps from 100 → 1 000 RPS over 2 min, sustains for 1 min
-  - **stress**: constant 50 RPS throughout (background noise traffic)
+    - **ramp_up**: ramps from 100 → 1 000 RPS over 2 min, sustains for 1 min
+    - **stress**: constant 50 RPS throughout (background noise traffic)
 - Queries: drawn from a 25-query pool (wildcards, common terms, UI labels)
 - Think time: 50–200ms between requests
 
@@ -140,9 +140,9 @@ Add a step to the deploy workflow (optional, post-deploy performance gate):
 - name: Run performance benchmarks
   uses: ./.github/actions/k6-benchmark
   with:
-    url: ${{ secrets.STAGING_URL }}
-    api_key: ${{ secrets.LOADTEST_API_KEY }}
-    index_id: ${{ secrets.LOADTEST_INDEX_ID }}
+      url: ${{ secrets.STAGING_URL }}
+      api_key: ${{ secrets.LOADTEST_API_KEY }}
+      index_id: ${{ secrets.LOADTEST_INDEX_ID }}
 ```
 
 ## Regression Detection

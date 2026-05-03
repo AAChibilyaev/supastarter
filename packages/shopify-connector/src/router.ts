@@ -238,7 +238,10 @@ export const shopifyApp = new Hono()
 				);
 			}
 			if (store.syncStatus === "syncing") {
-				return c.json({ error: "sync_in_progress", message: "A sync is already running" }, 409);
+				return c.json(
+					{ error: "sync_in_progress", message: "A sync is already running" },
+					409,
+				);
 			}
 
 			// Mark store as syncing
@@ -287,7 +290,8 @@ export const shopifyApp = new Hono()
 			return c.json({
 				status: "sync_started",
 				type: "full",
-				message: "Full product sync started. Check status via GET /api/shopify/:storeId/status",
+				message:
+					"Full product sync started. Check status via GET /api/shopify/:storeId/status",
 			});
 		} catch (error) {
 			logger.error("Shopify sync trigger failed", { error });
@@ -327,7 +331,10 @@ export const shopifyApp = new Hono()
 				);
 			}
 			if (store.syncStatus === "syncing") {
-				return c.json({ error: "sync_in_progress", message: "A sync is already running" }, 409);
+				return c.json(
+					{ error: "sync_in_progress", message: "A sync is already running" },
+					409,
+				);
 			}
 
 			// Mark store as syncing
@@ -338,7 +345,8 @@ export const shopifyApp = new Hono()
 
 			// Default to 24h ago if never synced
 			const updatedSince =
-				store.lastSyncAt?.toISOString() ?? new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+				store.lastSyncAt?.toISOString() ??
+				new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
 			// Create the authenticated client
 			const client = createShopifyClient(store.shop, store.id);
@@ -382,7 +390,8 @@ export const shopifyApp = new Hono()
 				status: "delta_sync_started",
 				type: "delta",
 				since: updatedSince,
-				message: "Delta sync started. Only products updated since the last sync will be indexed.",
+				message:
+					"Delta sync started. Only products updated since the last sync will be indexed.",
 			});
 		} catch (error) {
 			logger.error("Shopify delta sync trigger failed", { error });

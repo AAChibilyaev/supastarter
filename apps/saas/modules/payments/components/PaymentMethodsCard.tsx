@@ -56,7 +56,9 @@ export function PaymentMethodsCard({ organizationId }: PaymentMethodsCardProps) 
 	const setDefaultMutation = useMutation(
 		orpc.payments.setDefaultPaymentMethod.mutationOptions({
 			onSuccess: () => {
-				void qc.invalidateQueries({ queryKey: orpc.payments.listPaymentMethods.queryKey() });
+				void qc.invalidateQueries({
+					queryKey: orpc.payments.listPaymentMethods.queryKey(),
+				});
 			},
 			onError: () => {
 				toastError(t("settings.billing.paymentMethods.actionError"));
@@ -67,7 +69,9 @@ export function PaymentMethodsCard({ organizationId }: PaymentMethodsCardProps) 
 	const deleteMutation = useMutation(
 		orpc.payments.deletePaymentMethod.mutationOptions({
 			onSuccess: () => {
-				void qc.invalidateQueries({ queryKey: orpc.payments.listPaymentMethods.queryKey() });
+				void qc.invalidateQueries({
+					queryKey: orpc.payments.listPaymentMethods.queryKey(),
+				});
 				toastSuccess(t("settings.billing.paymentMethods.delete"));
 			},
 			onError: () => {
@@ -102,7 +106,7 @@ export function PaymentMethodsCard({ organizationId }: PaymentMethodsCardProps) 
 
 	return (
 		<Card>
-			<CardHeader className="flex flex-row items-center justify-between gap-4">
+			<CardHeader className="gap-4 flex flex-row items-center justify-between">
 				<CardTitle className="font-medium text-base">
 					{t("settings.billing.paymentMethods.title")}
 				</CardTitle>
@@ -123,7 +127,7 @@ export function PaymentMethodsCard({ organizationId }: PaymentMethodsCardProps) 
 						<Skeleton className="h-14 w-full" />
 					</div>
 				) : paymentMethods.length === 0 ? (
-					<div className="flex flex-col items-center justify-center gap-3 py-8 text-center">
+					<div className="gap-3 py-8 flex flex-col items-center justify-center text-center">
 						<CreditCardIcon className="size-8 text-muted-foreground" />
 						<p className="text-sm text-muted-foreground">
 							{t("settings.billing.paymentMethods.empty")}
@@ -134,9 +138,9 @@ export function PaymentMethodsCard({ organizationId }: PaymentMethodsCardProps) 
 						{paymentMethods.map((pm) => (
 							<li
 								key={pm.id}
-								className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0"
+								className="gap-4 py-3 first:pt-0 last:pb-0 flex items-center justify-between"
 							>
-								<div className="flex items-center gap-3 min-w-0">
+								<div className="gap-3 min-w-0 flex items-center">
 									<CreditCardIcon className="size-5 shrink-0 text-muted-foreground" />
 									<div className="min-w-0">
 										<p className="text-sm font-medium leading-none">
@@ -149,15 +153,12 @@ export function PaymentMethodsCard({ organizationId }: PaymentMethodsCardProps) 
 										</p>
 									</div>
 									{pm.isDefault && (
-										<Badge
-											status="success"
-											className="shrink-0"
-										>
+										<Badge status="success" className="shrink-0">
 											{t("settings.billing.paymentMethods.default")}
 										</Badge>
 									)}
 								</div>
-								<div className="flex shrink-0 items-center gap-2">
+								<div className="gap-2 flex shrink-0 items-center">
 									{!pm.isDefault && (
 										<Button
 											variant="ghost"
@@ -165,7 +166,8 @@ export function PaymentMethodsCard({ organizationId }: PaymentMethodsCardProps) 
 											onClick={() => handleSetDefault(pm.id)}
 											loading={
 												setDefaultMutation.isPending &&
-												setDefaultMutation.variables?.paymentMethodId === pm.id
+												setDefaultMutation.variables?.paymentMethodId ===
+													pm.id
 											}
 										>
 											<StarIcon className="mr-1 size-4" />

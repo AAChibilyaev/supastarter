@@ -66,7 +66,12 @@ export function BillingAnalyticsSection() {
 		<div className="gap-6 grid grid-cols-1">
 			{/* KPI cards */}
 			<div className="gap-4 md:grid-cols-3 grid grid-cols-1">
-				<KpiCard title={t("mrr")} value={data?.currentMrr} prefix="$" isLoading={isLoading} />
+				<KpiCard
+					title={t("mrr")}
+					value={data?.currentMrr}
+					prefix="$"
+					isLoading={isLoading}
+				/>
 				<KpiCard
 					title={t("activeSubscriptions")}
 					value={data?.activeSubscriptions}
@@ -100,14 +105,22 @@ export function BillingAnalyticsSection() {
 									}}
 								>
 									<CartesianGrid strokeDasharray="3 3" vertical={false} />
-									<XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
+									<XAxis
+										dataKey="month"
+										tickLine={false}
+										axisLine={false}
+										tickMargin={8}
+									/>
 									<YAxis
 										tickLine={false}
 										axisLine={false}
 										tickMargin={8}
 										tickFormatter={(value: number) => `$${value}`}
 									/>
-									<ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+									<ChartTooltip
+										cursor={false}
+										content={<ChartTooltipContent />}
+									/>
 									<Area
 										type="monotone"
 										dataKey="revenue"
@@ -136,15 +149,21 @@ export function BillingAnalyticsSection() {
 								<thead>
 									<tr className="border-b text-left text-muted-foreground">
 										<th className="pb-2 font-medium">{t("plan")}</th>
-										<th className="pb-2 font-medium text-right">{t("subscribers")}</th>
-										<th className="pb-2 font-medium text-right">{t("mrrPerPlan")}</th>
+										<th className="pb-2 font-medium text-right">
+											{t("subscribers")}
+										</th>
+										<th className="pb-2 font-medium text-right">
+											{t("mrrPerPlan")}
+										</th>
 									</tr>
 								</thead>
 								<tbody>
 									{(data?.subscriptionsByPlan ?? []).map((plan) => (
 										<tr key={plan.planId} className="border-b last:border-b-0">
 											<td className="py-2 capitalize">{plan.planId}</td>
-											<td className="py-2 text-right tabular-nums">{plan.count}</td>
+											<td className="py-2 text-right tabular-nums">
+												{plan.count}
+											</td>
 											<td className="py-2 font-mono text-right tabular-nums">
 												$
 												{plan.mrr.toLocaleString(undefined, {

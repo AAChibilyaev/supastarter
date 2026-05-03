@@ -419,7 +419,8 @@ export async function checkQuota(orgId: string, resource: "search" | "ingest"): 
 		};
 	}
 
-	const limit = resource === "search" ? plan.limits.maxSearchesPerMonth : plan.limits.maxDocuments;
+	const limit =
+		resource === "search" ? plan.limits.maxSearchesPerMonth : plan.limits.maxDocuments;
 	if (limit === -1) {
 		return {
 			resource,

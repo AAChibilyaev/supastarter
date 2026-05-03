@@ -2,6 +2,7 @@ import { getTypesenseClient, generateEmbedding, formatVectorQuery } from "@repo/
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -19,7 +20,7 @@ const hitSchema = z.object({
 });
 
 export const hybridSearch = protectedProcedure
-	.use(creditGate("hybrid_search_embedding", BigInt(200)))
+	.use(creditGate("embedding", CREDIT_RATES.embedding))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/hybrid-search",
@@ -62,7 +63,7 @@ export const hybridSearch = protectedProcedure
 		try {
 			embedding = await generateEmbedding(input.query, input.model);
 		} catch (err) {
-			await releaseCreditReservation(context, creditReservationId);
+			await releaseCreditReservation(creditReservationId);
 			throw err;
 		}
 		const vectorQuery = formatVectorQuery(embedding.vector, input.vectorField, input.k);
@@ -87,7 +88,13 @@ export const hybridSearch = protectedProcedure
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			.search(searchParams as any)) as any;
 
-		await commitFlatFeeUsage(context, creditReservationId, BigInt(200));
+		await commitFlatFeeUsage({
+			reservationId: creditReservationId,
+			operation: "embedding",
+			provider: "openai",
+			model: input.model,
+			flatFeeKopecks: CREDIT_RATES.embedding,
+		});
 
 		return {
 			found: results.found ?? 0,

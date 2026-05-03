@@ -210,7 +210,9 @@ test.describe("Widget Filter Chips", () => {
 		await page.waitForTimeout(500);
 
 		// Select BrandA facet
-		await page.locator('input[type="checkbox"][data-field="brand"][data-value="BrandA"]').click();
+		await page
+			.locator('input[type="checkbox"][data-field="brand"][data-value="BrandA"]')
+			.click();
 		await page.waitForTimeout(500);
 
 		// Verify filter chip appeared
@@ -292,9 +294,13 @@ test.describe("Widget Filter Chips", () => {
 		await page.waitForTimeout(500);
 
 		// Select two facet values
-		await page.locator('input[type="checkbox"][data-field="brand"][data-value="BrandA"]').click();
+		await page
+			.locator('input[type="checkbox"][data-field="brand"][data-value="BrandA"]')
+			.click();
 		await page.waitForTimeout(300);
-		await page.locator('input[type="checkbox"][data-field="category"][data-value="Cat1"]').click();
+		await page
+			.locator('input[type="checkbox"][data-field="category"][data-value="Cat1"]')
+			.click();
 		await page.waitForTimeout(300);
 
 		// Verify two chips are visible

@@ -184,7 +184,8 @@ export class ContextCorrector {
 
 			// Compute final score as weighted combination
 			for (const s of scored) {
-				s.finalScore = s.score * (1 - cfg.contextWeight) + s.contextScore * cfg.contextWeight;
+				s.finalScore =
+					s.score * (1 - cfg.contextWeight) + s.contextScore * cfg.contextWeight;
 			}
 
 			scored.sort((a, b) => b.finalScore - a.finalScore);

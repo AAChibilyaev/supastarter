@@ -307,7 +307,10 @@ export function ImportDialog({
 										{t("search.import.cancel") || "Cancel"}
 									</button>
 								</div>
-								<Progress value={(progress.current / progress.total) * 100} className="h-2" />
+								<Progress
+									value={(progress.current / progress.total) * 100}
+									className="h-2"
+								/>
 							</div>
 						)}
 					</div>
@@ -329,7 +332,10 @@ export function ImportDialog({
 							/>
 						</TabsContent>
 						<TabsContent value={TAB_PASTE}>
-							<ImportPaste onParse={(data) => handleParse(data, "paste")} disabled={isImporting} />
+							<ImportPaste
+								onParse={(data) => handleParse(data, "paste")}
+								disabled={isImporting}
+							/>
 						</TabsContent>
 					</Tabs>
 				)}

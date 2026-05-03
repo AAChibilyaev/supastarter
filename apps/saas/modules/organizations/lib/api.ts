@@ -83,7 +83,13 @@ export const createOrganizationMutationKey = ["create-organization"] as const;
 export const useCreateOrganizationMutation = () => {
 	return useMutation({
 		mutationKey: createOrganizationMutationKey,
-		mutationFn: async ({ name, metadata }: { name: string; metadata?: OrganizationMetadata }) => {
+		mutationFn: async ({
+			name,
+			metadata,
+		}: {
+			name: string;
+			metadata?: OrganizationMetadata;
+		}) => {
 			const { slug } = await orpcClient.organizations.generateSlug({
 				name,
 			});

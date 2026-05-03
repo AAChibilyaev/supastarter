@@ -46,7 +46,9 @@ export function MarketingThemeProvider({ children, defaultTheme }: MarketingThem
 		[theme],
 	);
 
-	return <MarketingThemeContext.Provider value={value}>{children}</MarketingThemeContext.Provider>;
+	return (
+		<MarketingThemeContext.Provider value={value}>{children}</MarketingThemeContext.Provider>
+	);
 }
 
 export function useMarketingTheme() {

@@ -35,9 +35,9 @@ export const reindexCommand = new Command("reindex")
 				process.exit(1);
 			}
 
-			const indexes = await client.get<Array<{ id: string; slug: string; displayName: string }>>(
-				`/v1/projects/${project.id}/indexes`,
-			);
+			const indexes = await client.get<
+				Array<{ id: string; slug: string; displayName: string }>
+			>(`/v1/projects/${project.id}/indexes`);
 			const found = indexes.find(
 				(idx) => idx.slug === options.collection || idx.displayName === options.collection,
 			);
@@ -67,7 +67,9 @@ export const reindexCommand = new Command("reindex")
 
 			console.log(`Triggering reindex for "${found.displayName}"...`);
 
-			const result = await client.post<Record<string, unknown>>(`/v1/indexes/${found.id}/reindex`);
+			const result = await client.post<Record<string, unknown>>(
+				`/v1/indexes/${found.id}/reindex`,
+			);
 
 			if (options.json) {
 				console.log(JSON.stringify(result, null, 2));

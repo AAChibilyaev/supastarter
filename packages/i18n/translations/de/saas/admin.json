@@ -1,250 +1,250 @@
 {
-  "admin": {
-    "menu": {
-      "organizations": "Organisationen",
-      "users": "Benutzer"
-    },
-    "organizations": {
-      "backToList": "Zurück zu Organisationen",
-      "confirmDelete": {
-        "confirm": "Löschen",
-        "message": "Bist du sicher, dass du diese Organisation löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
-        "title": "Organisation löschen"
-      },
-      "create": "Erstellen",
-      "delete": "Löschen",
-      "deleteOrganization": {
-        "deleted": "Die Organisation wurde erfolgreich gelöscht!",
-        "deleting": "Löschung der Organisation...",
-        "notDeleted": "Organisation konnte nicht gelöscht werden. Bitte versuche es erneut."
-      },
-      "edit": "bearbeiten",
-      "form": {
-        "createTitle": "Erstellen eine Organisation",
-        "name": "Name der Organisation",
-        "notifications": {
-          "error": "Die Organisation konnte nicht gespeichert werden. Bitte versuche es später noch einmal.",
-          "success": "Die Organisation wurde erfolgreich gespeichert."
-        },
-        "save": "Speichern",
-        "updateTitle": "Organisation bearbeiten"
-      },
-      "loading": "Organisationen laden...",
-      "membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
-      "search": "Suche nach einer Organisation...",
-      "title": "Verwalten von Organisationen"
-    },
-    "title": "Administration",
-    "users": {
-      "confirmDelete": {
-        "confirm": "Löschen",
-        "message": "Bist du sicher, dass du diesen Benutzer löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
-        "title": "Benutzer löschen"
-      },
-      "delete": "Löschen",
-      "deleteUser": {
-        "deleted": "Der Benutzer wurde erfolgreich gelöscht!",
-        "deleting": "Benutzer wird gelöscht...",
-        "notDeleted": "Der Benutzer konnte nicht gelöscht werden. Bitte versuche es erneut."
-      },
-      "emailVerified": {
-        "verified": "Email verifiziert",
-        "waiting": "E-Mail wartet auf Verifizierung"
-      },
-      "impersonate": "Imitieren",
-      "impersonation": {
-        "impersonating": "Ich gebe mich als {name} aus..."
-      },
-      "loading": "Benutzer werden geladen...",
-      "resendVerificationMail": {
-        "error": "Bestatigungsmail konnte nicht erneut gesendet werden. Bitte versuche es erneut.",
-        "submitting": "Bestatigungsmail wird erneut gesendet...",
-        "success": "Bestatigungsmail wurde gesendet.",
-        "title": "Bestatigungsmail erneut senden"
-      },
-      "search": "Nach Name oder E-Mail suchen...",
-      "title": "Benutzer verwalten",
-      "assignAdminRole": "Administration-Rolle zuweisen",
-      "removeAdminRole": "Adminstrator-Rolle entfernen"
-    },
-    "description": "Verwalte deine Anwendung.",
-    "config": {
-      "title": "Konfiguration",
-      "loadError": "Konfigurationsdaten konnten nicht geladen werden.",
-      "application": "Anwendung",
-      "appName": "App-Name",
-      "nodeVersion": "Node.js-Version",
-      "runtimeEnv": "Laufzeit",
-      "platform": "Plattform",
-      "uptime": "Betriebszeit",
-      "typesenseHealth": "Search-Engine-Status",
-      "healthy": "Gesund",
-      "unhealthy": "Ungesund",
-      "version": "Version",
-      "databaseStats": "Datenbankstatistiken",
-      "users": "Benutzer",
-      "organizations": "Organisationen",
-      "searchIndexes": "Suchindexe",
-      "apiKeys": "API-Schlüssel",
-      "usageEvents": "Nutzungsereignisse",
-      "statsError": "Statistiken konnten nicht abgerufen werden.",
-      "services": "Externe Dienste",
-      "configured": "Konfiguriert",
-      "notConfigured": "Nicht konfiguriert",
-      "pageTitle": "Laufzeitkonfiguration",
-      "pageSubtitle": "Systemkonfiguration in Echtzeit, Dienstintegrität und Datenbankstatistiken."
-    },
-    "integrations": {
-      "title": "Integrationen",
-      "loadError": "Integrationsstatus konnte nicht geprüft werden.",
-      "database": "Datenbank",
-      "typesense": "AACsearch Engine",
-      "mail": "E-Mail",
-      "payments": "Zahlungen",
-      "storage": "Speicher",
-      "walletProvider": "Wallet-Anbieter",
-      "configured": "Konfiguriert",
-      "notConfigured": "Nicht konfiguriert",
-      "endpoint": "Endpunkt",
-      "pageTitle": "Integrationsstatus",
-      "pageSubtitle": "Echtzeit-Verbindungsprüfungen für alle konfigurierten externen Dienste.",
-      "connected": "Verbunden",
-      "disconnected": "Getrennt",
-      "latencyMs": "{ms}ms Latenz",
-      "status": "Status",
-      "provider": "Anbieter"
-    },
-    "jobs": {
-      "title": "Aufgaben",
-      "loadError": "Aufgabenstatus konnte nicht geladen werden.",
-      "backgroundJobs": "Hintergrundaufgaben",
-      "ready": "Bereit",
-      "missingSecret": "Fehlendes Geheimnis",
-      "recentSyncActivity": "Letzte Sync-Aktivität",
-      "totalJobs": "Aufgaben insgesamt",
-      "noSyncActivity": "Noch keine Sync-Aktivität.",
-      "pageTitle": "Hintergrundaufgaben",
-      "pageSubtitle": "Status der Cron-Job-Konfiguration und aktuelle Synchronisierungsaktivitäten.",
-      "itemsCount": "{count} {count, plural, one {Element} other {Elemente}}"
-    },
-    "overview": {
-      "usersTitle": "Benutzer",
-      "organizationsTitle": "Organisationen",
-      "unreadNotifications": "Ungelesene Benachrichtigungen",
-      "noData": "Keine Daten",
-      "recentUsers": "Aktuelle Benutzer",
-      "defaultRole": "Benutzer",
-      "openUsers": "Benutzer öffnen",
-      "recentOrganizations": "Aktuelle Organisationen",
-      "noSlug": "Kein Slug",
-      "membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
-      "openOrganizations": "Organisationen öffnen",
-      "pageTitle": "Admin-Übersicht",
-      "pageSubtitle": "Betriebszusammenfassung für Benutzer, Organisationen und Benachrichtigungen."
-    },
-    "audit": {
-      "recentUserChanges": "Aktuelle Benutzeränderungen",
-      "recentOrgChanges": "Aktuelle Organisationsänderungen",
-      "defaultRole": "Benutzer",
-      "noSlug": "Kein Slug",
-      "pageTitle": "Audit-Ansicht",
-      "pageSubtitle": "Aktuelle Benutzer- und Organisationsänderungen aus Admin-Datenquellen."
-    },
-    "notifications": {
-      "recentNotifications": "Aktuelle Benachrichtigungen",
-      "markAllRead": "Alle als gelesen markieren",
-      "markingRead": "Benachrichtigungen werden als gelesen markiert...",
-      "markReadSuccess": "Fertig.",
-      "markReadError": "Konnte nicht alle als gelesen markieren.",
-      "statusRead": "gelesen",
-      "statusUnread": "ungelesen",
-      "noNotifications": "Noch keine Benachrichtigungen.",
-      "pageTitle": "Benachrichtigungsverwaltung",
-      "pageSubtitle": "Aktuelle Benachrichtigungen einsehen und Zustelleinstellungen aktualisieren."
-    },
-    "wallet": {
-      "manualAdjustment": "Manuelle Wallet-Anpassung",
-      "searchOrgPlaceholder": "Organisation suchen...",
-      "selectOrgPlaceholder": "Organisation auswählen",
-      "currentBalance": "Aktuelles Guthaben",
-      "walletNotInitialized": "Wallet ist für die ausgewählte Organisation nicht initialisiert.",
-      "creditLabel": "Gutschrift",
-      "debitLabel": "Belastung",
-      "amountPlaceholder": "Betrag (RUB)",
-      "applyButton": "Anwenden",
-      "reasonPlaceholder": "Grund (mindestens 10 Zeichen)",
-      "noWalletError": "Wählen Sie eine Organisation mit initialisiertem Wallet aus.",
-      "invalidAmountError": "Betrag muss eine positive Zahl sein.",
-      "shortReasonError": "Grund muss mindestens 10 Zeichen lang sein.",
-      "applyingAdjustment": "Anpassung wird angewendet...",
-      "adjustmentSuccess": "Wallet erfolgreich angepasst.",
-      "adjustmentError": "Wallet-Anpassung fehlgeschlagen.",
-      "latestTransactions": "Letzte Wallet-Transaktionen",
-      "noTransactions": "Keine Transaktionen gefunden.",
-      "pageTitle": "Wallet-Operationen",
-      "pageSubtitle": "Manuelle KI-Wallet-Anpassungen für Organisationen."
-    },
-    "security": {
-      "pageTitle": "Sicherheitsoperationen",
-      "pageSubtitle": "Aktive Sitzungen, Passkeys und Zwei-Faktor-Einstellungen für das aktuelle Admin-Konto."
-    },
-    "onboarding": {
-      "pageTitle": "Onboarding-Analytics",
-      "pageSubtitle": "Funnel-Abschlussraten, Zeit bis zum ersten Wert und Kohortenanalyse",
-      "exportCsv": "CSV exportieren",
-      "error": "Analytik-Daten konnten nicht geladen werden"
-    },
-    "billingAnalytics": {
-      "pageTitle": "Billing Analytics",
-      "pageSubtitle": "MRR, churn rate, and revenue overview.",
-      "mrr": "Monthly Recurring Revenue",
-      "activeSubscriptions": "Active Subscriptions",
-      "churnRate": "Churn Rate (last month)",
-      "revenueChart": "Revenue Over Time",
-      "subscriptionsByPlan": "Subscriptions by Plan",
-      "revenue": "Revenue",
-      "plan": "Plan",
-      "subscribers": "Subscribers",
-      "mrrPerPlan": "MRR"
-    },
-    "roadmap": {
-      "pageTitle": "Roadmap-Verwaltung",
-      "pageSubtitle": "Roadmap-Elemente hinzufügen, bearbeiten, neu anordnen und löschen.",
-      "menu": {
-        "roadmap": "Roadmap"
-      },
-      "addItem": "Element hinzufügen",
-      "itemsCount": "{count} {count, plural, one {Element} other {Elemente}}",
-      "empty": "Noch keine Roadmap-Elemente. Erstellen Sie Ihr erstes.",
-      "createTitle": "Neues Roadmap-Element",
-      "createDescription": "Ein neues Feature zur öffentlichen Roadmap hinzufügen.",
-      "editTitle": "Roadmap-Element bearbeiten",
-      "editDescription": "Ein vorhandenes Roadmap-Element aktualisieren.",
-      "form": {
-        "key": "Schlüssel",
-        "title": "Titel",
-        "description": "Beschreibung",
-        "status": "Status",
-        "quarter": "Quartal",
-        "iconName": "Symbolname",
-        "changelogSlug": "Changelog-Slug",
-        "changelogSlugPlaceholder": "z.B. vector-search-launch",
-        "cancel": "Abbrechen",
-        "save": "Speichern",
-        "saving": "Speichern...",
-        "create": "Erstellen"
-      },
-      "status": {
-        "shipped": "Veröffentlicht",
-        "inProgress": "In Arbeit",
-        "planned": "Geplant"
-      },
-      "confirmDelete": {
-        "title": "Roadmap-Element löschen",
-        "message": "Sind Sie sicher, dass Sie dieses Element löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
-        "confirm": "Löschen",
-        "cancel": "Abbrechen"
-      }
-    }
-  }
+	"admin": {
+		"menu": {
+			"organizations": "Organisationen",
+			"users": "Benutzer"
+		},
+		"organizations": {
+			"backToList": "Zurück zu Organisationen",
+			"confirmDelete": {
+				"confirm": "Löschen",
+				"message": "Bist du sicher, dass du diese Organisation löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+				"title": "Organisation löschen"
+			},
+			"create": "Erstellen",
+			"delete": "Löschen",
+			"deleteOrganization": {
+				"deleted": "Die Organisation wurde erfolgreich gelöscht!",
+				"deleting": "Löschung der Organisation...",
+				"notDeleted": "Organisation konnte nicht gelöscht werden. Bitte versuche es erneut."
+			},
+			"edit": "bearbeiten",
+			"form": {
+				"createTitle": "Erstellen eine Organisation",
+				"name": "Name der Organisation",
+				"notifications": {
+					"error": "Die Organisation konnte nicht gespeichert werden. Bitte versuche es später noch einmal.",
+					"success": "Die Organisation wurde erfolgreich gespeichert."
+				},
+				"save": "Speichern",
+				"updateTitle": "Organisation bearbeiten"
+			},
+			"loading": "Organisationen laden...",
+			"membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
+			"search": "Suche nach einer Organisation...",
+			"title": "Verwalten von Organisationen"
+		},
+		"title": "Administration",
+		"users": {
+			"confirmDelete": {
+				"confirm": "Löschen",
+				"message": "Bist du sicher, dass du diesen Benutzer löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+				"title": "Benutzer löschen"
+			},
+			"delete": "Löschen",
+			"deleteUser": {
+				"deleted": "Der Benutzer wurde erfolgreich gelöscht!",
+				"deleting": "Benutzer wird gelöscht...",
+				"notDeleted": "Der Benutzer konnte nicht gelöscht werden. Bitte versuche es erneut."
+			},
+			"emailVerified": {
+				"verified": "Email verifiziert",
+				"waiting": "E-Mail wartet auf Verifizierung"
+			},
+			"impersonate": "Imitieren",
+			"impersonation": {
+				"impersonating": "Ich gebe mich als {name} aus..."
+			},
+			"loading": "Benutzer werden geladen...",
+			"resendVerificationMail": {
+				"error": "Bestatigungsmail konnte nicht erneut gesendet werden. Bitte versuche es erneut.",
+				"submitting": "Bestatigungsmail wird erneut gesendet...",
+				"success": "Bestatigungsmail wurde gesendet.",
+				"title": "Bestatigungsmail erneut senden"
+			},
+			"search": "Nach Name oder E-Mail suchen...",
+			"title": "Benutzer verwalten",
+			"assignAdminRole": "Administration-Rolle zuweisen",
+			"removeAdminRole": "Adminstrator-Rolle entfernen"
+		},
+		"description": "Verwalte deine Anwendung.",
+		"config": {
+			"title": "Konfiguration",
+			"loadError": "Konfigurationsdaten konnten nicht geladen werden.",
+			"application": "Anwendung",
+			"appName": "App-Name",
+			"nodeVersion": "Node.js-Version",
+			"runtimeEnv": "Laufzeit",
+			"platform": "Plattform",
+			"uptime": "Betriebszeit",
+			"typesenseHealth": "Search-Engine-Status",
+			"healthy": "Gesund",
+			"unhealthy": "Ungesund",
+			"version": "Version",
+			"databaseStats": "Datenbankstatistiken",
+			"users": "Benutzer",
+			"organizations": "Organisationen",
+			"searchIndexes": "Suchindexe",
+			"apiKeys": "API-Schlüssel",
+			"usageEvents": "Nutzungsereignisse",
+			"statsError": "Statistiken konnten nicht abgerufen werden.",
+			"services": "Externe Dienste",
+			"configured": "Konfiguriert",
+			"notConfigured": "Nicht konfiguriert",
+			"pageTitle": "Laufzeitkonfiguration",
+			"pageSubtitle": "Systemkonfiguration in Echtzeit, Dienstintegrität und Datenbankstatistiken."
+		},
+		"integrations": {
+			"title": "Integrationen",
+			"loadError": "Integrationsstatus konnte nicht geprüft werden.",
+			"database": "Datenbank",
+			"typesense": "AACsearch Engine",
+			"mail": "E-Mail",
+			"payments": "Zahlungen",
+			"storage": "Speicher",
+			"walletProvider": "Wallet-Anbieter",
+			"configured": "Konfiguriert",
+			"notConfigured": "Nicht konfiguriert",
+			"endpoint": "Endpunkt",
+			"pageTitle": "Integrationsstatus",
+			"pageSubtitle": "Echtzeit-Verbindungsprüfungen für alle konfigurierten externen Dienste.",
+			"connected": "Verbunden",
+			"disconnected": "Getrennt",
+			"latencyMs": "{ms}ms Latenz",
+			"status": "Status",
+			"provider": "Anbieter"
+		},
+		"jobs": {
+			"title": "Aufgaben",
+			"loadError": "Aufgabenstatus konnte nicht geladen werden.",
+			"backgroundJobs": "Hintergrundaufgaben",
+			"ready": "Bereit",
+			"missingSecret": "Fehlendes Geheimnis",
+			"recentSyncActivity": "Letzte Sync-Aktivität",
+			"totalJobs": "Aufgaben insgesamt",
+			"noSyncActivity": "Noch keine Sync-Aktivität.",
+			"pageTitle": "Hintergrundaufgaben",
+			"pageSubtitle": "Status der Cron-Job-Konfiguration und aktuelle Synchronisierungsaktivitäten.",
+			"itemsCount": "{count} {count, plural, one {Element} other {Elemente}}"
+		},
+		"overview": {
+			"usersTitle": "Benutzer",
+			"organizationsTitle": "Organisationen",
+			"unreadNotifications": "Ungelesene Benachrichtigungen",
+			"noData": "Keine Daten",
+			"recentUsers": "Aktuelle Benutzer",
+			"defaultRole": "Benutzer",
+			"openUsers": "Benutzer öffnen",
+			"recentOrganizations": "Aktuelle Organisationen",
+			"noSlug": "Kein Slug",
+			"membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
+			"openOrganizations": "Organisationen öffnen",
+			"pageTitle": "Admin-Übersicht",
+			"pageSubtitle": "Betriebszusammenfassung für Benutzer, Organisationen und Benachrichtigungen."
+		},
+		"audit": {
+			"recentUserChanges": "Aktuelle Benutzeränderungen",
+			"recentOrgChanges": "Aktuelle Organisationsänderungen",
+			"defaultRole": "Benutzer",
+			"noSlug": "Kein Slug",
+			"pageTitle": "Audit-Ansicht",
+			"pageSubtitle": "Aktuelle Benutzer- und Organisationsänderungen aus Admin-Datenquellen."
+		},
+		"notifications": {
+			"recentNotifications": "Aktuelle Benachrichtigungen",
+			"markAllRead": "Alle als gelesen markieren",
+			"markingRead": "Benachrichtigungen werden als gelesen markiert...",
+			"markReadSuccess": "Fertig.",
+			"markReadError": "Konnte nicht alle als gelesen markieren.",
+			"statusRead": "gelesen",
+			"statusUnread": "ungelesen",
+			"noNotifications": "Noch keine Benachrichtigungen.",
+			"pageTitle": "Benachrichtigungsverwaltung",
+			"pageSubtitle": "Aktuelle Benachrichtigungen einsehen und Zustelleinstellungen aktualisieren."
+		},
+		"wallet": {
+			"manualAdjustment": "Manuelle Wallet-Anpassung",
+			"searchOrgPlaceholder": "Organisation suchen...",
+			"selectOrgPlaceholder": "Organisation auswählen",
+			"currentBalance": "Aktuelles Guthaben",
+			"walletNotInitialized": "Wallet ist für die ausgewählte Organisation nicht initialisiert.",
+			"creditLabel": "Gutschrift",
+			"debitLabel": "Belastung",
+			"amountPlaceholder": "Betrag (RUB)",
+			"applyButton": "Anwenden",
+			"reasonPlaceholder": "Grund (mindestens 10 Zeichen)",
+			"noWalletError": "Wählen Sie eine Organisation mit initialisiertem Wallet aus.",
+			"invalidAmountError": "Betrag muss eine positive Zahl sein.",
+			"shortReasonError": "Grund muss mindestens 10 Zeichen lang sein.",
+			"applyingAdjustment": "Anpassung wird angewendet...",
+			"adjustmentSuccess": "Wallet erfolgreich angepasst.",
+			"adjustmentError": "Wallet-Anpassung fehlgeschlagen.",
+			"latestTransactions": "Letzte Wallet-Transaktionen",
+			"noTransactions": "Keine Transaktionen gefunden.",
+			"pageTitle": "Wallet-Operationen",
+			"pageSubtitle": "Manuelle KI-Wallet-Anpassungen für Organisationen."
+		},
+		"security": {
+			"pageTitle": "Sicherheitsoperationen",
+			"pageSubtitle": "Aktive Sitzungen, Passkeys und Zwei-Faktor-Einstellungen für das aktuelle Admin-Konto."
+		},
+		"onboarding": {
+			"pageTitle": "Onboarding-Analytics",
+			"pageSubtitle": "Funnel-Abschlussraten, Zeit bis zum ersten Wert und Kohortenanalyse",
+			"exportCsv": "CSV exportieren",
+			"error": "Analytik-Daten konnten nicht geladen werden"
+		},
+		"billingAnalytics": {
+			"pageTitle": "Billing Analytics",
+			"pageSubtitle": "MRR, churn rate, and revenue overview.",
+			"mrr": "Monthly Recurring Revenue",
+			"activeSubscriptions": "Active Subscriptions",
+			"churnRate": "Churn Rate (last month)",
+			"revenueChart": "Revenue Over Time",
+			"subscriptionsByPlan": "Subscriptions by Plan",
+			"revenue": "Revenue",
+			"plan": "Plan",
+			"subscribers": "Subscribers",
+			"mrrPerPlan": "MRR"
+		},
+		"roadmap": {
+			"pageTitle": "Roadmap-Verwaltung",
+			"pageSubtitle": "Roadmap-Elemente hinzufügen, bearbeiten, neu anordnen und löschen.",
+			"menu": {
+				"roadmap": "Roadmap"
+			},
+			"addItem": "Element hinzufügen",
+			"itemsCount": "{count} {count, plural, one {Element} other {Elemente}}",
+			"empty": "Noch keine Roadmap-Elemente. Erstellen Sie Ihr erstes.",
+			"createTitle": "Neues Roadmap-Element",
+			"createDescription": "Ein neues Feature zur öffentlichen Roadmap hinzufügen.",
+			"editTitle": "Roadmap-Element bearbeiten",
+			"editDescription": "Ein vorhandenes Roadmap-Element aktualisieren.",
+			"form": {
+				"key": "Schlüssel",
+				"title": "Titel",
+				"description": "Beschreibung",
+				"status": "Status",
+				"quarter": "Quartal",
+				"iconName": "Symbolname",
+				"changelogSlug": "Changelog-Slug",
+				"changelogSlugPlaceholder": "z.B. vector-search-launch",
+				"cancel": "Abbrechen",
+				"save": "Speichern",
+				"saving": "Speichern...",
+				"create": "Erstellen"
+			},
+			"status": {
+				"shipped": "Veröffentlicht",
+				"inProgress": "In Arbeit",
+				"planned": "Geplant"
+			},
+			"confirmDelete": {
+				"title": "Roadmap-Element löschen",
+				"message": "Sind Sie sicher, dass Sie dieses Element löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+				"confirm": "Löschen",
+				"cancel": "Abbrechen"
+			}
+		}
+	}
 }

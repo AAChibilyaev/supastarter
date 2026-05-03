@@ -59,7 +59,10 @@ export async function getMessagesForLocale<T = Record<string, unknown>>(
 		if (scope === "saas" || scope === "marketing") {
 			defaultRaw = await loadSplitMessages(config.defaultLocale, scope);
 		} else {
-			defaultRaw = await importLocaleMessages<Record<string, unknown>>(config.defaultLocale, scope);
+			defaultRaw = await importLocaleMessages<Record<string, unknown>>(
+				config.defaultLocale,
+				scope,
+			);
 		}
 		const defaultSharedMessages = await importLocaleMessages<Record<string, unknown>>(
 			config.defaultLocale,

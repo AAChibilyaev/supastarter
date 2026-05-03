@@ -174,7 +174,11 @@ function RoadmapCard({
 										: "border-muted-foreground/30 bg-muted/50 text-muted-foreground",
 							)}
 						>
-							{isShipped ? t("shipped") : isInProgress ? t("inProgress") : t("planned")}
+							{isShipped
+								? t("shipped")
+								: isInProgress
+									? t("inProgress")
+									: t("planned")}
 						</span>
 					</CardTitle>
 				</FeatureCardHeaderRow>
@@ -205,7 +209,9 @@ function RoadmapCard({
 										: "border border-border/30 bg-muted/50 text-muted-foreground hover:border-primary/20 hover:text-foreground",
 								)}
 							>
-								<ThumbsUpIcon className={cn("size-3.5", isVoted && "fill-current")} />
+								<ThumbsUpIcon
+									className={cn("size-3.5", isVoted && "fill-current")}
+								/>
 								{isVoted ? t("voted") : t("vote")}
 							</button>
 						)}
@@ -254,7 +260,9 @@ export function RoadmapGrid({ items }: { items: RoadmapItemData[] }) {
 
 	const shipped = items.filter((item) => item.status === "shipped");
 	const inProgress = items.filter((item) => item.status === "inProgress");
-	const planned = items.filter((item) => item.status !== "shipped" && item.status !== "inProgress");
+	const planned = items.filter(
+		(item) => item.status !== "shipped" && item.status !== "inProgress",
+	);
 
 	return (
 		<>
@@ -281,7 +289,9 @@ export function RoadmapGrid({ items }: { items: RoadmapItemData[] }) {
 						<h2 className="font-medium text-3xl tracking-tight md:text-4xl text-balance">
 							{t("feedback.title")}
 						</h2>
-						<p className="mt-4 text-lg text-muted-foreground">{t("feedback.description")}</p>
+						<p className="mt-4 text-lg text-muted-foreground">
+							{t("feedback.description")}
+						</p>
 						<div className="mt-8 gap-3 flex flex-wrap items-center justify-center">
 							<a
 								href="mailto:feedback@aacsearch.com?subject=Feature%20Request"

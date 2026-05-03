@@ -90,7 +90,9 @@ export function UserSegmentsPanel({ organizationId }: UserSegmentsPanelProps) {
 							<UsersIcon className="size-4 text-primary" />
 							{tr("recommendations.segments.title")}
 						</CardTitle>
-						<CardDescription>{tr("recommendations.segments.description")}</CardDescription>
+						<CardDescription>
+							{tr("recommendations.segments.description")}
+						</CardDescription>
 					</div>
 					<Dialog open={createOpen} onOpenChange={setCreateOpen}>
 						<DialogTrigger asChild>
@@ -133,23 +135,33 @@ export function UserSegmentsPanel({ organizationId }: UserSegmentsPanelProps) {
 									<Card key={seg.id}>
 										<CardHeader className="pb-3">
 											<div className="flex items-center justify-between">
-												<CardTitle className="text-sm">{seg.name}</CardTitle>
-												<Badge status="info">{tr("recommendations.segments.predefined")}</Badge>
+												<CardTitle className="text-sm">
+													{seg.name}
+												</CardTitle>
+												<Badge status="info">
+													{tr("recommendations.segments.predefined")}
+												</Badge>
 											</div>
-											<CardDescription className="text-xs">{seg.description}</CardDescription>
+											<CardDescription className="text-xs">
+												{seg.description}
+											</CardDescription>
 										</CardHeader>
 										<CardContent>
 											{segStats ? (
 												<div className="space-y-1">
 													<div className="gap-2 flex items-baseline">
-														<span className="text-2xl font-bold">{segStats.userCount}</span>
+														<span className="text-2xl font-bold">
+															{segStats.userCount}
+														</span>
 														<span className="text-xs text-muted-foreground">
 															{tr("recommendations.segments.users")}
 														</span>
 													</div>
 													<div className="text-xs text-muted-foreground">
-														{tr("recommendations.segments.avgEvents")}: {segStats.averageEvents} |{" "}
-														{tr("recommendations.segments.totalEvents")}: {segStats.totalEvents}
+														{tr("recommendations.segments.avgEvents")}:{" "}
+														{segStats.averageEvents} |{" "}
+														{tr("recommendations.segments.totalEvents")}
+														: {segStats.totalEvents}
 													</div>
 												</div>
 											) : (
@@ -172,7 +184,9 @@ export function UserSegmentsPanel({ organizationId }: UserSegmentsPanelProps) {
 									variant="inline"
 									icon={<UsersIcon className="size-8" />}
 									title={tr("recommendations.segments.noCustomSegments")}
-									description={tr("recommendations.segments.noCustomSegmentsDesc")}
+									description={tr(
+										"recommendations.segments.noCustomSegmentsDesc",
+									)}
 									action={
 										<Button size="sm" onClick={() => setCreateOpen(true)}>
 											<PlusIcon className="size-4 mr-1" />
@@ -191,13 +205,19 @@ export function UserSegmentsPanel({ organizationId }: UserSegmentsPanelProps) {
 										<CardHeader className="pb-3">
 											<div className="flex items-center justify-between">
 												<div>
-													<CardTitle className="text-sm">{seg.name}</CardTitle>
+													<CardTitle className="text-sm">
+														{seg.name}
+													</CardTitle>
 													{seg.description && (
-														<CardDescription className="text-xs">{seg.description}</CardDescription>
+														<CardDescription className="text-xs">
+															{seg.description}
+														</CardDescription>
 													)}
 												</div>
 												<div className="gap-2 flex items-center">
-													<Badge status="warning">{tr("recommendations.segments.custom")}</Badge>
+													<Badge status="warning">
+														{tr("recommendations.segments.custom")}
+													</Badge>
 													<Dialog
 														open={editSegmentId === seg.id}
 														onOpenChange={(open) => {
@@ -209,7 +229,9 @@ export function UserSegmentsPanel({ organizationId }: UserSegmentsPanelProps) {
 																variant="outline"
 																size="icon"
 																className="size-7"
-																onClick={() => setEditSegmentId(seg.id)}
+																onClick={() =>
+																	setEditSegmentId(seg.id)
+																}
 															>
 																<PencilIcon className="size-3" />
 															</Button>
@@ -243,19 +265,31 @@ export function UserSegmentsPanel({ organizationId }: UserSegmentsPanelProps) {
 														<span className="text-muted-foreground">
 															{tr("recommendations.segments.users")}:
 														</span>{" "}
-														<span className="font-medium">{segStats.userCount}</span>
+														<span className="font-medium">
+															{segStats.userCount}
+														</span>
 													</div>
 													<div>
 														<span className="text-muted-foreground">
-															{tr("recommendations.segments.avgEvents")}:
+															{tr(
+																"recommendations.segments.avgEvents",
+															)}
+															:
 														</span>{" "}
-														<span className="font-medium">{segStats.averageEvents}</span>
+														<span className="font-medium">
+															{segStats.averageEvents}
+														</span>
 													</div>
 													<div>
 														<span className="text-muted-foreground">
-															{tr("recommendations.segments.totalEvents")}:
+															{tr(
+																"recommendations.segments.totalEvents",
+															)}
+															:
 														</span>{" "}
-														<span className="font-medium">{segStats.totalEvents}</span>
+														<span className="font-medium">
+															{segStats.totalEvents}
+														</span>
 													</div>
 												</div>
 											) : (
@@ -276,11 +310,16 @@ export function UserSegmentsPanel({ organizationId }: UserSegmentsPanelProps) {
 														Max events: {seg.criteria.maxEvents}
 													</Badge>
 												)}
-												{seg.criteria.queryPatterns && seg.criteria.queryPatterns.length > 0 && (
-													<Badge variant="outline" className="text-xs">
-														{seg.criteria.queryPatterns.length} query pattern(s)
-													</Badge>
-												)}
+												{seg.criteria.queryPatterns &&
+													seg.criteria.queryPatterns.length > 0 && (
+														<Badge
+															variant="outline"
+															className="text-xs"
+														>
+															{seg.criteria.queryPatterns.length}{" "}
+															query pattern(s)
+														</Badge>
+													)}
 												{seg.criteria.lastActiveDays !== undefined && (
 													<Badge variant="outline" className="text-xs">
 														{seg.criteria.lastActiveDays}d window
@@ -372,7 +411,9 @@ function CreateSegmentDialog({
 					/>
 				</div>
 				<div className="space-y-2">
-					<Label htmlFor="seg-desc">{tr("recommendations.segments.segmentDescription")}</Label>
+					<Label htmlFor="seg-desc">
+						{tr("recommendations.segments.segmentDescription")}
+					</Label>
 					<Textarea
 						id="seg-desc"
 						placeholder={tr("recommendations.segments.segmentDescriptionPlaceholder")}
@@ -405,7 +446,9 @@ function CreateSegmentDialog({
 						/>
 					</div>
 					<div className="space-y-2">
-						<Label htmlFor="seg-days">{tr("recommendations.segments.timeWindow")}</Label>
+						<Label htmlFor="seg-days">
+							{tr("recommendations.segments.timeWindow")}
+						</Label>
 						<Input
 							id="seg-days"
 							type="number"
@@ -515,11 +558,19 @@ function EditSegmentDialog({
 			</DialogHeader>
 			<div className="space-y-4">
 				<div className="space-y-2">
-					<Label htmlFor="edit-seg-name">{tr("recommendations.segments.segmentName")}</Label>
-					<Input id="edit-seg-name" value={name} onChange={(e) => setName(e.target.value)} />
+					<Label htmlFor="edit-seg-name">
+						{tr("recommendations.segments.segmentName")}
+					</Label>
+					<Input
+						id="edit-seg-name"
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+					/>
 				</div>
 				<div className="space-y-2">
-					<Label htmlFor="edit-seg-desc">{tr("recommendations.segments.segmentDescription")}</Label>
+					<Label htmlFor="edit-seg-desc">
+						{tr("recommendations.segments.segmentDescription")}
+					</Label>
 					<Textarea
 						id="edit-seg-desc"
 						value={description}
@@ -529,7 +580,9 @@ function EditSegmentDialog({
 				</div>
 				<div className="gap-4 grid grid-cols-3">
 					<div className="space-y-2">
-						<Label htmlFor="edit-seg-min">{tr("recommendations.segments.minEvents")}</Label>
+						<Label htmlFor="edit-seg-min">
+							{tr("recommendations.segments.minEvents")}
+						</Label>
 						<Input
 							id="edit-seg-min"
 							type="number"
@@ -539,7 +592,9 @@ function EditSegmentDialog({
 						/>
 					</div>
 					<div className="space-y-2">
-						<Label htmlFor="edit-seg-max">{tr("recommendations.segments.maxEvents")}</Label>
+						<Label htmlFor="edit-seg-max">
+							{tr("recommendations.segments.maxEvents")}
+						</Label>
 						<Input
 							id="edit-seg-max"
 							type="number"
@@ -549,7 +604,9 @@ function EditSegmentDialog({
 						/>
 					</div>
 					<div className="space-y-2">
-						<Label htmlFor="edit-seg-days">{tr("recommendations.segments.timeWindow")}</Label>
+						<Label htmlFor="edit-seg-days">
+							{tr("recommendations.segments.timeWindow")}
+						</Label>
 						<Input
 							id="edit-seg-days"
 							type="number"

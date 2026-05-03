@@ -80,7 +80,9 @@ export function MySearchUsageCard({ ownerType, ownerId, orgSlug }: MySearchUsage
 			: 0;
 
 	const isNearLimit =
-		filePercent >= 80 || storagePercent >= 80 || (data.aiAskLimit !== null && aiAsksPercent >= 80);
+		filePercent >= 80 ||
+		storagePercent >= 80 ||
+		(data.aiAskLimit !== null && aiAsksPercent >= 80);
 	const showUpgradeCta = isNearLimit || data.plan === "free";
 
 	return (
@@ -112,7 +114,8 @@ export function MySearchUsageCard({ ownerType, ownerId, orgSlug }: MySearchUsage
 					<div className="text-sm flex items-center justify-between">
 						<span className="text-muted-foreground">{t("storage")}</span>
 						<span className="font-medium tabular-nums">
-							{formatBytes(data.storageUsedBytes)} / {formatBytes(data.storageLimitBytes)}
+							{formatBytes(data.storageUsedBytes)} /{" "}
+							{formatBytes(data.storageLimitBytes)}
 						</span>
 					</div>
 					<Progress value={storagePercent} className="h-1.5" />

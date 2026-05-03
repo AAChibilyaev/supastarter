@@ -22,14 +22,20 @@ export function PricingScenarios() {
 								<div className="gap-3 flex items-start">
 									<DollarSignIcon className="size-5 mt-0.5 shrink-0 text-primary" />
 									<div className="space-y-3">
-										<CardTitle className="text-lg">{t(`scenarios.${scenario}.heading`)}</CardTitle>
+										<CardTitle className="text-lg">
+											{t(`scenarios.${scenario}.heading`)}
+										</CardTitle>
 										<ul className="space-y-2 text-sm text-muted-foreground">
 											<li className="gap-2 flex">
-												<span className="font-semibold shrink-0 text-foreground">Algolia:</span>
+												<span className="font-semibold shrink-0 text-foreground">
+													Algolia:
+												</span>
 												<span>{t(`scenarios.${scenario}.algolia`)}</span>
 											</li>
 											<li className="gap-2 flex">
-												<span className="font-semibold shrink-0 text-primary">AACsearch:</span>
+												<span className="font-semibold shrink-0 text-primary">
+													AACsearch:
+												</span>
 												<span>{t(`scenarios.${scenario}.aacsearch`)}</span>
 											</li>
 										</ul>

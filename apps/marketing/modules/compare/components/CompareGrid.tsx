@@ -13,7 +13,13 @@ import { useTranslations } from "next-intl";
 import type { ComponentType } from "react";
 
 interface CompareItem {
-	key: "vsAlgolia" | "vsElasticsearch" | "vsMeilisearch" | "vsTypesense" | "vsCustom" | "whenNotUs";
+	key:
+		| "vsAlgolia"
+		| "vsElasticsearch"
+		| "vsMeilisearch"
+		| "vsTypesense"
+		| "vsCustom"
+		| "whenNotUs";
 	icon: ComponentType<{ className?: string }>;
 }
 

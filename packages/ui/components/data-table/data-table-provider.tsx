@@ -32,7 +32,10 @@ interface DataTableBaseContextType<TData = unknown, TValue = unknown> {
 	totalRows?: number;
 	filterRows?: number;
 	getFacetedUniqueValues?: (table: Table<TData>, columnId: string) => Map<string, number>;
-	getFacetedMinMaxValues?: (table: Table<TData>, columnId: string) => undefined | [number, number];
+	getFacetedMinMaxValues?: (
+		table: Table<TData>,
+		columnId: string,
+	) => undefined | [number, number];
 }
 
 interface DataTableContextType<TData = unknown, TValue = unknown>

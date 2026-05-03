@@ -136,7 +136,10 @@ function App() {
 					</CardContent>
 				</Card>
 			) : (
-				<Tabs value={installTab} onValueChange={(v) => setInstallTab(v as typeof installTab)}>
+				<Tabs
+					value={installTab}
+					onValueChange={(v) => setInstallTab(v as typeof installTab)}
+				>
 					<TabsList>
 						<TabsTrigger value="script">{tConfig("embedCode")}</TabsTrigger>
 						<TabsTrigger value="npm">NPM / Yarn</TabsTrigger>
@@ -229,7 +232,12 @@ function App() {
 										<Button
 											variant="outline"
 											size="icon"
-											onClick={() => handleCopy("npm install @aacsearch/widget", setCopiedNpm)}
+											onClick={() =>
+												handleCopy(
+													"npm install @aacsearch/widget",
+													setCopiedNpm,
+												)
+											}
 										>
 											{copiedNpm ? (
 												<CheckIcon className="size-4" />
@@ -267,7 +275,8 @@ function App() {
 											{t("widget.installDocs") || "documentation"}
 											<ExternalLinkIcon className="size-3 ml-1" />
 										</a>{" "}
-										{t("widget.installNpmDocsEnd") || "for framework-specific integration guides."}
+										{t("widget.installNpmDocsEnd") ||
+											"for framework-specific integration guides."}
 									</p>
 								</div>
 							</CardContent>

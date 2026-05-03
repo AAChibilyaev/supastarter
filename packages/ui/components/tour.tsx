@@ -274,9 +274,13 @@ export function TourProvider({
 
 				const isWithinBounds =
 					clickX >= elementPosition.left &&
-					clickX <= elementPosition.left + (steps[currentStep]?.width || elementPosition.width) &&
+					clickX <=
+						elementPosition.left +
+							(steps[currentStep]?.width || elementPosition.width) &&
 					clickY >= elementPosition.top &&
-					clickY <= elementPosition.top + (steps[currentStep]?.height || elementPosition.height);
+					clickY <=
+						elementPosition.top +
+							(steps[currentStep]?.height || elementPosition.height);
 
 				if (isWithinBounds) {
 					steps[currentStep].onClickWithinArea?.();
@@ -355,7 +359,12 @@ export function TourProvider({
 									/>
 								</mask>
 							</defs>
-							<rect width="100%" height="100%" fill="rgba(0,0,0,0.5)" mask="url(#tour-mask)" />
+							<rect
+								width="100%"
+								height="100%"
+								fill="rgba(0,0,0,0.5)"
+								mask="url(#tour-mask)"
+							/>
 						</motion.svg>
 						<motion.div
 							initial={{ opacity: 0, scale: 0.95 }}
@@ -429,7 +438,8 @@ export function TourProvider({
 										onAnimationComplete={() => {
 											contentTransitioning.current = false;
 											if (contentRef.current) {
-												const rect = contentRef.current.getBoundingClientRect();
+												const rect =
+													contentRef.current.getBoundingClientRect();
 												setContentSize({
 													width: rect.width,
 													height: rect.height,
@@ -470,7 +480,9 @@ export function TourProvider({
 												onClick={nextStep}
 												className={cn(buttonVariants({ size: "sm" }))}
 											>
-												{currentStep === steps.length - 1 ? "Finish" : "Next"}
+												{currentStep === steps.length - 1
+													? "Finish"
+													: "Next"}
 											</button>
 										</div>
 									</div>
@@ -543,7 +555,8 @@ export function TourAlertDialog({
 						Welcome to the Tour
 					</AlertDialogTitle>
 					<AlertDialogDescription className="mt-2 text-sm text-center text-muted-foreground">
-						Take a quick tour to learn about the key features and functionality of this application.
+						Take a quick tour to learn about the key features and functionality of this
+						application.
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<div className="mt-6 space-y-3">

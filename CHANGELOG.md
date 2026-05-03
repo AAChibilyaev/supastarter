@@ -27,12 +27,12 @@
 #### Widget (MVP)
 
 - **`@repo/widget`**: Hosted storefront search widget — embeddable with one `<script>` tag.
-  - Vanilla JS (no framework dependency), Shadow DOM for CSS isolation.
-  - Works with AACsearch public API (Bearer auth with `ss_search_*` or `ss_scoped_*` keys).
-  - Modes: inline (default), supports facets, sorting, pagination, price display, availability.
-  - Theme: light, dark, auto (follows system preference).
-  - Built with tsup — outputs IIFE (14KB minified) + ESM.
-  - Auto-initializes from `<script>` data-\* attributes.
+    - Vanilla JS (no framework dependency), Shadow DOM for CSS isolation.
+    - Works with AACsearch public API (Bearer auth with `ss_search_*` or `ss_scoped_*` keys).
+    - Modes: inline (default), supports facets, sorting, pagination, price display, availability.
+    - Theme: light, dark, auto (follows system preference).
+    - Built with tsup — outputs IIFE (14KB minified) + ESM.
+    - Auto-initializes from `<script>` data-\* attributes.
 
 #### API
 
@@ -322,19 +322,19 @@ This release restructures the monorepo around separate marketing and SaaS applic
 - **Major dependency update**: Migrated from individual `@radix-ui/react-*` packages to unified `radix-ui` package (v1.4.3)
 - **Consolidated dependencies**: Replaced 13 separate Radix UI packages with a single `radix-ui` package
 - **Updated all UI components** to use new unified package imports:
-  - `accordion.tsx`: Updated to use `Accordion` from `radix-ui`
-  - `alert-dialog.tsx`: Updated to use `AlertDialog` from `radix-ui`
-  - `avatar.tsx`: Updated to use `Avatar` from `radix-ui`
-  - `button.tsx`: Updated to use `Slot` and `Slottable` from `radix-ui`
-  - `dialog.tsx`: Updated to use `Dialog` from `radix-ui`
-  - `dropdown-menu.tsx`: Updated to use `DropdownMenu` from `radix-ui`
-  - `form.tsx`: Updated to use `Label` and `Slot` from `radix-ui`
-  - `label.tsx`: Updated to use `Label` from `radix-ui`
-  - `progress.tsx`: Updated to use `Progress` from `radix-ui`
-  - `select.tsx`: Updated to use `Select` from `radix-ui` and migrated icons to Lucide
-  - `sheet.tsx`: Updated to use `Sheet` from `radix-ui`
-  - `tabs.tsx`: Updated to use `Tabs` from `radix-ui`
-  - `tooltip.tsx`: Updated to use `Tooltip` from `radix-ui`
+    - `accordion.tsx`: Updated to use `Accordion` from `radix-ui`
+    - `alert-dialog.tsx`: Updated to use `AlertDialog` from `radix-ui`
+    - `avatar.tsx`: Updated to use `Avatar` from `radix-ui`
+    - `button.tsx`: Updated to use `Slot` and `Slottable` from `radix-ui`
+    - `dialog.tsx`: Updated to use `Dialog` from `radix-ui`
+    - `dropdown-menu.tsx`: Updated to use `DropdownMenu` from `radix-ui`
+    - `form.tsx`: Updated to use `Label` and `Slot` from `radix-ui`
+    - `label.tsx`: Updated to use `Label` from `radix-ui`
+    - `progress.tsx`: Updated to use `Progress` from `radix-ui`
+    - `select.tsx`: Updated to use `Select` from `radix-ui` and migrated icons to Lucide
+    - `sheet.tsx`: Updated to use `Sheet` from `radix-ui`
+    - `tabs.tsx`: Updated to use `Tabs` from `radix-ui`
+    - `tooltip.tsx`: Updated to use `Tooltip` from `radix-ui`
 
 #### Icon migration
 
@@ -427,12 +427,12 @@ This release restructures the monorepo around separate marketing and SaaS applic
 #### Form components
 
 - Updated all SaaS form components to use the new toast API:
-  - Organization forms (Create, Change Name, Delete, Logo, Invite Member)
-  - Settings forms (Change Email, Change Name, Change Password, Set Password, Delete Account, User Avatar, User Language)
-  - Admin components (Organization Form, Organization List, User List)
-  - Organization management components (Members List, Invitations List, Organization Select)
-  - Security components (Passkeys Block, Two Factor Block, Active Sessions Block)
-  - Customer Portal Button
+    - Organization forms (Create, Change Name, Delete, Logo, Invite Member)
+    - Settings forms (Change Email, Change Name, Change Password, Set Password, Delete Account, User Avatar, User Language)
+    - Admin components (Organization Form, Organization List, User List)
+    - Organization management components (Members List, Invitations List, Organization Select)
+    - Security components (Passkeys Block, Two Factor Block, Active Sessions Block)
+    - Customer Portal Button
 
 ---
 
@@ -520,30 +520,30 @@ The centralized config package has been removed in favor of scoped configuration
 **Breaking changes:**
 
 - Removed `config/` package entirely:
-  - `config/index.ts`
-  - `config/package.json`
-  - `config/tsconfig.json`
-  - `config/types.ts`
+    - `config/index.ts`
+    - `config/package.json`
+    - `config/tsconfig.json`
+    - `config/types.ts`
 - All imports from `@repo/config` or `config` will fail
 - Config is now scoped to individual packages
 
 **New structure:**
 
 - Each package now has its own `config.ts` file:
-  - `apps/web/config.ts` - Web app configuration
-  - `packages/api/config.ts` - API configuration
-  - `packages/auth/config.ts` - Auth configuration
-  - `packages/i18n/config.ts` - i18n configuration
-  - `packages/mail/config.ts` - Mail configuration
-  - `packages/payments/config.ts` - Payments configuration
-  - `packages/storage/config.ts` - Storage configuration
+    - `apps/web/config.ts` - Web app configuration
+    - `packages/api/config.ts` - API configuration
+    - `packages/auth/config.ts` - Auth configuration
+    - `packages/i18n/config.ts` - i18n configuration
+    - `packages/mail/config.ts` - Mail configuration
+    - `packages/payments/config.ts` - Payments configuration
+    - `packages/storage/config.ts` - Storage configuration
 - Root `config.ts` file for shared configuration
 
 **Migration steps:**
 
 1. Update imports from `@repo/config` or `config` to package-specific configs:
-   - `import { config } from "@config"` for web app
-   - `import { config as i18nConfig } from "@repo/i18n/config"` for package configs
+    - `import { config } from "@config"` for web app
+    - `import { config as i18nConfig } from "@repo/i18n/config"` for package configs
 2. Update any code referencing the old config package structure
 3. Review each package's config file to understand what configuration is available
 4. Update environment variable usage if config structure changed
@@ -573,9 +573,9 @@ Mail package has been restructured with a flatter directory structure and improv
 - Removed `packages/mail/src/components/Logo.tsx` (use `@repo/ui` instead)
 - Removed `packages/mail/src/provider/custom.ts` provider
 - Restructured mail package directory layout:
-  - `src/components/` → `components/` (PrimaryButton, Wrapper moved)
-  - `src/provider/` → `provider/` (all providers moved)
-  - `src/util/` → `util/` (send, templates, translations moved)
+    - `src/components/` → `components/` (PrimaryButton, Wrapper moved)
+    - `src/provider/` → `provider/` (all providers moved)
+    - `src/util/` → `util/` (send, templates, translations moved)
 - Updated all mail provider implementations to use new config structure
 - Updated all mail email templates to use new import paths
 
@@ -589,16 +589,16 @@ Mail package has been restructured with a flatter directory structure and improv
 **Migration steps:**
 
 1. If using the Logo component in mail templates, import from `@repo/ui` instead:
-   ```typescript
-   import { Logo } from "@repo/ui";
-   ```
+    ```typescript
+    import { Logo } from "@repo/ui";
+    ```
 2. If using custom mail provider, migrate to one of the supported providers:
-   - Resend
-   - Nodemailer
-   - Mailgun
-   - Postmark
-   - Plunk
-   - Console (for development)
+    - Resend
+    - Nodemailer
+    - Mailgun
+    - Postmark
+    - Plunk
+    - Console (for development)
 3. Update mail provider configuration to use `packages/mail/config.ts`
 4. Update any imports from `packages/mail/src/*` to `packages/mail/*`
 5. Use `apps/mail-preview` app for previewing emails during development
@@ -642,9 +642,9 @@ All components and modules have been updated to use the new import paths through
 
 1. Run `pnpm install` to ensure all workspace dependencies are linked correctly
 2. Update any custom code using old import paths:
-   - `apps/web/modules/ui/*` → `@repo/ui/*`
-   - `@repo/config` → package-specific configs
-   - `@shared/components/Logo` → `@repo/ui`
+    - `apps/web/modules/ui/*` → `@repo/ui/*`
+    - `@repo/config` → package-specific configs
+    - `@shared/components/Logo` → `@repo/ui`
 3. Run type checking: `pnpm type-check` to identify any remaining import issues
 4. Update any custom scripts or build tools that reference old paths
 
@@ -661,12 +661,12 @@ The workspace structure has been updated to reflect the new package organization
 **Migration steps:**
 
 1. Update `pnpm-workspace.yaml` to remove the `config` entry:
-   ```yaml
-   packages:
-     - apps/*
-     - packages/*
-     - tooling/*
-   ```
+    ```yaml
+    packages:
+        - apps/*
+        - packages/*
+        - tooling/*
+    ```
 2. Run `pnpm install` to refresh workspace links
 3. Verify all packages are properly linked with `pnpm list --depth=0`
 
@@ -685,12 +685,12 @@ All Biome configurations have been standardized across the monorepo for consiste
 **Migration steps:**
 
 1. If you have custom Biome rules, ensure they follow the new pattern:
-   ```json
-   {
-   	"root": false,
-   	"extends": "//"
-   }
-   ```
+    ```json
+    {
+    	"root": false,
+    	"extends": "//"
+    }
+    ```
 2. Run `pnpm format` to apply new formatting rules
 3. Run `pnpm lint` to check for any linting issues with new config
 
@@ -826,20 +826,20 @@ All coding agent guidelines have been consolidated into a single, comprehensive 
 #### New files
 
 - `agents.md` - Comprehensive 679-line guide covering:
-  - Technology stack overview
-  - Monorepo architecture and directory structure
-  - Import conventions and path aliases
-  - TypeScript best practices with code examples
-  - React & Next.js patterns (Server vs Client Components)
-  - API & Data Layer patterns (oRPC procedures, database queries)
-  - Authentication & Authorization patterns
-  - UI & Styling guidelines
-  - Forms & Validation patterns
-  - Internationalization
-  - Configuration management
-  - Tooling & Quality standards
-  - Performance optimization guidelines
-  - Code review checklist
+    - Technology stack overview
+    - Monorepo architecture and directory structure
+    - Import conventions and path aliases
+    - TypeScript best practices with code examples
+    - React & Next.js patterns (Server vs Client Components)
+    - API & Data Layer patterns (oRPC procedures, database queries)
+    - Authentication & Authorization patterns
+    - UI & Styling guidelines
+    - Forms & Validation patterns
+    - Internationalization
+    - Configuration management
+    - Tooling & Quality standards
+    - Performance optimization guidelines
+    - Code review checklist
 - `claude.md` - Symlink to `agents.md` for Claude Code compatibility
 
 This consolidation provides a single source of truth for all AI coding agents working with the codebase, regardless of the IDE or tool being used.
@@ -1001,10 +1001,10 @@ Pinned `prisma-zod-generator` to version `1.32.1` to prevent automatic upgrades 
 - Refactored webhook handler to use SDK's built-in webhook verification instead of manual signature verification
 - Moved webhook secret configuration to client initialization for better security
 - Updated webhook event types to match new SDK version:
-  - `checkout.session.completed` → `payment.succeeded`
-  - `subscription.created` → `subscription.active`
-  - `subscription.cancelled` → `subscription.expired`
-  - Added support for `subscription.plan_changed` event
+    - `checkout.session.completed` → `payment.succeeded`
+    - `subscription.created` → `subscription.active`
+    - `subscription.cancelled` → `subscription.expired`
+    - Added support for `subscription.plan_changed` event
 - Updated product ID extraction to use `product_cart` array structure from new SDK
 
 ---
@@ -1061,27 +1061,27 @@ Upgraded `better-auth` from version `1.3.34` to `1.4.4`. This version introduces
 #### Migration steps
 
 1. **Update dependencies:**
-   - Update `better-auth` to `1.4.4` in both `apps/web/package.json` and `packages/auth/package.json`
-   - Add `@better-auth/passkey` package (version `^1.4.4`) to `packages/auth/package.json`
+    - Update `better-auth` to `1.4.4` in both `apps/web/package.json` and `packages/auth/package.json`
+    - Add `@better-auth/passkey` package (version `^1.4.4`) to `packages/auth/package.json`
 
 2. **Update passkey plugin imports:**
-   - In `packages/auth/auth.ts`: Change `import { passkey } from "better-auth/plugins/passkey"` to `import { passkey } from "@better-auth/passkey"`
-   - In `packages/auth/client.ts`: Change `passkeyClient` import from `better-auth/client/plugins` to `import { passkeyClient } from "@better-auth/passkey/client"`
+    - In `packages/auth/auth.ts`: Change `import { passkey } from "better-auth/plugins/passkey"` to `import { passkey } from "@better-auth/passkey"`
+    - In `packages/auth/client.ts`: Change `passkeyClient` import from `better-auth/client/plugins` to `import { passkeyClient } from "@better-auth/passkey/client"`
 
 3. **Update magicLink callback signature:**
-   - Change the `sendMagicLink` callback from `async ({ email, url }, request)` to `async ({ email, url }, ctx)`
-   - Extract the request object from context: `const request = ctx?.request as Request`
+    - Change the `sendMagicLink` callback from `async ({ email, url }, request)` to `async ({ email, url }, ctx)`
+    - Extract the request object from context: `const request = ctx?.request as Request`
 
 4. **Update database schema:**
-   - Run `pnpm db:push` or create a migration to add the following indexes:
-     - `Session`: `@@index([userId])`
-     - `Account`: `@@index([userId])`
-     - `Verification`: `@@index([identifier])`
-     - `Passkey`: `@@index([userId])` and `@@index([credentialID])`
-     - `TwoFactor`: `@@index([secret])` and `@@index([userId])`
-     - `Member`: `@@index([organizationId])` and `@@index([userId])`
-     - `Invitation`: `@@index([organizationId])` and `@@index([email])`
-   - Add `createdAt DateTime @default(now())` field to the `Invitation` model
+    - Run `pnpm db:push` or create a migration to add the following indexes:
+        - `Session`: `@@index([userId])`
+        - `Account`: `@@index([userId])`
+        - `Verification`: `@@index([identifier])`
+        - `Passkey`: `@@index([userId])` and `@@index([credentialID])`
+        - `TwoFactor`: `@@index([secret])` and `@@index([userId])`
+        - `Member`: `@@index([organizationId])` and `@@index([userId])`
+        - `Invitation`: `@@index([organizationId])` and `@@index([email])`
+    - Add `createdAt DateTime @default(now())` field to the `Invitation` model
 
 These changes improve database query performance through additional indexes and align with better-auth 1.4's new plugin architecture where passkey functionality is now a separate package.
 
@@ -1289,8 +1289,8 @@ If you are updating an existing project, work through the following steps to ali
 1. Upgrade `next`, `react`, and `react-dom` to their latest stable releases in both `package.json` files (`package.json` at the root and `apps/web/package.json` if it exists).
 
 2. Rename the middleware entry point:
-   - Move `apps/web/middleware.ts` to `apps/web/proxy.ts`.
-   - Inside the renamed file update the exported handler to `export function proxy(...)` (it was previously `middleware`).
+    - Move `apps/web/middleware.ts` to `apps/web/proxy.ts`.
+    - Inside the renamed file update the exported handler to `export function proxy(...)` (it was previously `middleware`).
 
 3. Remove the inline ESLint configuration from `apps/web/next.config.ts`
 

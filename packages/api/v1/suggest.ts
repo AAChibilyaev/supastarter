@@ -296,7 +296,8 @@ async function fetchIndexFieldValues(
 			.filter((f: any) => f.type === "string" && !f.name.startsWith("_"))
 			.map((f: any) => f.name) as string[];
 
-		const values: Array<{ text: string; highlights?: Array<{ start: number; end: number }> }> = [];
+		const values: Array<{ text: string; highlights?: Array<{ start: number; end: number }> }> =
+			[];
 		for (const field of stringFields.slice(0, 3)) {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const result = (await (client as any)
@@ -319,7 +320,9 @@ async function fetchIndexFieldValues(
 						if (startIndex >= 0 && !values.some((v) => v.text === val)) {
 							values.push({
 								text: val,
-								highlights: [{ start: startIndex, end: startIndex + prefix.length }],
+								highlights: [
+									{ start: startIndex, end: startIndex + prefix.length },
+								],
 							});
 						}
 					}
@@ -470,12 +473,18 @@ export const suggestApp = new Hono()
 		try {
 			body = (await c.req.json()) as SuggestInput;
 		} catch {
-			return c.json({ error: "invalid_json", message: "Request body must be valid JSON" }, 400);
+			return c.json(
+				{ error: "invalid_json", message: "Request body must be valid JSON" },
+				400,
+			);
 		}
 
 		// Validate required fields
 		if (!body.q || typeof body.q !== "string" || body.q.length > 200) {
-			return c.json({ error: "invalid_input", message: "'q' is required (1-200 chars)" }, 400);
+			return c.json(
+				{ error: "invalid_input", message: "'q' is required (1-200 chars)" },
+				400,
+			);
 		}
 
 		const {
@@ -519,7 +528,11 @@ export const suggestApp = new Hono()
 				}
 
 				if (enableTrending) {
-					const trendingQueries = await fetchTrendingQueries(indexId, organizationId, limit);
+					const trendingQueries = await fetchTrendingQueries(
+						indexId,
+						organizationId,
+						limit,
+					);
 					for (const tq of trendingQueries) {
 						if (!suggestions.some((s) => s.text === tq.query)) {
 							suggestions.push({
@@ -605,7 +618,10 @@ export const suggestApp = new Hono()
 
 			// Source 4: Popular queries from Typesense analytics
 			if (popular && suggestions.length < limit) {
-				const popularQueries = await fetchPopularQueries(indexSlug, limit - suggestions.length + 3);
+				const popularQueries = await fetchPopularQueries(
+					indexSlug,
+					limit - suggestions.length + 3,
+				);
 				for (const pq of popularQueries) {
 					if (
 						pq.query.toLowerCase().startsWith(q.toLowerCase()) &&

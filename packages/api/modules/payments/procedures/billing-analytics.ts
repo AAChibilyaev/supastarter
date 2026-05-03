@@ -137,7 +137,9 @@ export const billingAnalytics = adminProcedure
 				// Approximation: use current active subscriptions as denominator
 				if (activeSubscriptions + lastMonth.cancellations > 0) {
 					churnRateLastMonth =
-						(lastMonth.cancellations / (activeSubscriptions + lastMonth.cancellations)) * 100;
+						(lastMonth.cancellations /
+							(activeSubscriptions + lastMonth.cancellations)) *
+						100;
 				}
 			}
 		}

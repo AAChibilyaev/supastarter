@@ -77,7 +77,9 @@ export function TruncateIndexDialog({
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>{t("collection.confirmTruncate")}</AlertDialogTitle>
-					<AlertDialogDescription>{t("collection.confirmTruncateDesc")}</AlertDialogDescription>
+					<AlertDialogDescription>
+						{t("collection.confirmTruncateDesc")}
+					</AlertDialogDescription>
 				</AlertDialogHeader>
 
 				<div className="space-y-2">

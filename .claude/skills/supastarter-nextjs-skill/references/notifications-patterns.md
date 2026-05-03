@@ -49,14 +49,14 @@ The user can disable each channel per type via `updatePreference`.
 ## Adding a new notification type
 
 1. **Prisma enum** — add the value to `NotificationType` in `packages/database/prisma/schema.prisma`. Push:
-   ```bash
-   pnpm --filter @repo/database push
-   pnpm --filter @repo/database generate
-   ```
+    ```bash
+    pnpm --filter @repo/database push
+    pnpm --filter @repo/database generate
+    ```
 2. **TS union** — add the same string to `NotificationType` in `packages/notifications/types.ts`.
 3. **Catalog** — register it in `packages/notifications/catalog.ts`:
-   - Assign it to a group in `NOTIFICATION_GROUPS`.
-   - Add the i18n label keys (`title`, `description`) under `saas.settings.notificationsPage.types.<type>` in **all 4 locales** (`en, de, es, fr`).
+    - Assign it to a group in `NOTIFICATION_GROUPS`.
+    - Add the i18n label keys (`title`, `description`) under `saas.settings.notificationsPage.types.<type>` in **all 4 locales** (`en, de, es, fr`).
 4. (Optional) Customize `resolve-link.ts` if the deep link depends on `data`.
 5. Trigger via `createNotification({ type: "<new_type>", ... })`.
 

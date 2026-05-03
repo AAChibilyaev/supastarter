@@ -88,7 +88,9 @@ export function TwoFactorBlock() {
 
 			setDialogOpen(false);
 
-			toastSuccess(t("settings.account.security.twoFactor.notifications.disable.success.title"));
+			toastSuccess(
+				t("settings.account.security.twoFactor.notifications.disable.success.title"),
+			);
 		},
 
 		onError: () => {
@@ -107,7 +109,9 @@ export function TwoFactorBlock() {
 				throw error;
 			}
 
-			toastSuccess(t("settings.account.security.twoFactor.notifications.verify.success.title"));
+			toastSuccess(
+				t("settings.account.security.twoFactor.notifications.verify.success.title"),
+			);
 
 			await reloadSession();
 			setDialogOpen(false);
@@ -175,14 +179,21 @@ export function TwoFactorBlock() {
 						<form onSubmit={handleSubmit}>
 							<div className="gap-4 grid grid-cols-1">
 								<p className="text-sm text-foreground/60">
-									{t("settings.account.security.twoFactor.dialog.password.description")}
+									{t(
+										"settings.account.security.twoFactor.dialog.password.description",
+									)}
 								</p>
 
 								<FormItem>
 									<Label className="block">
-										{t("settings.account.security.twoFactor.dialog.password.label")}
+										{t(
+											"settings.account.security.twoFactor.dialog.password.label",
+										)}
 									</Label>
-									<PasswordInput value={password} onChange={(value) => setPassword(value)} />
+									<PasswordInput
+										value={password}
+										onChange={(value) => setPassword(value)}
+									/>
 								</FormItem>
 							</div>
 							<div className="mt-4">
@@ -190,7 +201,10 @@ export function TwoFactorBlock() {
 									type="submit"
 									variant="secondary"
 									className="w-full"
-									loading={enableTwoFactorMutation.isPending || disableTwoFactorMutation.isPending}
+									loading={
+										enableTwoFactorMutation.isPending ||
+										disableTwoFactorMutation.isPending
+									}
 								>
 									{t("common.actions.continue")}
 									<ArrowRightIcon className="ml-1.5 size-4" />
@@ -201,13 +215,17 @@ export function TwoFactorBlock() {
 						<form onSubmit={handleSubmit}>
 							<div className="gap-4 grid grid-cols-1">
 								<p className="text-sm text-foreground/60">
-									{t("settings.account.security.twoFactor.dialog.totpUrl.description")}
+									{t(
+										"settings.account.security.twoFactor.dialog.totpUrl.description",
+									)}
 								</p>
 								<Card className="gap-4 p-6 flex flex-col items-center">
 									<QRCode title={totpURI} value={totpURI} />
 
 									{totpURISecret && (
-										<p className="text-xs text-center text-muted-foreground">{totpURISecret}</p>
+										<p className="text-xs text-center text-muted-foreground">
+											{totpURISecret}
+										</p>
 									)}
 								</Card>
 
@@ -216,9 +234,14 @@ export function TwoFactorBlock() {
 								<div className="gap-4 grid grid-cols-1">
 									<FormItem>
 										<Label className="block">
-											{t("settings.account.security.twoFactor.dialog.totpUrl.code")}
+											{t(
+												"settings.account.security.twoFactor.dialog.totpUrl.code",
+											)}
 										</Label>
-										<Input value={totpCode} onChange={(e) => setTotpCode(e.target.value)} />
+										<Input
+											value={totpCode}
+											onChange={(e) => setTotpCode(e.target.value)}
+										/>
 									</FormItem>
 								</div>
 							</div>

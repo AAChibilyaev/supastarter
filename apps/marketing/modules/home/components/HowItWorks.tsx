@@ -30,7 +30,9 @@ export function HowItWorks() {
 
 								{/* Number circle */}
 								<div className="size-12 shadow-sm z-10 flex items-center justify-center rounded-full border-2 border-primary/30 bg-background">
-									<span className="font-semibold text-sm text-primary">{i + 1}</span>
+									<span className="font-semibold text-sm text-primary">
+										{i + 1}
+									</span>
 								</div>
 
 								{/* Right connector line (hidden on last) */}

@@ -127,7 +127,10 @@ export function NavBar() {
 					)}
 				>
 					<div className="min-w-0 flex shrink-0 items-center justify-start">
-						<LocaleLink href="/" className="block hover:no-underline active:no-underline">
+						<LocaleLink
+							href="/"
+							className="block hover:no-underline active:no-underline"
+						>
 							<Logo />
 						</LocaleLink>
 					</div>
@@ -189,7 +192,10 @@ export function NavBar() {
 						</Suspense>
 
 						{/* Mobile menu */}
-						<Sheet open={mobileMenuOpen} onOpenChange={(open) => setMobileMenuOpen(open)}>
+						<Sheet
+							open={mobileMenuOpen}
+							onOpenChange={(open) => setMobileMenuOpen(open)}
+						>
 							<SheetTrigger asChild>
 								<Button
 									className="lg:hidden"
@@ -261,7 +267,10 @@ function MobileNavGroup({
 			<CollapsibleTrigger className="px-3 py-2 font-medium text-base flex w-full items-center justify-between text-foreground/80 hover:text-foreground">
 				{group.label}
 				<ChevronDown
-					className={cn("h-4 w-4 transition-transform duration-200", open && "rotate-180")}
+					className={cn(
+						"h-4 w-4 transition-transform duration-200",
+						open && "rotate-180",
+					)}
 				/>
 			</CollapsibleTrigger>
 			<CollapsibleContent>

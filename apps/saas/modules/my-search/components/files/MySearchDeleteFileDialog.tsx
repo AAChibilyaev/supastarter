@@ -91,8 +91,14 @@ export function MySearchDeleteFileDialog({
 					<Button variant="outline" onClick={onClose} disabled={deleteMutation.isPending}>
 						{t("cancel")}
 					</Button>
-					<Button variant="destructive" onClick={handleDelete} disabled={deleteMutation.isPending}>
-						{deleteMutation.isPending && <Loader2Icon className="size-4 animate-spin" />}
+					<Button
+						variant="destructive"
+						onClick={handleDelete}
+						disabled={deleteMutation.isPending}
+					>
+						{deleteMutation.isPending && (
+							<Loader2Icon className="size-4 animate-spin" />
+						)}
 						{t("files.delete")}
 					</Button>
 				</DialogFooter>

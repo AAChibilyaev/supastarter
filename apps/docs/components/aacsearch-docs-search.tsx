@@ -212,7 +212,11 @@ export function AacsearchDocsSearch({
 						</div>
 					)}
 
-					{error && <div className="px-4 py-6 text-sm text-center text-destructive">{error}</div>}
+					{error && (
+						<div className="px-4 py-6 text-sm text-center text-destructive">
+							{error}
+						</div>
+					)}
 
 					{!loading && !error && query && results.length === 0 && total === 0 && (
 						<div className="px-4 py-8 text-sm text-center text-muted-foreground">
@@ -236,7 +240,8 @@ export function AacsearchDocsSearch({
 											<div
 												className="text-sm font-medium"
 												dangerouslySetInnerHTML={{
-													__html: hit.highlight?.title || hit.document.title,
+													__html:
+														hit.highlight?.title || hit.document.title,
 												}}
 											/>
 											{hit.document.description && (

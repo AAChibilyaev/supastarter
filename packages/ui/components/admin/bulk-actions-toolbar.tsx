@@ -68,7 +68,10 @@ export const BulkActionsToolbar = ({
 					<X />
 				</Button>
 				<span className="text-sm text-muted-foreground">
-					<Translate i18nKey="ra.action.bulk_actions" options={{ smart_count: selectedIds.length }}>
+					<Translate
+						i18nKey="ra.action.bulk_actions"
+						options={{ smart_count: selectedIds.length }}
+					>
 						{selectedIds.length} rows selected
 					</Translate>
 				</span>

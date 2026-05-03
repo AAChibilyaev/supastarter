@@ -33,7 +33,11 @@ test.describe.configure({ mode: "serial" });
 test.describe("AAC-321 Search Features API", () => {
 	test.beforeAll(async () => {
 		// Create a test index with geo field
-		const index = await createTestIndex(ADMIN_KEY, BASE_URL, `e2e-search-features-${Date.now()}`);
+		const index = await createTestIndex(
+			ADMIN_KEY,
+			BASE_URL,
+			`e2e-search-features-${Date.now()}`,
+		);
 		indexSlug = index.slug;
 
 		// Create API keys
@@ -177,9 +181,12 @@ test.describe("AAC-321 Search Features API", () => {
 
 	test.describe("Export Documents", () => {
 		test("should export documents as JSONL", async () => {
-			const response = await fetch(`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/export`, {
-				headers: { Authorization: `Bearer ${adminApiKey}` },
-			});
+			const response = await fetch(
+				`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/export`,
+				{
+					headers: { Authorization: `Bearer ${adminApiKey}` },
+				},
+			);
 			expect(response.status).toBe(200);
 			const text = await response.text();
 			const lines = text.trim().split("\n").filter(Boolean);
@@ -189,7 +196,9 @@ test.describe("AAC-321 Search Features API", () => {
 		});
 
 		test("should return 401 without auth", async () => {
-			const response = await fetch(`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/export`);
+			const response = await fetch(
+				`${BASE_URL}/api/v1/indexes/${indexSlug}/documents/export`,
+			);
 			expect(response.status).toBe(401);
 		});
 	});

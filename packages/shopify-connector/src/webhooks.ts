@@ -265,7 +265,9 @@ async function processCollectionChanges(
 	categoryMap?: CategoryMap,
 ): Promise<void> {
 	const collectionIds = [
-		...new Set(events.map((e) => e.collectionId).filter((id): id is number => id !== undefined)),
+		...new Set(
+			events.map((e) => e.collectionId).filter((id): id is number => id !== undefined),
+		),
 	];
 
 	for (const collectionId of collectionIds) {

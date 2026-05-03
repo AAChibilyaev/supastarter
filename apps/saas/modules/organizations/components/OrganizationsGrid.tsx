@@ -24,7 +24,9 @@ export function OrganizationsGrid() {
 
 	return (
 		<div className="@container">
-			<h2 className="mb-2 font-semibold text-lg">{t("organizations.organizationsGrid.title")}</h2>
+			<h2 className="mb-2 font-semibold text-lg">
+				{t("organizations.organizationsGrid.title")}
+			</h2>
 			<div className="@2xl:grid-cols-3 @lg:grid-cols-2 gap-4 grid grid-cols-1">
 				{allOrganizations?.map((organization) => (
 					<Card

@@ -65,7 +65,9 @@ export function ShopifySyncHistory({ organizationId }: ShopifySyncHistoryProps) 
 		return (
 			<Card>
 				<CardContent className="py-8">
-					<p className="text-sm text-center text-muted-foreground">{tShopify("noSyncHistory")}</p>
+					<p className="text-sm text-center text-muted-foreground">
+						{tShopify("noSyncHistory")}
+					</p>
 				</CardContent>
 			</Card>
 		);
@@ -102,7 +104,9 @@ export function ShopifySyncHistory({ organizationId }: ShopifySyncHistoryProps) 
 							{job.itemsCount > 0 && (
 								<>
 									<span>·</span>
-									<span>{tShopify("itemsSynced", { count: job.itemsCount })}</span>
+									<span>
+										{tShopify("itemsSynced", { count: job.itemsCount })}
+									</span>
 								</>
 							)}
 							{job.failuresCount > 0 && (
@@ -115,7 +119,9 @@ export function ShopifySyncHistory({ organizationId }: ShopifySyncHistoryProps) 
 							)}
 						</div>
 						{job.lastError && (
-							<p className="mt-0.5 text-xs truncate text-destructive">{job.lastError}</p>
+							<p className="mt-0.5 text-xs truncate text-destructive">
+								{job.lastError}
+							</p>
 						)}
 					</div>
 				</div>

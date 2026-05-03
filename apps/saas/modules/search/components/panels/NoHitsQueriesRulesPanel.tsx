@@ -153,7 +153,9 @@ export function NoHitsQueriesRulesPanel({ organizationId, slug }: NoHitsQueriesR
 					<div className="mb-4 flex items-center justify-between">
 						<div>
 							<h3 className="text-lg font-medium">{t("nohitsQueries.title")}</h3>
-							<p className="text-sm text-muted-foreground">{t("nohitsQueries.description")}</p>
+							<p className="text-sm text-muted-foreground">
+								{t("nohitsQueries.description")}
+							</p>
 						</div>
 						<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 							<DialogTrigger asChild>
@@ -164,8 +166,12 @@ export function NoHitsQueriesRulesPanel({ organizationId, slug }: NoHitsQueriesR
 							</DialogTrigger>
 							<DialogContent className="max-w-lg">
 								<DialogHeader>
-									<DialogTitle>{t("nohitsQueries.createDialogTitle")}</DialogTitle>
-									<DialogDescription>{t("nohitsQueries.createDialogDesc")}</DialogDescription>
+									<DialogTitle>
+										{t("nohitsQueries.createDialogTitle")}
+									</DialogTitle>
+									<DialogDescription>
+										{t("nohitsQueries.createDialogDesc")}
+									</DialogDescription>
 								</DialogHeader>
 								<div className="space-y-4">
 									<div className="space-y-2">
@@ -173,17 +179,25 @@ export function NoHitsQueriesRulesPanel({ organizationId, slug }: NoHitsQueriesR
 										<Input
 											placeholder="no-hit-queries-logger"
 											value={newRule.name}
-											onChange={(e) => setNewRule({ ...newRule, name: e.target.value })}
+											onChange={(e) =>
+												setNewRule({ ...newRule, name: e.target.value })
+											}
 										/>
 									</div>
 									<div className="space-y-2">
 										<Label>{t("nohitsQueries.sourceCollection")}</Label>
 										<Select
 											value={newRule.collection}
-											onValueChange={(v) => setNewRule({ ...newRule, collection: v })}
+											onValueChange={(v) =>
+												setNewRule({ ...newRule, collection: v })
+											}
 										>
 											<SelectTrigger>
-												<SelectValue placeholder={t("nohitsQueries.selectCollection")} />
+												<SelectValue
+													placeholder={t(
+														"nohitsQueries.selectCollection",
+													)}
+												/>
 											</SelectTrigger>
 											<SelectContent>
 												<SelectItem value={slug}>{slug}</SelectItem>
@@ -211,7 +225,10 @@ export function NoHitsQueriesRulesPanel({ organizationId, slug }: NoHitsQueriesR
 									<Button variant="outline" onClick={() => setDialogOpen(false)}>
 										{t("nohitsQueries.cancel")}
 									</Button>
-									<Button onClick={handleCreate} loading={createMutation.isPending}>
+									<Button
+										onClick={handleCreate}
+										loading={createMutation.isPending}
+									>
 										{t("nohitsQueries.create")}
 									</Button>
 								</DialogFooter>
@@ -230,20 +247,30 @@ export function NoHitsQueriesRulesPanel({ organizationId, slug }: NoHitsQueriesR
 								<TableRow>
 									<TableHead>{t("nohitsQueries.name")}</TableHead>
 									<TableHead>{t("nohitsQueries.sourceCollection")}</TableHead>
-									<TableHead>{t("nohitsQueries.destinationCollection")}</TableHead>
-									<TableHead className="w-[80px]">{t("nohitsQueries.actions")}</TableHead>
+									<TableHead>
+										{t("nohitsQueries.destinationCollection")}
+									</TableHead>
+									<TableHead className="w-[80px]">
+										{t("nohitsQueries.actions")}
+									</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
 								{nohitsRules.map((rule) => {
 									const params = rule.params as Record<string, unknown>;
-									const source = params?.source as { collections?: string[] } | undefined;
-									const destination = params?.destination as { collection?: string } | undefined;
+									const source = params?.source as
+										| { collections?: string[] }
+										| undefined;
+									const destination = params?.destination as
+										| { collection?: string }
+										| undefined;
 									const sourceCollection = source?.collections?.[0] ?? "-";
 									const destCollection = destination?.collection ?? "-";
 									return (
 										<TableRow key={rule.name}>
-											<TableCell className="font-medium">{rule.name}</TableCell>
+											<TableCell className="font-medium">
+												{rule.name}
+											</TableCell>
 											<TableCell>{sourceCollection}</TableCell>
 											<TableCell>{destCollection}</TableCell>
 											<TableCell>

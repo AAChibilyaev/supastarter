@@ -11,18 +11,15 @@ import { CompareWeaviateGrid } from "../../../../modules/compare/components/Comp
 const FAQ_ITEMS = [
 	{
 		question: "Why switch from Weaviate to AACsearch?",
-		answer:
-			"AACsearch offers native multi-tenancy, scoped API tokens, simpler flat pricing, and zero vendor lock-in with full Typesense data export.",
+		answer: "AACsearch offers native multi-tenancy, scoped API tokens, simpler flat pricing, and zero vendor lock-in with full Typesense data export.",
 	},
 	{
 		question: "How does AACsearch pricing compare to Weaviate?",
-		answer:
-			"AACsearch uses flat per-index pricing with unlimited search operations — no per-record or per-query charges. Weaviate pricing info would go here.",
+		answer: "AACsearch uses flat per-index pricing with unlimited search operations — no per-record or per-query charges. Weaviate pricing info would go here.",
 	},
 	{
 		question: "Is migration from Weaviate to AACsearch difficult?",
-		answer:
-			"Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes.",
+		answer: "Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes.",
 	},
 ];
 

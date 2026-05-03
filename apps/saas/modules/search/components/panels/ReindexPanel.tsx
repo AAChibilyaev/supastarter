@@ -102,7 +102,9 @@ export function ReindexPanel({
 					<div className="mb-4 space-y-3">
 						<div className="gap-2 flex items-center">
 							<RefreshCwIcon className="size-4 animate-spin text-primary" />
-							<span className="text-sm font-medium">{t("collection.reindexInProgress")}</span>
+							<span className="text-sm font-medium">
+								{t("collection.reindexInProgress")}
+							</span>
 						</div>
 
 						{/* Progress bar */}
@@ -115,7 +117,8 @@ export function ReindexPanel({
 
 						<div className="text-xs flex items-center justify-between text-muted-foreground">
 							<span>
-								{currentJob.processed} / {currentJob.total} {t("collection.reindexDocuments")}
+								{currentJob.processed} / {currentJob.total}{" "}
+								{t("collection.reindexDocuments")}
 							</span>
 							<span>{progressPercent}%</span>
 						</div>
@@ -135,7 +138,9 @@ export function ReindexPanel({
 				{/* No active job */}
 				{(!currentJob || currentJob.processed >= currentJob.total) && (
 					<div className="space-y-3">
-						<p className="text-sm text-muted-foreground">{t("collection.reindexIdle")}</p>
+						<p className="text-sm text-muted-foreground">
+							{t("collection.reindexIdle")}
+						</p>
 
 						{/* Advanced options info */}
 						<div className="gap-2 p-3 border-amber-500/20 bg-amber-500/5 flex items-start rounded-lg border">
@@ -150,7 +155,11 @@ export function ReindexPanel({
 							</div>
 						</div>
 
-						<Button variant="outline" onClick={handleReindex} disabled={reindexMutation.isPending}>
+						<Button
+							variant="outline"
+							onClick={handleReindex}
+							disabled={reindexMutation.isPending}
+						>
 							<RotateCcwIcon className="mr-2 size-4" />
 							{t("collection.reindexButton")}
 						</Button>

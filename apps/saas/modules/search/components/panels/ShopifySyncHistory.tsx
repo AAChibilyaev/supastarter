@@ -71,7 +71,9 @@ export function ShopifySyncHistory({
 							))}
 						</div>
 					) : jobs.length === 0 ? (
-						<p className="text-sm py-4 text-muted-foreground">{t("search.connector.noJobLogs")}</p>
+						<p className="text-sm py-4 text-muted-foreground">
+							{t("search.connector.noJobLogs")}
+						</p>
 					) : (
 						<Table>
 							<TableHeader>
@@ -92,7 +94,9 @@ export function ShopifySyncHistory({
 												: t("search.connector.typeDelta")}
 										</TableCell>
 										<TableCell>
-											<Badge status={syncJobStatusBadge[job.status] ?? "info"}>
+											<Badge
+												status={syncJobStatusBadge[job.status] ?? "info"}
+											>
 												{job.status === "completed"
 													? t("search.connector.statusCompleted")
 													: job.status === "running"
@@ -101,7 +105,9 @@ export function ShopifySyncHistory({
 											</Badge>
 										</TableCell>
 										<TableCell className="text-sm whitespace-nowrap text-muted-foreground">
-											{job.startedAt ? new Date(job.startedAt).toLocaleString() : "—"}
+											{job.startedAt
+												? new Date(job.startedAt).toLocaleString()
+												: "—"}
 										</TableCell>
 										<TableCell className="text-sm text-muted-foreground">
 											{job.duration ?? "—"}

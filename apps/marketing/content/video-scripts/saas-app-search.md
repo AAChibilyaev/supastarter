@@ -50,21 +50,21 @@
 
 1. Code editor showing integration:
 
-   ```typescript
-   import { SearchClient } from "@repo/search-client";
+    ```typescript
+    import { SearchClient } from "@repo/search-client";
 
-   const client = new SearchClient({
-   	apiKey: process.env.AACSEARCH_KEY,
-   	projectId: "your-project",
-   });
+    const client = new SearchClient({
+    	apiKey: process.env.AACSEARCH_KEY,
+    	projectId: "your-project",
+    });
 
-   // Each request is automatically tenant-filtered
-   const results = await client.search("invoices", {
-   	tenantId: session.orgId, // ← scoped to this org only
-   	page: 1,
-   	perPage: 20,
-   });
-   ```
+    // Each request is automatically tenant-filtered
+    const results = await client.search("invoices", {
+    	tenantId: session.orgId, // ← scoped to this org only
+    	page: 1,
+    	perPage: 20,
+    });
+    ```
 
 2. Terminal: `pnpm add @repo/search-client`
 3. Show search results returning only Acme Corp's invoices

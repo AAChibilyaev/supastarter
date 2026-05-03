@@ -143,7 +143,9 @@ export const LandingPrimaryImageCtaSection = ({
 		<section
 			className={cn(
 				"gap-8 py-12 lg:py-16 relative flex w-full flex-col items-center justify-center",
-				withBackground && variant === "primary" ? "bg-primary-100/20 dark:bg-primary-900/10" : "",
+				withBackground && variant === "primary"
+					? "bg-primary-100/20 dark:bg-primary-900/10"
+					: "",
 				withBackground && variant === "secondary"
 					? "bg-secondary-100/20 dark:bg-secondary-900/10"
 					: "",
@@ -234,7 +236,8 @@ export const LandingPrimaryImageCtaSection = ({
 									imagePerspective === "right" && "lg:perspective-right",
 									imagePerspective === "bottom" && "lg:perspective-bottom",
 									imagePerspective === "bottom-lg" && "lg:perspective-bottom-lg",
-									imagePerspective === "paper" && "lg:ml-[7%] lg:perspective-paper",
+									imagePerspective === "paper" &&
+										"lg:ml-[7%] lg:perspective-paper",
 									imagePerspective === "none" ? "my-4" : "my-8",
 								)}
 								alt={imageAlt}
@@ -317,7 +320,9 @@ export const LandingPrimaryVideoCtaSection = ({
 		<section
 			className={cn(
 				"gap-8 py-12 lg:py-16 relative flex w-full flex-col items-center justify-center",
-				withBackground && variant === "primary" ? "bg-primary-100/20 dark:bg-primary-900/10" : "",
+				withBackground && variant === "primary"
+					? "bg-primary-100/20 dark:bg-primary-900/10"
+					: "",
 				withBackground && variant === "secondary"
 					? "bg-secondary-100/20 dark:bg-secondary-900/10"
 					: "",
@@ -471,7 +476,9 @@ export const LandingPrimaryTextCtaSection = ({
 		<section
 			className={cn(
 				"gap-8 py-12 lg:py-16 relative flex w-full flex-col items-center justify-center",
-				withBackground && variant === "primary" ? "bg-primary-100/20 dark:bg-primary-900/10" : "",
+				withBackground && variant === "primary"
+					? "bg-primary-100/20 dark:bg-primary-900/10"
+					: "",
 				withBackground && variant === "secondary"
 					? "bg-secondary-100/20 dark:bg-secondary-900/10"
 					: "",

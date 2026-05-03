@@ -62,7 +62,8 @@ export function tokenize(text: string, config: Partial<TokenizerConfig> = {}): T
 	const escapedSeparators = cfg.tokenSeparators.map((s) =>
 		s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
 	);
-	const separatorPattern = escapedSeparators.length > 0 ? `[${escapedSeparators.join("")}]` : null;
+	const separatorPattern =
+		escapedSeparators.length > 0 ? `[${escapedSeparators.join("")}]` : null;
 
 	// Detect and preserve symbol tokens
 	const symbolTokenPositions: { index: number; original: string; value: string }[] = [];

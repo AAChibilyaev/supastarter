@@ -19,7 +19,9 @@ export default async function SharedSearchPage({ params }: Props) {
 			<div className="max-w-6xl px-4 py-8 mx-auto">
 				<div className="mb-8 text-center">
 					<h1 className="text-2xl font-bold tracking-tight">Shared Search</h1>
-					<p className="mt-1 text-sm text-muted-foreground">Powered by AACsearch Engine</p>
+					<p className="mt-1 text-sm text-muted-foreground">
+						Powered by AACsearch Engine
+					</p>
 				</div>
 				<SharedSearchView token={token} />
 			</div>

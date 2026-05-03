@@ -52,7 +52,11 @@ export const Layout = (props: CoreLayoutProps) => {
 				<ErrorBoundary
 					onError={handleError}
 					fallbackRender={({ error, resetErrorBoundary }) => (
-						<Error error={error} errorInfo={errorInfo} resetErrorBoundary={resetErrorBoundary} />
+						<Error
+							error={error}
+							errorInfo={errorInfo}
+							resetErrorBoundary={resetErrorBoundary}
+						/>
 					)}
 				>
 					<Suspense fallback={<Loading />}>

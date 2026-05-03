@@ -52,7 +52,9 @@ export function EmptyState({
 	);
 
 	return (
-		<Card className={cn("p-12 flex flex-col items-center justify-center text-center", className)}>
+		<Card
+			className={cn("p-12 flex flex-col items-center justify-center text-center", className)}
+		>
 			<IconComponent className="mb-4 size-12 text-muted-foreground/40" />
 			{title && <h3 className="mb-1 text-lg font-semibold">{title}</h3>}
 			<p className="mb-6 max-w-md text-sm text-muted-foreground">{description}</p>

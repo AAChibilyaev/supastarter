@@ -129,7 +129,9 @@ export function NotificationCenter({ className }: { className?: string }) {
 						size="sm"
 						className="h-8 text-xs shrink-0"
 						disabled={
-							list.length === 0 || !list.some((n) => !n.read) || markAllReadMutation.isPending
+							list.length === 0 ||
+							!list.some((n) => !n.read) ||
+							markAllReadMutation.isPending
 						}
 						onClick={() => markAllReadMutation.mutate({})}
 					>
@@ -138,7 +140,9 @@ export function NotificationCenter({ className }: { className?: string }) {
 				</div>
 				<div className="max-h-80 px-1 py-2 overflow-y-auto">
 					{list.length === 0 ? (
-						<p className="px-3 py-6 text-sm text-center text-muted-foreground">{t("empty")}</p>
+						<p className="px-3 py-6 text-sm text-center text-muted-foreground">
+							{t("empty")}
+						</p>
 					) : (
 						<ul className="gap-1 flex flex-col">
 							{(list as NotificationRow[]).map((n) => {

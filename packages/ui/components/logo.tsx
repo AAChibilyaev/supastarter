@@ -2,7 +2,12 @@ import { cn } from "../lib";
 
 export function Logo({ withLabel = true, className }: { className?: string; withLabel?: boolean }) {
 	return (
-		<span className={cn("font-semibold flex items-center leading-none text-foreground", className)}>
+		<span
+			className={cn(
+				"font-semibold flex items-center leading-none text-foreground",
+				className,
+			)}
+		>
 			<svg className="size-10 text-primary" viewBox="0 0 734 635">
 				<title>acme</title>
 				<path

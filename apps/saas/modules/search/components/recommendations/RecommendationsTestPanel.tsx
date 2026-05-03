@@ -211,12 +211,16 @@ export function RecommendationsTestPanel({
 										key={item.id}
 										type="button"
 										className={`p-3 w-full rounded-lg border text-left transition-colors hover:bg-accent ${
-											selectedProductId === item.id ? "border-primary bg-accent" : ""
+											selectedProductId === item.id
+												? "border-primary bg-accent"
+												: ""
 										}`}
 										onClick={() => handleSelectProduct(item.id, item.title)}
 									>
 										<div className="font-medium">{item.title}</div>
-										<div className="text-xs text-muted-foreground">ID: {item.id}</div>
+										<div className="text-xs text-muted-foreground">
+											ID: {item.id}
+										</div>
 									</button>
 								))}
 							</div>

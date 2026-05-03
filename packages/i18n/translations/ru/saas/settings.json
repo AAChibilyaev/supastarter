@@ -1,439 +1,439 @@
 {
-  "settings": {
-    "account": {
-      "avatar": {
-        "description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
-        "notifications": {
-          "error": "Could not update avatar",
-          "success": "Avatar was updated successfully"
-        },
-        "title": "Your avatar"
-      },
-      "changeEmail": {
-        "description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
-        "notifications": {
-          "error": "Could not update email",
-          "success": "Email was updated successfully"
-        },
-        "title": "Your email"
-      },
-      "changeName": {
-        "notifications": {
-          "error": "Could not update name",
-          "success": "Name was updated successfully"
-        },
-        "title": "Your name"
-      },
-      "deleteAccount": {
-        "confirmation": "Are you sure you want to delete your account?",
-        "description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
-        "notifications": {
-          "error": "Could not delete account",
-          "success": "Account was deleted successfully"
-        },
-        "submit": "Delete account",
-        "title": "Delete account"
-      },
-      "language": {
-        "description": "To change the language of the app for your account, select a language from the list and click save.",
-        "notifications": {
-          "error": "Could not update language",
-          "success": "Language was updated successfully"
-        },
-        "title": "Your language"
-      },
-      "security": {
-        "activeSessions": {
-          "description": "These are all the active sessions of your account. Click the X to end a specifc session.",
-          "title": "Active sessions",
-          "notifications": {
-            "revokeSession": {
-              "success": "Session revoked"
-            }
-          },
-          "currentSession": "Current session"
-        },
-        "changePassword": {
-          "currentPassword": "Current password",
-          "newPassword": "New password",
-          "notifications": {
-            "error": "Could not update password",
-            "success": "Password was updated successfully"
-          },
-          "title": "Your password"
-        },
-        "connectedAccounts": {
-          "connect": "Connect",
-          "connected": "Connected",
-          "disconnect": "Disconnect",
-          "title": "Connected accounts"
-        },
-        "passkeys": {
-          "addPasskey": "Add passkey",
-          "description": "Use passkeys as a secure alternative to passwords.",
-          "notifications": {
-            "addPasskey": {
-              "error": {
-                "title": "Could not add passkey"
-              },
-              "success": {
-                "title": "Passkey added"
-              }
-            },
-            "deletePasskey": {
-              "error": {
-                "title": "Could not delete passkey"
-              },
-              "loading": {
-                "title": "Deleting passkey..."
-              },
-              "success": {
-                "title": "Passkey deleted"
-              }
-            }
-          },
-          "title": "Passkeys"
-        },
-        "setPassword": {
-          "description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
-          "notifications": {
-            "error": "Could not send link to set password. Please try again.",
-            "success": "Check your inbox for the link to set your password."
-          },
-          "submit": "Set password",
-          "title": "Your password"
-        },
-        "title": "Security",
-        "twoFactor": {
-          "title": "Two-factor authentication",
-          "description": "Add an extra layer of security to your account.",
-          "dialog": {
-            "password": {
-              "title": "Verify with password",
-              "description": "Please verify your account by entering your password:",
-              "label": "Your password:"
-            },
-            "totpUrl": {
-              "description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
-              "code": "Enter 6-digit code to verify the setup:",
-              "title": "Enable two-factor authentication"
-            }
-          },
-          "enable": "Enable two-factor authentication",
-          "notifications": {
-            "verify": {
-              "success": {
-                "title": "Two-factor authentication has been enabled successfully."
-              }
-            },
-            "enable": {
-              "error": {
-                "title": "Could not verify your account with the provided password. Please try again."
-              }
-            },
-            "disable": {
-              "success": {
-                "title": "Two-factor authentication has been disabled successfully."
-              }
-            }
-          },
-          "disable": "Disable two-factor authentication",
-          "enabled": "You have two-factor authentication enabled for your account."
-        }
-      },
-      "subtitle": "Manage the settings of your personal account.",
-      "title": "Account settings"
-    },
-    "billing": {
-      "createCustomerPortal": {
-        "label": "Управление биллингом",
-        "notifications": {
-          "error": {
-            "title": "Не удалось создать сессию клиентского портала. Пожалуйста, попробуйте снова."
-          }
-        }
-      },
-      "activePlan": {
-        "description": "Ваш текущий план и лимиты использования для поиска и индексирования.",
-        "notFound": "Информация о плане недоступна.",
-        "status": {
-          "active": "Активен",
-          "canceled": "Отменён",
-          "expired": "Истёк",
-          "incomplete": "Не завершён",
-          "past_due": "Просрочен",
-          "paused": "Приостановлен",
-          "trialing": "Пробный",
-          "unpaid": "Не оплачен"
-        },
-        "title": "Ваш план"
-      },
-      "changePlan": {
-        "description": "Выберите план для подписки.",
-        "title": "Изменить план"
-      },
-      "upgradePlan": "Улучшить план",
-      "currentPlan": "Текущий план",
-      "switchToAnnual": "Перейти на годовой",
-      "upgradeSuccess": "План успешно обновлён",
-      "upgradeSuccessTitle": "Тариф обновлен!",
-      "upgradeSuccessWithPlan": "Ваш тариф обновлен до {plan}. Наслаждайтесь новыми возможностями и увеличенными лимитами.",
-      "redirectingIn": "Перенаправление через {seconds}с...",
-      "aiCredits": {
-        "title": "AI-кредиты",
-        "subtitle": "Оплата по факту использования AI. Пополните кошелёк для доступа ко всем функциям AI.",
-        "balance": {
-          "title": "Баланс кошелька",
-          "includedRemaining": "Включено в этом месяце",
-          "reserved": "Зарезервировано",
-          "promo": "Промо-кредиты",
-          "notInitialized": "Кошелёк ещё не инициализирован."
-        },
-        "topup": {
-          "button": "Пополнить",
-          "title": "Пополнить AI-кошелёк",
-          "description": "Выберите сумму или введите произвольное значение в рублях.",
-          "customAmount": "Произвольная сумма (₽)",
-          "summary": "С вас будет списано {amount}",
-          "confirm": "Оплатить через Точку",
-          "error": "Не удалось создать ссылку на оплату. Пожалуйста, попробуйте снова."
-        },
-        "errors": {
-          "insufficientFunds": "Недостаточно AI-кредитов. Пополните кошелёк."
-        },
-        "chart": {
-          "title": "Расход кредитов",
-          "daily": "За день",
-          "weekly": "За неделю",
-          "monthly": "За месяц",
-          "kopecks": "Стоимость",
-          "events": "События"
-        },
-        "consumption": {
-          "title": "История расходов",
-          "date": "Дата",
-          "operation": "Операция",
-          "provider": "Провайдер",
-          "model": "Модель",
-          "tokens": "Токены",
-          "charge": "Списано",
-          "empty": "Событий использования пока нет."
-        },
-        "rateCard": {
-          "title": "Тарифы",
-          "operation": "Операция",
-          "provider": "Провайдер",
-          "model": "Модель",
-          "inputPer1M": "Ввод / 1M токенов",
-          "outputPer1M": "Вывод / 1M токенов",
-          "embeddingPer1M": "Эмбеддинг / 1M токенов",
-          "flatFee": "Фиксированная плата",
-          "empty": "Тарифы не настроены."
-        },
-        "lowBalance": {
-          "title": "Мало кредитов",
-          "message": "Ваш баланс кредитов на исходе (осталось {balance}).",
-          "topUp": "Пополнить сейчас"
-        }
-      },
-      "title": "Биллинг",
-      "usage": {
-        "searches": "Поиски",
-        "documents": "Документы"
-      },
-      "limits": {
-        "maxIndexes": "Макс. индексов",
-        "maxDocuments": "Макс. документов",
-        "maxApiKeys": "Макс. API-ключей",
-        "rateLimit": "Лимит запросов",
-        "maxSearchesPerMonth": "Поисков / месяц"
-      },
-      "features": {
-        "title": "Функции",
-        "none": "Нет настроенных функций"
-      },
-      "upgrade": "Улучшить план",
-      "overageStatus": {
-        "title": "Использование квоты поиска",
-        "description": "Текущее использование поиска и статус превышения.",
-        "normal": "Норма",
-        "softCap": "Приближение к лимиту",
-        "hardCap": "Лимит достигнут",
-        "overageActive": "Превышение активно",
-        "walletBalance": "Кошелёк превышения",
-        "remaining": "осталось",
-        "noOverage": "Превышение не настроено",
-        "unlimited": "Безлимитно",
-        "searchesUsed": "Использовано {{used}} из {{limit}} поисков"
-      },
-      "upgradeModal": {
-        "title": "Upgrade тарифа",
-        "currentPlan": "Текущий тариф",
-        "selectPlan": "Выберите тариф для перехода",
-        "prorationPreview": "Предпросчёт пропорции",
-        "currentRemaining": "Остаток на текущем тарифе",
-        "newPlanCost": "Новый тариф (пропорционально)",
-        "totalDueToday": "К оплате сегодня",
-        "totalCredit": "Общий кредит",
-        "confirmUpgrade": "Подтвердить upgrade",
-        "redirectingToStripe": "Перенаправление в Stripe...",
-        "upgradeSuccess": "Тариф успешно обновлён!",
-        "upgradeError": "Не удалось обновить тариф. Попробуйте ещё раз.",
-        "noPaymentNeeded": "Платёж не требуется",
-        "comparePlans": "Сравнить тарифы",
-        "feature": "Функция",
-        "current": "Текущий",
-        "select": "Выбрать"
-      },
-      "downgradeModal": {
-        "title": "Подтвердить понижение",
-        "warningTitle": "Вы собираетесь понизить тариф",
-        "dataLossWarning": "Понижение тарифа уменьшит лимиты вашего плана. Некоторые документы, поисковые запросы и функции могут стать недоступными.",
-        "whatChanges": "Что изменится",
-        "currentLimit": "Текущий",
-        "newLimit": "Новый",
-        "limitChanges": "Изменения лимитов",
-        "featureDowngrades": "Функции, которые будут отключены",
-        "noFeatureLoss": "При этом понижении ни одна функция не будет потеряна",
-        "prorationCredit": "Вы получите пропорциональный кредит в размере {amount}",
-        "gracePeriod": "После понижения у вас будет 7-дневный льготный период, в течение которого поиск останется читаемым, но индексация будет немедленно приостановлена.",
-        "confirmDowngrade": "Подтвердить понижение",
-        "cancelDowngrade": "Отмена",
-        "downgradeProcessing": "Обработка понижения..."
-      },
-      "invoiceHistory": {
-        "title": "История счетов",
-        "description": "Просмотр и скачивание прошлых счетов.",
-        "date": "Дата",
-        "amount": "Сумма",
-        "status": {
-          "paid": "Оплачено",
-          "open": "Ожидается",
-          "uncollectible": "Невозможно взыскать",
-          "void": "Аннулирован",
-          "draft": "Черновик"
-        },
-        "actions": "Действия",
-        "downloadPdf": "Скачать PDF",
-        "notAvailable": "Недоступно",
-        "previous": "Назад",
-        "next": "Далее",
-        "pageInfo": "{{start}}–{{end}} из {{total}}",
-        "empty": "Счетов пока нет. Счета появятся здесь после первого платежа.",
-        "loading": "Загрузка счетов...",
-        "downloadError": "Не удалось открыть PDF счета. Попробуйте снова.",
-        "statusLabel": "Статус",
-        "page": "Страница {{page}}"
-      },
-      "paymentMethod": {
-        "title": "Способ оплаты",
-        "description": "Текущий способ оплаты.",
-        "card": "Карта",
-        "maskedNumber": "•••• {{last4}}",
-        "expiry": "{{month}}/{{year}}",
-        "manage": "Управлять",
-        "loading": "Загрузка способа оплаты...",
-        "addCard": "Добавить карту",
-        "addCardTitle": "Добавить новый способ оплаты",
-        "addCardDescription": "Введите данные карты ниже.",
-        "addCardConfirm": "Добавить карту",
-        "cardAdded": "Карта успешно добавлена",
-        "defaultLabel": "По умолчанию",
-        "setDefault": "Сделать основной",
-        "defaultSuccess": "Способ оплаты по умолчанию обновлён",
-        "defaultError": "Не удалось обновить способ оплаты по умолчанию",
-        "deleteDialogTitle": "Удалить карту?",
-        "deleteDialogDescription": "Вы уверены, что хотите удалить {card}?",
-        "deleteConfirm": "Удалить",
-        "deleteSuccess": "Карта удалена",
-        "deleteError": "Не удалось удалить карту",
-        "emptyState": "Нет сохранённых способов оплаты",
-        "preparing": "Подготовка формы для карты...",
-        "setupError": "Не удалось подготовить форму. Попробуйте снова."
-      },
-      "invoices": {
-        "title": "История счетов",
-        "emptyState": "Счетов пока нет",
-        "downloadPdf": "Скачать PDF",
-        "status": {
-          "paid": "Оплачен",
-          "pending": "Ожидает",
-          "failed": "Ошибка"
-        }
-      },
-      "tabs": {
-        "overview": "Обзор",
-        "paymentMethods": "Способы оплаты",
-        "invoices": "Счета",
-        "aiCredits": "AI-кредиты"
-      },
-      "paymentMethods": {
-        "title": "Способы оплаты",
-        "empty": "Нет сохранённых способов оплаты",
-        "addCard": "Добавить способ оплаты",
-        "default": "По умолчанию",
-        "setDefault": "Сделать основным",
-        "delete": "Удалить карту",
-        "deleteConfirmTitle": "Удалить эту карту?",
-        "deleteConfirmMessage": "Эта карта будет удалена из вашего аккаунта."
-      }
-    },
-    "notificationsPage": {
-      "title": "Notifications",
-      "description": "Choose how you receive notifications. Disabled options are stored; everything is enabled by default.",
-      "groups": {
-        "general": {
-          "title": "General"
-        },
-        "billing": {
-          "title": "Биллинг"
-        }
-      },
-      "types": {
-        "APP_UPDATE": {
-          "label": "App updates"
-        },
-        "AI_LOW_BALANCE": {
-          "label": "Баланс AI-кошелька низкий"
-        },
-        "AI_TOPUP_PAID": {
-          "label": "Пополнение AI-кошелька подтверждено"
-        },
-        "AI_TOPUP_FAILED": {
-          "label": "Пополнение AI-кошелька не удалось"
-        },
-        "AI_OVERAGE_REACHED": {
-          "label": "Превышен лимит AI-кошелька"
-        },
-        "PAYMENT_FAILED": {
-          "label": "Ошибка оплаты подписки"
-        }
-      },
-      "columns": {
-        "type": "Notification",
-        "inApp": "In-app",
-        "email": "Email"
-      }
-    },
-    "menu": {
-      "account": {
-        "billing": "Биллинг",
-        "dangerZone": "Danger zone",
-        "general": "General",
-        "notifications": "Notifications",
-        "security": "Security",
-        "title": "Account",
-        "invoices": "Счета",
-        "paymentMethods": "Способы оплаты"
-      },
-      "organization": {
-        "billing": "Биллинг",
-        "general": "General",
-        "members": "Members",
-        "title": "Organization",
-        "dangerZone": "Danger zone"
-      }
-    },
-    "save": "Save"
-  }
+	"settings": {
+		"account": {
+			"avatar": {
+				"description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
+				"notifications": {
+					"error": "Could not update avatar",
+					"success": "Avatar was updated successfully"
+				},
+				"title": "Your avatar"
+			},
+			"changeEmail": {
+				"description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
+				"notifications": {
+					"error": "Could not update email",
+					"success": "Email was updated successfully"
+				},
+				"title": "Your email"
+			},
+			"changeName": {
+				"notifications": {
+					"error": "Could not update name",
+					"success": "Name was updated successfully"
+				},
+				"title": "Your name"
+			},
+			"deleteAccount": {
+				"confirmation": "Are you sure you want to delete your account?",
+				"description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
+				"notifications": {
+					"error": "Could not delete account",
+					"success": "Account was deleted successfully"
+				},
+				"submit": "Delete account",
+				"title": "Delete account"
+			},
+			"language": {
+				"description": "To change the language of the app for your account, select a language from the list and click save.",
+				"notifications": {
+					"error": "Could not update language",
+					"success": "Language was updated successfully"
+				},
+				"title": "Your language"
+			},
+			"security": {
+				"activeSessions": {
+					"description": "These are all the active sessions of your account. Click the X to end a specifc session.",
+					"title": "Active sessions",
+					"notifications": {
+						"revokeSession": {
+							"success": "Session revoked"
+						}
+					},
+					"currentSession": "Current session"
+				},
+				"changePassword": {
+					"currentPassword": "Current password",
+					"newPassword": "New password",
+					"notifications": {
+						"error": "Could not update password",
+						"success": "Password was updated successfully"
+					},
+					"title": "Your password"
+				},
+				"connectedAccounts": {
+					"connect": "Connect",
+					"connected": "Connected",
+					"disconnect": "Disconnect",
+					"title": "Connected accounts"
+				},
+				"passkeys": {
+					"addPasskey": "Add passkey",
+					"description": "Use passkeys as a secure alternative to passwords.",
+					"notifications": {
+						"addPasskey": {
+							"error": {
+								"title": "Could not add passkey"
+							},
+							"success": {
+								"title": "Passkey added"
+							}
+						},
+						"deletePasskey": {
+							"error": {
+								"title": "Could not delete passkey"
+							},
+							"loading": {
+								"title": "Deleting passkey..."
+							},
+							"success": {
+								"title": "Passkey deleted"
+							}
+						}
+					},
+					"title": "Passkeys"
+				},
+				"setPassword": {
+					"description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
+					"notifications": {
+						"error": "Could not send link to set password. Please try again.",
+						"success": "Check your inbox for the link to set your password."
+					},
+					"submit": "Set password",
+					"title": "Your password"
+				},
+				"title": "Security",
+				"twoFactor": {
+					"title": "Two-factor authentication",
+					"description": "Add an extra layer of security to your account.",
+					"dialog": {
+						"password": {
+							"title": "Verify with password",
+							"description": "Please verify your account by entering your password:",
+							"label": "Your password:"
+						},
+						"totpUrl": {
+							"description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
+							"code": "Enter 6-digit code to verify the setup:",
+							"title": "Enable two-factor authentication"
+						}
+					},
+					"enable": "Enable two-factor authentication",
+					"notifications": {
+						"verify": {
+							"success": {
+								"title": "Two-factor authentication has been enabled successfully."
+							}
+						},
+						"enable": {
+							"error": {
+								"title": "Could not verify your account with the provided password. Please try again."
+							}
+						},
+						"disable": {
+							"success": {
+								"title": "Two-factor authentication has been disabled successfully."
+							}
+						}
+					},
+					"disable": "Disable two-factor authentication",
+					"enabled": "You have two-factor authentication enabled for your account."
+				}
+			},
+			"subtitle": "Manage the settings of your personal account.",
+			"title": "Account settings"
+		},
+		"billing": {
+			"createCustomerPortal": {
+				"label": "Управление биллингом",
+				"notifications": {
+					"error": {
+						"title": "Не удалось создать сессию клиентского портала. Пожалуйста, попробуйте снова."
+					}
+				}
+			},
+			"activePlan": {
+				"description": "Ваш текущий план и лимиты использования для поиска и индексирования.",
+				"notFound": "Информация о плане недоступна.",
+				"status": {
+					"active": "Активен",
+					"canceled": "Отменён",
+					"expired": "Истёк",
+					"incomplete": "Не завершён",
+					"past_due": "Просрочен",
+					"paused": "Приостановлен",
+					"trialing": "Пробный",
+					"unpaid": "Не оплачен"
+				},
+				"title": "Ваш план"
+			},
+			"changePlan": {
+				"description": "Выберите план для подписки.",
+				"title": "Изменить план"
+			},
+			"upgradePlan": "Улучшить план",
+			"currentPlan": "Текущий план",
+			"switchToAnnual": "Перейти на годовой",
+			"upgradeSuccess": "План успешно обновлён",
+			"upgradeSuccessTitle": "Тариф обновлен!",
+			"upgradeSuccessWithPlan": "Ваш тариф обновлен до {plan}. Наслаждайтесь новыми возможностями и увеличенными лимитами.",
+			"redirectingIn": "Перенаправление через {seconds}с...",
+			"aiCredits": {
+				"title": "AI-кредиты",
+				"subtitle": "Оплата по факту использования AI. Пополните кошелёк для доступа ко всем функциям AI.",
+				"balance": {
+					"title": "Баланс кошелька",
+					"includedRemaining": "Включено в этом месяце",
+					"reserved": "Зарезервировано",
+					"promo": "Промо-кредиты",
+					"notInitialized": "Кошелёк ещё не инициализирован."
+				},
+				"topup": {
+					"button": "Пополнить",
+					"title": "Пополнить AI-кошелёк",
+					"description": "Выберите сумму или введите произвольное значение в рублях.",
+					"customAmount": "Произвольная сумма (₽)",
+					"summary": "С вас будет списано {amount}",
+					"confirm": "Оплатить через Точку",
+					"error": "Не удалось создать ссылку на оплату. Пожалуйста, попробуйте снова."
+				},
+				"errors": {
+					"insufficientFunds": "Недостаточно AI-кредитов. Пополните кошелёк."
+				},
+				"chart": {
+					"title": "Расход кредитов",
+					"daily": "За день",
+					"weekly": "За неделю",
+					"monthly": "За месяц",
+					"kopecks": "Стоимость",
+					"events": "События"
+				},
+				"consumption": {
+					"title": "История расходов",
+					"date": "Дата",
+					"operation": "Операция",
+					"provider": "Провайдер",
+					"model": "Модель",
+					"tokens": "Токены",
+					"charge": "Списано",
+					"empty": "Событий использования пока нет."
+				},
+				"rateCard": {
+					"title": "Тарифы",
+					"operation": "Операция",
+					"provider": "Провайдер",
+					"model": "Модель",
+					"inputPer1M": "Ввод / 1M токенов",
+					"outputPer1M": "Вывод / 1M токенов",
+					"embeddingPer1M": "Эмбеддинг / 1M токенов",
+					"flatFee": "Фиксированная плата",
+					"empty": "Тарифы не настроены."
+				},
+				"lowBalance": {
+					"title": "Мало кредитов",
+					"message": "Ваш баланс кредитов на исходе (осталось {balance}).",
+					"topUp": "Пополнить сейчас"
+				}
+			},
+			"title": "Биллинг",
+			"usage": {
+				"searches": "Поиски",
+				"documents": "Документы"
+			},
+			"limits": {
+				"maxIndexes": "Макс. индексов",
+				"maxDocuments": "Макс. документов",
+				"maxApiKeys": "Макс. API-ключей",
+				"rateLimit": "Лимит запросов",
+				"maxSearchesPerMonth": "Поисков / месяц"
+			},
+			"features": {
+				"title": "Функции",
+				"none": "Нет настроенных функций"
+			},
+			"upgrade": "Улучшить план",
+			"overageStatus": {
+				"title": "Использование квоты поиска",
+				"description": "Текущее использование поиска и статус превышения.",
+				"normal": "Норма",
+				"softCap": "Приближение к лимиту",
+				"hardCap": "Лимит достигнут",
+				"overageActive": "Превышение активно",
+				"walletBalance": "Кошелёк превышения",
+				"remaining": "осталось",
+				"noOverage": "Превышение не настроено",
+				"unlimited": "Безлимитно",
+				"searchesUsed": "Использовано {{used}} из {{limit}} поисков"
+			},
+			"upgradeModal": {
+				"title": "Upgrade тарифа",
+				"currentPlan": "Текущий тариф",
+				"selectPlan": "Выберите тариф для перехода",
+				"prorationPreview": "Предпросчёт пропорции",
+				"currentRemaining": "Остаток на текущем тарифе",
+				"newPlanCost": "Новый тариф (пропорционально)",
+				"totalDueToday": "К оплате сегодня",
+				"totalCredit": "Общий кредит",
+				"confirmUpgrade": "Подтвердить upgrade",
+				"redirectingToStripe": "Перенаправление в Stripe...",
+				"upgradeSuccess": "Тариф успешно обновлён!",
+				"upgradeError": "Не удалось обновить тариф. Попробуйте ещё раз.",
+				"noPaymentNeeded": "Платёж не требуется",
+				"comparePlans": "Сравнить тарифы",
+				"feature": "Функция",
+				"current": "Текущий",
+				"select": "Выбрать"
+			},
+			"downgradeModal": {
+				"title": "Подтвердить понижение",
+				"warningTitle": "Вы собираетесь понизить тариф",
+				"dataLossWarning": "Понижение тарифа уменьшит лимиты вашего плана. Некоторые документы, поисковые запросы и функции могут стать недоступными.",
+				"whatChanges": "Что изменится",
+				"currentLimit": "Текущий",
+				"newLimit": "Новый",
+				"limitChanges": "Изменения лимитов",
+				"featureDowngrades": "Функции, которые будут отключены",
+				"noFeatureLoss": "При этом понижении ни одна функция не будет потеряна",
+				"prorationCredit": "Вы получите пропорциональный кредит в размере {amount}",
+				"gracePeriod": "После понижения у вас будет 7-дневный льготный период, в течение которого поиск останется читаемым, но индексация будет немедленно приостановлена.",
+				"confirmDowngrade": "Подтвердить понижение",
+				"cancelDowngrade": "Отмена",
+				"downgradeProcessing": "Обработка понижения..."
+			},
+			"invoiceHistory": {
+				"title": "История счетов",
+				"description": "Просмотр и скачивание прошлых счетов.",
+				"date": "Дата",
+				"amount": "Сумма",
+				"status": {
+					"paid": "Оплачено",
+					"open": "Ожидается",
+					"uncollectible": "Невозможно взыскать",
+					"void": "Аннулирован",
+					"draft": "Черновик"
+				},
+				"actions": "Действия",
+				"downloadPdf": "Скачать PDF",
+				"notAvailable": "Недоступно",
+				"previous": "Назад",
+				"next": "Далее",
+				"pageInfo": "{{start}}–{{end}} из {{total}}",
+				"empty": "Счетов пока нет. Счета появятся здесь после первого платежа.",
+				"loading": "Загрузка счетов...",
+				"downloadError": "Не удалось открыть PDF счета. Попробуйте снова.",
+				"statusLabel": "Статус",
+				"page": "Страница {{page}}"
+			},
+			"paymentMethod": {
+				"title": "Способ оплаты",
+				"description": "Текущий способ оплаты.",
+				"card": "Карта",
+				"maskedNumber": "•••• {{last4}}",
+				"expiry": "{{month}}/{{year}}",
+				"manage": "Управлять",
+				"loading": "Загрузка способа оплаты...",
+				"addCard": "Добавить карту",
+				"addCardTitle": "Добавить новый способ оплаты",
+				"addCardDescription": "Введите данные карты ниже.",
+				"addCardConfirm": "Добавить карту",
+				"cardAdded": "Карта успешно добавлена",
+				"defaultLabel": "По умолчанию",
+				"setDefault": "Сделать основной",
+				"defaultSuccess": "Способ оплаты по умолчанию обновлён",
+				"defaultError": "Не удалось обновить способ оплаты по умолчанию",
+				"deleteDialogTitle": "Удалить карту?",
+				"deleteDialogDescription": "Вы уверены, что хотите удалить {card}?",
+				"deleteConfirm": "Удалить",
+				"deleteSuccess": "Карта удалена",
+				"deleteError": "Не удалось удалить карту",
+				"emptyState": "Нет сохранённых способов оплаты",
+				"preparing": "Подготовка формы для карты...",
+				"setupError": "Не удалось подготовить форму. Попробуйте снова."
+			},
+			"invoices": {
+				"title": "История счетов",
+				"emptyState": "Счетов пока нет",
+				"downloadPdf": "Скачать PDF",
+				"status": {
+					"paid": "Оплачен",
+					"pending": "Ожидает",
+					"failed": "Ошибка"
+				}
+			},
+			"tabs": {
+				"overview": "Обзор",
+				"paymentMethods": "Способы оплаты",
+				"invoices": "Счета",
+				"aiCredits": "AI-кредиты"
+			},
+			"paymentMethods": {
+				"title": "Способы оплаты",
+				"empty": "Нет сохранённых способов оплаты",
+				"addCard": "Добавить способ оплаты",
+				"default": "По умолчанию",
+				"setDefault": "Сделать основным",
+				"delete": "Удалить карту",
+				"deleteConfirmTitle": "Удалить эту карту?",
+				"deleteConfirmMessage": "Эта карта будет удалена из вашего аккаунта."
+			}
+		},
+		"notificationsPage": {
+			"title": "Notifications",
+			"description": "Choose how you receive notifications. Disabled options are stored; everything is enabled by default.",
+			"groups": {
+				"general": {
+					"title": "General"
+				},
+				"billing": {
+					"title": "Биллинг"
+				}
+			},
+			"types": {
+				"APP_UPDATE": {
+					"label": "App updates"
+				},
+				"AI_LOW_BALANCE": {
+					"label": "Баланс AI-кошелька низкий"
+				},
+				"AI_TOPUP_PAID": {
+					"label": "Пополнение AI-кошелька подтверждено"
+				},
+				"AI_TOPUP_FAILED": {
+					"label": "Пополнение AI-кошелька не удалось"
+				},
+				"AI_OVERAGE_REACHED": {
+					"label": "Превышен лимит AI-кошелька"
+				},
+				"PAYMENT_FAILED": {
+					"label": "Ошибка оплаты подписки"
+				}
+			},
+			"columns": {
+				"type": "Notification",
+				"inApp": "In-app",
+				"email": "Email"
+			}
+		},
+		"menu": {
+			"account": {
+				"billing": "Биллинг",
+				"dangerZone": "Danger zone",
+				"general": "General",
+				"notifications": "Notifications",
+				"security": "Security",
+				"title": "Account",
+				"invoices": "Счета",
+				"paymentMethods": "Способы оплаты"
+			},
+			"organization": {
+				"billing": "Биллинг",
+				"general": "General",
+				"members": "Members",
+				"title": "Organization",
+				"dangerZone": "Danger zone"
+			}
+		},
+		"save": "Save"
+	}
 }

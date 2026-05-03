@@ -27,7 +27,8 @@ export function DataTableFilterCheckbox<TData>({
 	const Component = component;
 
 	const filterOptions = options?.filter(
-		(option) => inputValue === "" || option.label.toLowerCase().includes(inputValue.toLowerCase()),
+		(option) =>
+			inputValue === "" || option.label.toLowerCase().includes(inputValue.toLowerCase()),
 	);
 
 	const filters = filterValue ? (Array.isArray(filterValue) ? filterValue : [filterValue]) : [];
@@ -36,7 +37,10 @@ export function DataTableFilterCheckbox<TData>({
 		return (
 			<div className="grid divide-y rounded-lg border border-border">
 				{Array.from({ length: 3 }).map((_, index) => (
-					<div key={index} className="gap-2 px-2 py-2.5 flex items-center justify-between">
+					<div
+						key={index}
+						className="gap-2 px-2 py-2.5 flex items-center justify-between"
+					>
 						<Skeleton className="h-4 w-4 rounded-sm" />
 						<Skeleton className="h-4 w-full rounded-sm" />
 					</div>

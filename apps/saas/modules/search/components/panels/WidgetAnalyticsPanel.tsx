@@ -63,7 +63,9 @@ export function WidgetAnalyticsPanel({ organizationId }: WidgetAnalyticsPanelPro
 		return (
 			<Card>
 				<CardContent className="py-12 flex flex-col items-center text-center">
-					<p className="text-sm text-muted-foreground">{t("widgetConfigurator.noIndexes")}</p>
+					<p className="text-sm text-muted-foreground">
+						{t("widgetConfigurator.noIndexes")}
+					</p>
 				</CardContent>
 			</Card>
 		);
@@ -109,7 +111,8 @@ export function WidgetAnalyticsPanel({ organizationId }: WidgetAnalyticsPanelPro
 						{t("widget.analyticsWidgetMetrics") || "Widget Performance"}
 					</CardTitle>
 					<CardDescription>
-						{t("widget.analyticsWidgetDesc") || "Search metrics from the widget installation."}
+						{t("widget.analyticsWidgetDesc") ||
+							"Search metrics from the widget installation."}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -142,7 +145,9 @@ export function WidgetAnalyticsPanel({ organizationId }: WidgetAnalyticsPanelPro
 							<Card className="shadow-sm">
 								<CardHeader className="pb-2">
 									<CardTitle className="text-2xl font-bold tabular-nums">
-										{analyticsData.ctr != null ? `${(analyticsData.ctr * 100).toFixed(1)}%` : "—"}
+										{analyticsData.ctr != null
+											? `${(analyticsData.ctr * 100).toFixed(1)}%`
+											: "—"}
 									</CardTitle>
 								</CardHeader>
 								<CardContent>

@@ -56,17 +56,25 @@ export function CompareAlgoliaTable() {
 					<div className="md:hidden space-y-4">
 						{FEATURE_KEYS.map((key) => (
 							<div key={key} className="p-4 rounded-lg border border-border/60">
-								<div className="font-semibold text-sm mb-2">{t(`table.features.${key}.title`)}</div>
+								<div className="font-semibold text-sm mb-2">
+									{t(`table.features.${key}.title`)}
+								</div>
 								<div className="gap-2 text-sm grid grid-cols-2">
 									<div>
-										<div className="text-xs mb-1 text-muted-foreground">AACsearch</div>
+										<div className="text-xs mb-1 text-muted-foreground">
+											AACsearch
+										</div>
 										<div className="rounded px-2 py-1 font-medium bg-primary/5">
 											{t(`table.features.${key}.aacsearch`)}
 										</div>
 									</div>
 									<div>
-										<div className="text-xs mb-1 text-muted-foreground">Algolia</div>
-										<div className="rounded px-2 py-1">{t(`table.features.${key}.algolia`)}</div>
+										<div className="text-xs mb-1 text-muted-foreground">
+											Algolia
+										</div>
+										<div className="rounded px-2 py-1">
+											{t(`table.features.${key}.algolia`)}
+										</div>
 									</div>
 								</div>
 							</div>
@@ -92,10 +100,15 @@ export function CompareAlgoliaTable() {
 											{t(`table.features.${key}.title`)}
 										</TableCell>
 										<TableCell className="bg-primary/5">
-											<FeatureCell text={t(`table.features.${key}.aacsearch`)} highlight />
+											<FeatureCell
+												text={t(`table.features.${key}.aacsearch`)}
+												highlight
+											/>
 										</TableCell>
 										<TableCell>
-											<FeatureCell text={t(`table.features.${key}.algolia`)} />
+											<FeatureCell
+												text={t(`table.features.${key}.algolia`)}
+											/>
 										</TableCell>
 									</TableRow>
 								))}

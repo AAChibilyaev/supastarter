@@ -108,7 +108,9 @@ export function CreditUsageChart({ organizationId }: CreditUsageChartProps) {
 									cursor={false}
 									content={
 										<ChartTooltipContent
-											formatter={(value: number) => formatKopecks(String(value * 100))}
+											formatter={(value: number) =>
+												formatKopecks(String(value * 100))
+											}
 										/>
 									}
 								/>

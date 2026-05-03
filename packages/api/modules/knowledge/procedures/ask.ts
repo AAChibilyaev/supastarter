@@ -4,6 +4,7 @@ import { getKnowledgeSpaceBySlug } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -15,7 +16,7 @@ import { retrieveKnowledge } from "../lib/retrieval";
 import { knowledgeOwnerTypeSchema, knowledgeSpaceSlugSchema } from "../types";
 
 export const ask = protectedProcedure
-	.use(creditGate("knowledge_ask_rag", BigInt(500)))
+	.use(creditGate("rag_answer", CREDIT_RATES.rag_answer))
 	.route({
 		method: "POST",
 		path: "/knowledge/ask",
@@ -59,8 +60,7 @@ export const ask = protectedProcedure
 		if (retrieved.chunks.length === 0) {
 			await releaseCreditReservation(creditReservationId);
 			return {
-				answer:
-					"I could not find supporting knowledge in this space yet. Upload data sources or files first.",
+				answer: "I could not find supporting knowledge in this space yet. Upload data sources or files first.",
 				citations: [],
 				graphEdges: [],
 			};
@@ -96,7 +96,7 @@ export const ask = protectedProcedure
 			operation: "rag_answer",
 			provider: "aacsearch",
 			model: "rag",
-			flatFeeKopecks: BigInt(500),
+			flatFeeKopecks: CREDIT_RATES.rag_answer,
 		});
 
 		return {

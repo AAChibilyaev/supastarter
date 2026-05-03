@@ -40,7 +40,10 @@ export const listFiles = protectedProcedure
 		),
 	)
 	.handler(async ({ input, context: { user } }) => {
-		await requireKnowledgeOwnerMember({ ownerType: input.ownerType, ownerId: input.ownerId }, user);
+		await requireKnowledgeOwnerMember(
+			{ ownerType: input.ownerType, ownerId: input.ownerId },
+			user,
+		);
 
 		const scope = {
 			ownerType: input.ownerType,

@@ -559,9 +559,9 @@ This is **supastarter-supplied** — don't redesign. AACsearch-specific touches:
 - **General**: add `defaultLocale` + `currency` field on the org (additive Prisma change — confirm). Used as defaults for new indexes.
 - **Members**: stock supastarter; verify `isOrganizationAdmin` is wired correctly to the new search/connectors/relevance routes (only admins can `createApiKey`, `revokeApiKey`, manage connectors).
 - **Billing**: layered with our entitlements module — show:
-  - Current plan + usage % (from `entitlementsRouter.plan`)
-  - "Upgrade" CTA → existing supastarter checkout flow
-  - "Top-up wallet" → `apps/saas/modules/payments/components/AiWalletCard` + `TopUpDialog` (Tochka driver, active WIP)
+    - Current plan + usage % (from `entitlementsRouter.plan`)
+    - "Upgrade" CTA → existing supastarter checkout flow
+    - "Top-up wallet" → `apps/saas/modules/payments/components/AiWalletCard` + `TopUpDialog` (Tochka driver, active WIP)
 
 #### Customer-friendly touches
 

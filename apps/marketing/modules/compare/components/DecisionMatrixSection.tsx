@@ -25,10 +25,16 @@ export function DecisionMatrixSection() {
 								{aacItems.map((i) => (
 									<li key={i} className="gap-3 text-sm flex">
 										<span className="size-5 mt-0.5 inline-flex shrink-0 items-center justify-center rounded-full bg-primary/20">
-											<span className="font-bold text-xs text-primary">✓</span>
+											<span className="font-bold text-xs text-primary">
+												✓
+											</span>
 										</span>
 										<span className="leading-relaxed text-muted-foreground">
-											{t(`decisionMatrix.whenAACsearch.items.${i}` as Parameters<typeof t>[0])}
+											{t(
+												`decisionMatrix.whenAACsearch.items.${i}` as Parameters<
+													typeof t
+												>[0],
+											)}
 										</span>
 									</li>
 								))}
@@ -44,10 +50,16 @@ export function DecisionMatrixSection() {
 								{algoliaItems.map((i) => (
 									<li key={i} className="gap-3 text-sm flex">
 										<span className="size-5 mt-0.5 inline-flex shrink-0 items-center justify-center rounded-full bg-muted">
-											<span className="font-bold text-xs text-muted-foreground">•</span>
+											<span className="font-bold text-xs text-muted-foreground">
+												•
+											</span>
 										</span>
 										<span className="leading-relaxed text-muted-foreground">
-											{t(`decisionMatrix.whenAlgolia.items.${i}` as Parameters<typeof t>[0])}
+											{t(
+												`decisionMatrix.whenAlgolia.items.${i}` as Parameters<
+													typeof t
+												>[0],
+											)}
 										</span>
 									</li>
 								))}

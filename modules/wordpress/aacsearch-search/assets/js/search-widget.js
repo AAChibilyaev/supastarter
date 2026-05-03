@@ -228,7 +228,9 @@
 					this.escapeHtml(label) +
 					'" /> ' +
 					this.escapeHtml(label) +
-					(count > 0 ? ' <span class="aacsearch-facet-count">(' + count + ")</span>" : "") +
+					(count > 0
+						? ' <span class="aacsearch-facet-count">(' + count + ")</span>"
+						: "") +
 					"</label>";
 			}
 			container.innerHTML = html;
@@ -361,7 +363,9 @@
 			var breadcrumb = "";
 			if (categories.length > 0) {
 				breadcrumb =
-					'<div class="aacsearch-hit-breadcrumb">' + this.escapeHtml(categories[0]) + "</div>";
+					'<div class="aacsearch-hit-breadcrumb">' +
+					this.escapeHtml(categories[0]) +
+					"</div>";
 			}
 
 			// Highlight matches in title and excerpt
@@ -503,7 +507,12 @@
 
 				clearTimeout(self.debounceTimer);
 				self.debounceTimer = setTimeout(function () {
-					self.fetchAutocomplete(query, containerConfig.queryBy || "post_title", dropdown, input);
+					self.fetchAutocomplete(
+						query,
+						containerConfig.queryBy || "post_title",
+						dropdown,
+						input,
+					);
 				}, 150);
 			});
 
@@ -531,7 +540,10 @@
 
 					case "ArrowUp":
 						e.preventDefault();
-						self.autocomplete.activeIndex = Math.max(self.autocomplete.activeIndex - 1, -1);
+						self.autocomplete.activeIndex = Math.max(
+							self.autocomplete.activeIndex - 1,
+							-1,
+						);
 						self.highlightAutocompleteItem(items, dropdown);
 						break;
 
@@ -607,7 +619,8 @@
 		 */
 		renderAutocomplete: function (dropdown, items, query) {
 			if (!items || items.length === 0) {
-				dropdown.innerHTML = '<div class="aacsearch-autocomplete-empty">No suggestions</div>';
+				dropdown.innerHTML =
+					'<div class="aacsearch-autocomplete-empty">No suggestions</div>';
 				return;
 			}
 
@@ -640,11 +653,15 @@
 					title +
 					"</div>" +
 					(category
-						? '<div class="aacsearch-autocomplete-category">' + this.escapeHtml(category) + "</div>"
+						? '<div class="aacsearch-autocomplete-category">' +
+							this.escapeHtml(category) +
+							"</div>"
 						: "") +
 					"</div>" +
 					(postType
-						? '<span class="aacsearch-autocomplete-badge">' + this.escapeHtml(postType) + "</span>"
+						? '<span class="aacsearch-autocomplete-badge">' +
+							this.escapeHtml(postType) +
+							"</span>"
 						: "") +
 					"</a>";
 			}

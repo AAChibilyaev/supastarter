@@ -54,7 +54,11 @@ export default async function FeaturesAnalyticsPage(props: {
 				</div>
 			</section>
 			<AnalyticsGrid />
-			<CodeExampleSection namespace="featuresAnalytics" code={ANALYTICS_CODE} language="json" />
+			<CodeExampleSection
+				namespace="featuresAnalytics"
+				code={ANALYTICS_CODE}
+				language="json"
+			/>
 			<SoftwareApplicationSchema locale={locale} />
 			<CtaFooter />
 		</>

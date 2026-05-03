@@ -77,9 +77,15 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead>{t("settings.billing.invoiceHistory.date")}</TableHead>
-									<TableHead>{t("settings.billing.invoiceHistory.amount")}</TableHead>
-									<TableHead>{t("settings.billing.invoiceHistory.statusLabel")}</TableHead>
+									<TableHead>
+										{t("settings.billing.invoiceHistory.date")}
+									</TableHead>
+									<TableHead>
+										{t("settings.billing.invoiceHistory.amount")}
+									</TableHead>
+									<TableHead>
+										{t("settings.billing.invoiceHistory.statusLabel")}
+									</TableHead>
 									<TableHead className="text-right">
 										{t("settings.billing.invoiceHistory.actions")}
 									</TableHead>
@@ -116,7 +122,9 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 														download
 													>
 														<DownloadIcon className="size-4 mr-1" />
-														{t("settings.billing.invoiceHistory.downloadPdf")}
+														{t(
+															"settings.billing.invoiceHistory.downloadPdf",
+														)}
 													</a>
 												</Button>
 											)}
@@ -141,7 +149,12 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 										page: currentPage,
 									})}
 								</span>
-								<Button variant="ghost" size="sm" disabled={!hasMore} onClick={handleNextPage}>
+								<Button
+									variant="ghost"
+									size="sm"
+									disabled={!hasMore}
+									onClick={handleNextPage}
+								>
 									{t("settings.billing.invoiceHistory.next")}
 								</Button>
 							</div>

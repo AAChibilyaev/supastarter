@@ -62,7 +62,16 @@ export const naturalLanguageSearch = protectedProcedure
 				.array(
 					z.object({
 						field: z.string(),
-						type: z.enum(["string", "int32", "int64", "float", "bool", "string[]"]),
+\t\t\t\t\t\ttype: z.enum([
+\t\t\t\t\t\t\t"string", "int32", "int64", "float", "bool",
+\t\t\t\t\t\t\t"string[]", "int32[]", "int64[]", "float[]", "bool[]",
+\t\t\t\t\t\t\t"object", "object[]",
+\t\t\t\t\t\t\t"auto",
+\t\t\t\t\t\t\t"geopoint", "geopoint[]", "geopolygon",
+\t\t\t\t\t\t\t"geojson",
+\t\t\t\t\t\t\t"string*",
+\t\t\t\t\t\t\t"image",
+\t\t\t\t\t\t]),
 						facet: z.boolean().optional(),
 					}),
 				)

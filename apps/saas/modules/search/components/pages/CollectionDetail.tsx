@@ -125,7 +125,8 @@ export function CollectionDetail() {
 		}),
 	);
 
-	const recentActivities = activityData?.activities?.filter((a) => a.indexSlug === indexSlug) ?? [];
+	const recentActivities =
+		activityData?.activities?.filter((a) => a.indexSlug === indexSlug) ?? [];
 
 	// ── Fetch API keys (for API tab) ───────────────────────────────
 
@@ -316,7 +317,9 @@ $data = json_decode($response->getBody(), true);`;
 							{index.displayName ?? index.slug}
 						</h1>
 						<Badge status={index.enabled ? "success" : "warning"}>
-							{index.enabled ? t("collection.statusEnabled") : t("collection.statusDisabled")}
+							{index.enabled
+								? t("collection.statusEnabled")
+								: t("collection.statusDisabled")}
 						</Badge>
 					</div>
 					<p className="text-sm mt-1 text-muted-foreground">
@@ -371,7 +374,9 @@ $data = json_decode($response->getBody(), true);`;
 					<div className="gap-6 md:grid-cols-2 grid grid-cols-1">
 						<Card>
 							<CardHeader>
-								<CardTitle className="text-base">{t("collection.schemaOverview")}</CardTitle>
+								<CardTitle className="text-base">
+									{t("collection.schemaOverview")}
+								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-2 text-sm">
 								{schemaLoading ? (
@@ -381,24 +386,37 @@ $data = json_decode($response->getBody(), true);`;
 										<Skeleton className="h-4 w-1/2" />
 									</div>
 								) : schemaFields.length === 0 ? (
-									<p className="text-muted-foreground">{t("collection.noSchema")}</p>
+									<p className="text-muted-foreground">
+										{t("collection.noSchema")}
+									</p>
 								) : (
 									<>
 										<p className="text-muted-foreground">
 											{schemaFields.length} {t("collection.fields")}
-											{defaultSortingField ? ` \u00B7 Default sort: ${defaultSortingField}` : ""}
+											{defaultSortingField
+												? ` \u00B7 Default sort: ${defaultSortingField}`
+												: ""}
 										</p>
 										<div className="space-y-1">
 											{schemaFields.slice(0, 8).map((field) => (
-												<div key={field.name} className="gap-2 flex items-center justify-between">
-													<span className="font-mono text-xs truncate">{field.name}</span>
+												<div
+													key={field.name}
+													className="gap-2 flex items-center justify-between"
+												>
+													<span className="font-mono text-xs truncate">
+														{field.name}
+													</span>
 													<div className="gap-1.5 flex shrink-0 items-center">
 														<Badge status="info">{field.type}</Badge>
 														{field.facet && (
-															<span className="text-xs text-muted-foreground">facet</span>
+															<span className="text-xs text-muted-foreground">
+																facet
+															</span>
 														)}
 														{field.sort && (
-															<span className="text-xs text-muted-foreground">sort</span>
+															<span className="text-xs text-muted-foreground">
+																sort
+															</span>
 														)}
 													</div>
 												</div>
@@ -422,11 +440,15 @@ $data = json_decode($response->getBody(), true);`;
 
 						<Card>
 							<CardHeader>
-								<CardTitle className="text-base">{t("collection.recentActivity")}</CardTitle>
+								<CardTitle className="text-base">
+									{t("collection.recentActivity")}
+								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-4 text-sm">
 								{recentActivities.length === 0 ? (
-									<p className="text-muted-foreground">{t("collection.noActivity")}</p>
+									<p className="text-muted-foreground">
+										{t("collection.noActivity")}
+									</p>
 								) : (
 									recentActivities.map((activity) => (
 										<div key={activity.id} className="gap-3 flex items-start">
@@ -434,9 +456,14 @@ $data = json_decode($response->getBody(), true);`;
 												<ActivityIcon kind={activity.kind} />
 											</div>
 											<div className="min-w-0 flex-1">
-												<p className="text-sm truncate">{activity.description}</p>
+												<p className="text-sm truncate">
+													{activity.description}
+												</p>
 												<p className="text-xs text-muted-foreground">
-													{formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}
+													{formatDistanceToNow(
+														new Date(activity.createdAt),
+														{ addSuffix: true },
+													)}
 												</p>
 											</div>
 										</div>
@@ -487,7 +514,11 @@ $data = json_decode($response->getBody(), true);`;
 						docView === "files" ? (
 							<FileTable organizationId={orgId} slug={indexSlug} />
 						) : (
-							<DocumentsTable organizationId={orgId} slug={indexSlug} fields={schemaFields} />
+							<DocumentsTable
+								organizationId={orgId}
+								slug={indexSlug}
+								fields={schemaFields}
+							/>
 						)
 					) : (
 						<Card>
@@ -520,7 +551,9 @@ $data = json_decode($response->getBody(), true);`;
 						</CardHeader>
 						<CardContent className="space-y-6">
 							{apiKeys?.length === 0 && (
-								<p className="text-sm text-muted-foreground">{t("collection.noApiKeys")}</p>
+								<p className="text-sm text-muted-foreground">
+									{t("collection.noApiKeys")}
+								</p>
 							)}
 							<CodeBlock label="cURL" code={curlExample} />
 							<CodeBlock label="JavaScript (fetch)" code={jsExample} />
@@ -560,7 +593,9 @@ $data = json_decode($response->getBody(), true);`;
 							<MetaRow
 								label={t("collection.enabled")}
 								value={
-									index.enabled ? t("collection.statusEnabled") : t("collection.statusDisabled")
+									index.enabled
+										? t("collection.statusEnabled")
+										: t("collection.statusDisabled")
 								}
 							/>
 							<MetaRow
@@ -593,8 +628,12 @@ $data = json_decode($response->getBody(), true);`;
 							{/* Truncate section */}
 							<div className="space-y-4">
 								<div>
-									<h4 className="font-medium text-sm">{t("collection.truncate")}</h4>
-									<p className="text-sm text-muted-foreground">{t("collection.truncateDesc")}</p>
+									<h4 className="font-medium text-sm">
+										{t("collection.truncate")}
+									</h4>
+									<p className="text-sm text-muted-foreground">
+										{t("collection.truncateDesc")}
+									</p>
 								</div>
 								<Button
 									variant="outline"
@@ -610,8 +649,12 @@ $data = json_decode($response->getBody(), true);`;
 							{/* Delete section */}
 							<div className="space-y-4">
 								<div>
-									<h4 className="font-medium text-sm">{t("collection.deleteCollection")}</h4>
-									<p className="text-sm text-muted-foreground">{t("collection.deleteWarning")}</p>
+									<h4 className="font-medium text-sm">
+										{t("collection.deleteCollection")}
+									</h4>
+									<p className="text-sm text-muted-foreground">
+										{t("collection.deleteWarning")}
+									</p>
 								</div>
 								<Button
 									variant="destructive"
@@ -667,7 +710,10 @@ $data = json_decode($response->getBody(), true);`;
 								<AlertDialogCancel>{t("collection.cancel")}</AlertDialogCancel>
 								<Button
 									variant="destructive"
-									disabled={truncateConfirmPhrase !== index.slug || truncateMutation.isPending}
+									disabled={
+										truncateConfirmPhrase !== index.slug ||
+										truncateMutation.isPending
+									}
 									onClick={() => {
 										if (!orgId) return;
 										truncateMutation.mutate({
@@ -677,7 +723,9 @@ $data = json_decode($response->getBody(), true);`;
 										});
 									}}
 								>
-									{truncateMutation.isPending ? t("collection.loading") : t("collection.truncate")}
+									{truncateMutation.isPending
+										? t("collection.loading")
+										: t("collection.truncate")}
 								</Button>
 							</AlertDialogFooter>
 						</AlertDialogContent>
@@ -705,7 +753,9 @@ function MetaRow({ label, value, mono }: { label: string; value: string; mono?: 
 	return (
 		<div className="gap-2 flex items-center justify-between">
 			<span className="text-muted-foreground">{label}</span>
-			<span className={`font-medium text-right ${mono ? "font-mono text-xs" : ""}`}>{value}</span>
+			<span className={`font-medium text-right ${mono ? "font-mono text-xs" : ""}`}>
+				{value}
+			</span>
 		</div>
 	);
 }

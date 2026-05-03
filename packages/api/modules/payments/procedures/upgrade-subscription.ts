@@ -56,7 +56,10 @@ export const upgradeSubscription = protectedProcedure
 
 		// Authorization: only owner/admin can change org subscriptions
 		if (activePurchase.organizationId) {
-			const membership = await getOrganizationMembership(activePurchase.organizationId, user.id);
+			const membership = await getOrganizationMembership(
+				activePurchase.organizationId,
+				user.id,
+			);
 
 			if (!membership || (membership.role !== "owner" && membership.role !== "admin")) {
 				throw new ORPCError("FORBIDDEN");
@@ -134,7 +137,9 @@ async function sendUpgradeNotification(
 			}),
 		]);
 		recipientIds = orgMembers.length > 0 ? orgMembers.map((m) => m.userId) : [userId];
-		dashboardUrl = org?.slug ? `/organizations/${org.slug}/settings/billing` : "/settings/billing";
+		dashboardUrl = org?.slug
+			? `/organizations/${org.slug}/settings/billing`
+			: "/settings/billing";
 	} else {
 		recipientIds = [userId];
 		dashboardUrl = "/settings/billing";

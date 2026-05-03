@@ -33,7 +33,8 @@ Within these pages, the `[organizationSlug]` param identifies the active org.
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 
 export function OrgHeader() {
-	const { activeOrganization, isOrganizationAdmin, isOrganizationOwner } = useActiveOrganization();
+	const { activeOrganization, isOrganizationAdmin, isOrganizationOwner } =
+		useActiveOrganization();
 	// ...
 }
 ```

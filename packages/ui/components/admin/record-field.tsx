@@ -71,7 +71,12 @@ export const RecordField = <RecordType extends Record<string, any> = Record<stri
 						"text-muted-foreground",
 					)}
 				>
-					<FieldTitle label={label} source={source} resource={resource} isRequired={false} />
+					<FieldTitle
+						label={label}
+						source={source}
+						resource={resource}
+						isRequired={false}
+					/>
 				</div>
 			) : null}
 			{children ? (
@@ -79,7 +84,8 @@ export const RecordField = <RecordType extends Record<string, any> = Record<stri
 			) : render ? (
 				record && (
 					<span className="flex-1">
-						{render(record) || (typeof empty === "string" ? translate(empty, { _: empty }) : empty)}
+						{render(record) ||
+							(typeof empty === "string" ? translate(empty, { _: empty }) : empty)}
 					</span>
 				)
 			) : field ? (

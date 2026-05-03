@@ -9,7 +9,11 @@ export function useHotKey(callback: () => void, key: string, options?: { shift?:
 	useEffect(() => {
 		function handler(e: KeyboardEvent) {
 			const shiftMatch = options?.shift ? e.shiftKey : !e.shiftKey;
-			if (e.key.toLowerCase() === key.toLowerCase() && (e.metaKey || e.ctrlKey) && shiftMatch) {
+			if (
+				e.key.toLowerCase() === key.toLowerCase() &&
+				(e.metaKey || e.ctrlKey) &&
+				shiftMatch
+			) {
 				callbackRef.current();
 			}
 		}

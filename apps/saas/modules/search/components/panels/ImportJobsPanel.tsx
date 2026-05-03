@@ -193,7 +193,9 @@ function FileImportZone({ organizationId, slug, onImportComplete }: FileImportZo
 		multiple: false,
 		maxSize: IMPORT_MAX_FILE_BYTES,
 		onDropRejected: (rejections) => {
-			const isSize = rejections.some((r) => r.errors.some((e) => e.code === "file-too-large"));
+			const isSize = rejections.some((r) =>
+				r.errors.some((e) => e.code === "file-too-large"),
+			);
 			setState({
 				phase: "error",
 				message: isSize
@@ -260,7 +262,9 @@ function FileImportZone({ organizationId, slug, onImportComplete }: FileImportZo
 			<Card>
 				<CardContent className="gap-2 p-4 flex items-center justify-center">
 					<Loader2 className="size-4 animate-spin text-foreground/60" />
-					<p className="text-sm text-foreground/60">{t("search.importJobs.upload.parsing")}</p>
+					<p className="text-sm text-foreground/60">
+						{t("search.importJobs.upload.parsing")}
+					</p>
 				</CardContent>
 			</Card>
 		);
@@ -277,7 +281,9 @@ function FileImportZone({ organizationId, slug, onImportComplete }: FileImportZo
 				}`}
 			>
 				<input {...getInputProps()} />
-				<UploadCloud className={`size-8 ${isDragActive ? "text-primary" : "text-foreground/40"}`} />
+				<UploadCloud
+					className={`size-8 ${isDragActive ? "text-primary" : "text-foreground/40"}`}
+				/>
 				<div className="text-center">
 					<p className="text-sm font-medium">{t("search.importJobs.upload.dropzone")}</p>
 					<p className="mt-1 text-xs text-foreground/50">
@@ -400,7 +406,8 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 				description: job.type ?? undefined,
 				badge: {
 					label: `${job.processedItems}/${job.totalItems}`,
-					status: status === "completed" ? "success" : status === "failed" ? "error" : "info",
+					status:
+						status === "completed" ? "success" : status === "failed" ? "error" : "info",
 				} as const,
 				meta: job.errorMessage?.slice(0, 60) || formatTime(job.startedAt),
 			})),
@@ -431,7 +438,9 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 			<div className="sm:flex-row sm:items-center sm:justify-between gap-4 flex flex-col">
 				<div>
 					<h3 className="text-lg font-semibold">{t("search.importJobs.title")}</h3>
-					<p className="text-sm text-foreground/60">{t("search.importJobs.description")}</p>
+					<p className="text-sm text-foreground/60">
+						{t("search.importJobs.description")}
+					</p>
 				</div>
 				<div className="gap-1 p-0.5 flex items-center self-start rounded-lg bg-muted">
 					<Button
@@ -475,7 +484,9 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 			<Card>
 				<CardContent className="p-4 space-y-3">
 					<div className="text-sm flex items-center justify-between">
-						<span className="text-foreground/60">{t("search.importJobs.successRate")}</span>
+						<span className="text-foreground/60">
+							{t("search.importJobs.successRate")}
+						</span>
 						<span className="font-semibold text-success">{successRate}%</span>
 					</div>
 					<div className="h-2 w-full overflow-hidden rounded-full bg-muted">
@@ -489,21 +500,27 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 							<span className="size-2 rounded-full bg-success" />
 							<span>
 								<strong>{succeededCount}</strong>{" "}
-								<span className="text-foreground/60">{t("search.importJobs.completed")}</span>
+								<span className="text-foreground/60">
+									{t("search.importJobs.completed")}
+								</span>
 							</span>
 						</div>
 						<div className="gap-1.5 flex items-center">
 							<span className="size-2 rounded-full bg-destructive" />
 							<span>
 								<strong>{failedCount}</strong>{" "}
-								<span className="text-foreground/60">{t("search.importJobs.failed")}</span>
+								<span className="text-foreground/60">
+									{t("search.importJobs.failed")}
+								</span>
 							</span>
 						</div>
 						<div className="gap-1.5 flex items-center">
 							<span className="size-2 rounded-full bg-foreground/30" />
 							<span>
 								<strong>{pendingCount}</strong>{" "}
-								<span className="text-foreground/60">{t("search.importJobs.pending")}</span>
+								<span className="text-foreground/60">
+									{t("search.importJobs.pending")}
+								</span>
 							</span>
 						</div>
 					</div>
@@ -542,7 +559,9 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 									>
 										<div className="gap-2 min-w-0 flex items-center">
 											<XCircle className="size-4 shrink-0 text-destructive" />
-											<span className="font-mono text-xs truncate">{job.id}</span>
+											<span className="font-mono text-xs truncate">
+												{job.id}
+											</span>
 											{job.type && <Badge status="info">{job.type}</Badge>}
 										</div>
 										<div className="gap-3 text-xs flex items-center text-foreground/60">
@@ -552,7 +571,10 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 												</span>
 											)}
 											{job.errorMessage && (
-												<span className="max-w-[200px] truncate" title={job.errorMessage}>
+												<span
+													className="max-w-[200px] truncate"
+													title={job.errorMessage}
+												>
 													{job.errorMessage}
 												</span>
 											)}
@@ -606,9 +628,15 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 									{/* Job header */}
 									<div className="sm:flex-row sm:items-center gap-2 flex flex-col justify-between">
 										<div className="gap-2 min-w-0 flex items-center">
-											<EvIcon className={`size-4 shrink-0 ${getStatusColor(job.status)}`} />
-											<span className="font-mono text-xs truncate">{job.id}</span>
-											<Badge status={ingestJobStatusBadge[job.status] ?? "info"}>
+											<EvIcon
+												className={`size-4 shrink-0 ${getStatusColor(job.status)}`}
+											/>
+											<span className="font-mono text-xs truncate">
+												{job.id}
+											</span>
+											<Badge
+												status={ingestJobStatusBadge[job.status] ?? "info"}
+											>
 												{job.status}
 											</Badge>
 											{job.type && (
@@ -630,13 +658,17 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 										<div className="gap-4 text-xs flex items-center text-foreground/60">
 											<span>
 												{t("search.importJobs.tableProgress")}:{" "}
-												<span className="font-semibold text-success">{job.processedItems}</span>/
-												{job.totalItems}
+												<span className="font-semibold text-success">
+													{job.processedItems}
+												</span>
+												/{job.totalItems}
 											</span>
 											{failedItems > 0 && (
 												<span>
 													{t("search.importJobs.failed")}:{" "}
-													<span className="font-semibold text-destructive">{failedItems}</span>
+													<span className="font-semibold text-destructive">
+														{failedItems}
+													</span>
 												</span>
 											)}
 										</div>
@@ -646,7 +678,9 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 									{job.errorMessage && (
 										<div className="gap-2 text-xs p-2 flex items-start rounded-md bg-destructive/10 dark:bg-destructive/20">
 											<XCircle className="mt-0.5 size-3.5 shrink-0 text-destructive" />
-											<span className="text-destructive">{job.errorMessage}</span>
+											<span className="text-destructive">
+												{job.errorMessage}
+											</span>
 										</div>
 									)}
 								</CardContent>
@@ -676,7 +710,9 @@ export function ImportJobsPanel({ organizationId, slug }: ImportJobsPanelProps) 
 									</TableCell>
 									<TableCell className="text-xs">{job.type}</TableCell>
 									<TableCell>
-										<Badge status={ingestJobStatusBadge[job.status] ?? "info"}>{job.status}</Badge>
+										<Badge status={ingestJobStatusBadge[job.status] ?? "info"}>
+											{job.status}
+										</Badge>
 									</TableCell>
 									<TableCell className="text-xs">
 										{job.processedItems}/{job.totalItems}

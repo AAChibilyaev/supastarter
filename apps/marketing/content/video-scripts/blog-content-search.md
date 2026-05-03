@@ -64,10 +64,10 @@
 2. Show WordPress/Strapi theme integration
 3. Or show React/SDK approach: `import { SearchProvider } from '@repo/search-client'`
 4. Live demo: Search "how to deploy" → instant results with:
-   - Title + highlighted excerpt
-   - Category badge + author
-   - Published date
-   - Click → navigates to post
+    - Title + highlighted excerpt
+    - Category badge + author
+    - Published date
+    - Click → navigates to post
 
 **Narration**:
 

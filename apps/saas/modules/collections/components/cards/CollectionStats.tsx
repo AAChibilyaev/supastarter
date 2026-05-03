@@ -66,7 +66,11 @@ export function CollectionStats({
 				<div
 					className={cn(
 						"h-full rounded-full transition-all",
-						usagePercent > 90 ? "bg-destructive" : usagePercent > 70 ? "bg-warning" : "bg-primary",
+						usagePercent > 90
+							? "bg-destructive"
+							: usagePercent > 70
+								? "bg-warning"
+								: "bg-primary",
 					)}
 					style={{ width: `${Math.max(usagePercent, 4)}%` }}
 				/>

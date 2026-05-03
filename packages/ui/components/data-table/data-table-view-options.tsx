@@ -41,7 +41,10 @@ export function DataTableViewOptions() {
 					role="combobox"
 					aria-controls="view-options-popover"
 					aria-expanded={open}
-					className={cn(buttonVariants({ variant: "outline", size: "icon" }), "shadow-none")}
+					className={cn(
+						buttonVariants({ variant: "outline", size: "icon" }),
+						"shadow-none",
+					)}
 				>
 					<Settings2 className="h-4 w-4" />
 					<span className="sr-only">View</span>
@@ -49,13 +52,19 @@ export function DataTableViewOptions() {
 			</PopoverTrigger>
 			<PopoverContent side="bottom" align="end" className="p-0 w-[200px]">
 				<Command>
-					<CommandInput value={search} onValueChange={setSearch} placeholder="Search options..." />
+					<CommandInput
+						value={search}
+						onValueChange={setSearch}
+						placeholder="Search options..."
+					/>
 					<CommandList>
 						<CommandEmpty>No option found.</CommandEmpty>
 						<CommandGroup>
 							<Sortable
 								value={sortedColumns.map((c) => ({ id: c.id }))}
-								onValueChange={(items) => table.setColumnOrder(items.map((c) => c.id))}
+								onValueChange={(items) =>
+									table.setColumnOrder(items.map((c) => c.id))
+								}
 								overlay={<div className="h-8 w-full rounded-md bg-muted/60" />}
 								onDragStart={() => setDrag(true)}
 								onDragEnd={() => setDrag(false)}
@@ -63,13 +72,17 @@ export function DataTableViewOptions() {
 							>
 								{sortedColumns
 									.filter(
-										(column) => typeof column.accessorFn !== "undefined" && column.getCanHide(),
+										(column) =>
+											typeof column.accessorFn !== "undefined" &&
+											column.getCanHide(),
 									)
 									.map((column) => (
 										<SortableItem key={column.id} value={column.id} asChild>
 											<CommandItem
 												value={column.id}
-												onSelect={() => column.toggleVisibility(!column.getIsVisible())}
+												onSelect={() =>
+													column.toggleVisibility(!column.getIsVisible())
+												}
 												className={"capitalize"}
 												disabled={drag}
 											>
@@ -81,20 +94,31 @@ export function DataTableViewOptions() {
 															: "opacity-50 [&_svg]:invisible",
 													)}
 												>
-													<Check className={cn("size-3 text-background")} />
+													<Check
+														className={cn("size-3 text-background")}
+													/>
 												</div>
 												<span>
-													{(column.columnDef.meta as Record<string, string> | undefined)?.label ||
-														column.id}
+													{(
+														column.columnDef.meta as
+															| Record<string, string>
+															| undefined
+													)?.label || column.id}
 												</span>
-												<span data-slot="command-shortcut" className="hidden" />
+												<span
+													data-slot="command-shortcut"
+													className="hidden"
+												/>
 												{enableColumnOrdering && !search ? (
 													<SortableDragHandle
 														variant="ghost"
 														size="icon"
 														className="size-5 ml-auto text-muted-foreground hover:text-foreground focus:bg-muted focus:text-foreground"
 													>
-														<GripVertical className="size-4" aria-hidden="true" />
+														<GripVertical
+															className="size-4"
+															aria-hidden="true"
+														/>
 													</SortableDragHandle>
 												) : null}
 											</CommandItem>

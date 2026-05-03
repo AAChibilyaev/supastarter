@@ -228,7 +228,12 @@ export const SelectInput = (props: SelectInputProps) => {
 
 	return (
 		<>
-			<FormField id={id} name={field.name} className={cn("min-w-20 w-full", className)} {...rest}>
+			<FormField
+				id={id}
+				name={field.name}
+				className={cn("min-w-20 w-full", className)}
+				{...rest}
+			>
 				{label !== "" && label !== false && (
 					<FormLabel>
 						<FieldTitle
@@ -276,9 +281,15 @@ export const SelectInput = (props: SelectInputProps) => {
 								const isDisabled = getDisableValue(choice);
 
 								return (
-									<SelectItem key={value} value={value?.toString()} disabled={isDisabled}>
+									<SelectItem
+										key={value}
+										value={value?.toString()}
+										disabled={isDisabled}
+									>
 										{renderMenuItemOption(
-											!!createItem && choice?.id === createItem.id ? createItem : choice,
+											!!createItem && choice?.id === createItem.id
+												? createItem
+												: choice,
 										)}
 									</SelectItem>
 								);

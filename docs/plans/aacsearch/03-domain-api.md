@@ -134,28 +134,28 @@ MVP indexes only **products**. One canonical Typesense schema across PrestaShop 
 
 ```yaml
 ProductDocument:
-  id: string # external_id namespaced by project — e.g. "proj_42:7891"
-  project_id: string # tenant boundary — must always be filtered on
-  external_id: string # raw id from CMS
-  platform: string # prestashop | bitrix
-  title: string
-  description: string
-  sku: string
-  brand: string
-  categories: string[] # display names, may be localized
-  category_ids: string[] # platform-stable ids for facet links
-  tags: string[]
-  price: float
-  sale_price: float
-  currency: string # ISO 4217 — RUB | USD | EUR | …
-  image_url: string
-  product_url: string
-  availability: string # in_stock | out_of_stock | preorder
-  stock_quantity: int32 # optional / -1 if unknown
-  attributes: object # free-form CMS attributes (color, size, …) — small payload
-  locale: string # primary locale of the doc; multi-locale via separate docs in v1
-  created_at: int64 # epoch seconds
-  updated_at: int64
+    id: string # external_id namespaced by project — e.g. "proj_42:7891"
+    project_id: string # tenant boundary — must always be filtered on
+    external_id: string # raw id from CMS
+    platform: string # prestashop | bitrix
+    title: string
+    description: string
+    sku: string
+    brand: string
+    categories: string[] # display names, may be localized
+    category_ids: string[] # platform-stable ids for facet links
+    tags: string[]
+    price: float
+    sale_price: float
+    currency: string # ISO 4217 — RUB | USD | EUR | …
+    image_url: string
+    product_url: string
+    availability: string # in_stock | out_of_stock | preorder
+    stock_quantity: int32 # optional / -1 if unknown
+    attributes: object # free-form CMS attributes (color, size, …) — small payload
+    locale: string # primary locale of the doc; multi-locale via separate docs in v1
+    created_at: int64 # epoch seconds
+    updated_at: int64
 ```
 
 ### Field roles

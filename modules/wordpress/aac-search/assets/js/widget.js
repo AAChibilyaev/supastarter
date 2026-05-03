@@ -168,7 +168,8 @@
 		}
 
 		if (hits.length === 0) {
-			container.innerHTML = '<div class="aacsearch-widget-empty">Start typing to search...</div>';
+			container.innerHTML =
+				'<div class="aacsearch-widget-empty">Start typing to search...</div>';
 			return;
 		}
 
@@ -195,7 +196,8 @@
 			html += '<div class="aacsearch-widget-result-content">';
 			html += '<div class="aacsearch-widget-result-title">' + title + "</div>";
 			if (description) {
-				html += '<div class="aacsearch-widget-result-description">' + description + "</div>";
+				html +=
+					'<div class="aacsearch-widget-result-description">' + description + "</div>";
 			}
 			html += "</div>";
 

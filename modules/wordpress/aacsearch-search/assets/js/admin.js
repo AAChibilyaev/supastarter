@@ -59,7 +59,10 @@
 					} else {
 						statusEl
 							.addClass("error")
-							.text((response.data && response.data.message) || aacsearchAdmin.i18n.testFailed);
+							.text(
+								(response.data && response.data.message) ||
+									aacsearchAdmin.i18n.testFailed,
+							);
 					}
 				},
 			).fail(function () {
@@ -97,7 +100,9 @@
 							.addClass("error")
 							.text(
 								response.message ||
-									aacsearchAdmin.i18n.error + " " + aacsearchAdmin.i18n.reindexFailed,
+									aacsearchAdmin.i18n.error +
+										" " +
+										aacsearchAdmin.i18n.reindexFailed,
 							);
 					}
 				},
@@ -126,7 +131,9 @@
 						// Reload the page to show empty log
 						location.reload();
 					} else {
-						statusEl.text((response.data && response.data.message) || "Failed to clear log.");
+						statusEl.text(
+							(response.data && response.data.message) || "Failed to clear log.",
+						);
 					}
 				},
 			).fail(function () {

@@ -1,252 +1,252 @@
 name: Generate SDKs from OpenAPI
 
 on:
-  push:
-    branches: [main, develop]
-    paths:
-      - "packages/api/v1/openapi.ts"
-      - "packages/api/openapi.yaml"
+    push:
+        branches: [main, develop]
+        paths:
+            - "packages/api/v1/openapi.ts"
+            - "packages/api/openapi.yaml"
 
 env:
-  OPENAPI_FILE: packages/api/openapi.yaml
-  NODE_VERSION: lts/*
-  GO_VERSION: "1.21"
+    OPENAPI_FILE: packages/api/openapi.yaml
+    NODE_VERSION: lts/*
+    GO_VERSION: "1.21"
 
 jobs:
-  # ── Step 1: Regenerate OpenAPI spec from TypeScript ──────────────
-  generate-openapi:
-    name: Generate and validate OpenAPI spec
-    runs-on: ubuntu-latest
-    outputs:
-      spec_changed: ${{ steps.check-changed.outputs.changed }}
+    # ── Step 1: Regenerate OpenAPI spec from TypeScript ──────────────
+    generate-openapi:
+        name: Generate and validate OpenAPI spec
+        runs-on: ubuntu-latest
+        outputs:
+            spec_changed: ${{ steps.check-changed.outputs.changed }}
 
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
 
-      - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v4
 
-      - name: Install dependencies
-        run: pnpm install
+            - name: Install dependencies
+              run: pnpm install
 
-      - name: Generate openapi.yaml
-        run: pnpm generate:openapi
+            - name: Generate openapi.yaml
+              run: pnpm generate:openapi
 
-      - name: Validate OpenAPI spec
-        run: pnpm validate:openapi || echo "⚠️  Validation warnings — continuing"
+            - name: Validate OpenAPI spec
+              run: pnpm validate:openapi || echo "⚠️  Validation warnings — continuing"
 
-      - name: Check if spec changed
-        id: check-changed
-        run: |
-          if ! git diff --quiet -- "${{ env.OPENAPI_FILE }}"; then
-              echo "changed=true" >> "$GITHUB_OUTPUT"
-          else
-              echo "changed=false" >> "$GITHUB_OUTPUT"
-          fi
+            - name: Check if spec changed
+              id: check-changed
+              run: |
+                  if ! git diff --quiet -- "${{ env.OPENAPI_FILE }}"; then
+                      echo "changed=true" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "changed=false" >> "$GITHUB_OUTPUT"
+                  fi
 
-      - name: Commit spec changes if any
-        if: steps.check-changed.outputs.changed == 'true'
-        run: |
-          git config user.name "aacsearch-bot"
-          git config user.email "bot@aacsearch.com"
-          git add "${{ env.OPENAPI_FILE }}"
-          git commit -m "[bot] Update openapi.yaml from spec generator"
-          git push
+            - name: Commit spec changes if any
+              if: steps.check-changed.outputs.changed == 'true'
+              run: |
+                  git config user.name "aacsearch-bot"
+                  git config user.email "bot@aacsearch.com"
+                  git add "${{ env.OPENAPI_FILE }}"
+                  git commit -m "[bot] Update openapi.yaml from spec generator"
+                  git push
 
-  # ── Step 2: Build & Publish TypeScript SDK ───────────────────────
-  build-and-publish-ts-sdk:
-    name: Build TypeScript SDK
-    needs: [generate-openapi]
-    runs-on: ubuntu-latest
+    # ── Step 2: Build & Publish TypeScript SDK ───────────────────────
+    build-and-publish-ts-sdk:
+        name: Build TypeScript SDK
+        needs: [generate-openapi]
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: "https://registry.npmjs.org"
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  registry-url: "https://registry.npmjs.org"
 
-      - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v4
 
-      - name: Install dependencies
-        run: pnpm install
+            - name: Install dependencies
+              run: pnpm install
 
-      - name: Generate TypeScript types from OpenAPI
-        run: |
-          mkdir -p packages/search-client/src/generated
-          npx openapi-typescript@latest "${{ env.OPENAPI_FILE }}" \
-              -o packages/search-client/src/generated/sdk.ts || true
-          npx openapi-typescript@latest "${{ env.OPENAPI_FILE }}" \
-              -o packages/search-client/src/generated/types.ts \
-              --export-type || true
+            - name: Generate TypeScript types from OpenAPI
+              run: |
+                  mkdir -p packages/search-client/src/generated
+                  npx openapi-typescript@latest "${{ env.OPENAPI_FILE }}" \
+                      -o packages/search-client/src/generated/sdk.ts || true
+                  npx openapi-typescript@latest "${{ env.OPENAPI_FILE }}" \
+                      -o packages/search-client/src/generated/types.ts \
+                      --export-type || true
 
-      - name: Type-check
-        run: pnpm --filter @aacsearch/client type-check
+            - name: Type-check
+              run: pnpm --filter @aacsearch/client type-check
 
-      - name: Build
-        run: pnpm --filter @aacsearch/client build
+            - name: Build
+              run: pnpm --filter @aacsearch/client build
 
-      - name: Check SDK status
-        run: |
-          echo "✅ TypeScript SDK built successfully"
-          ls -lh packages/search-client/dist/
+            - name: Check SDK status
+              run: |
+                  echo "✅ TypeScript SDK built successfully"
+                  ls -lh packages/search-client/dist/
 
-      # Publish to npm (only on main branch push)
-      - name: Publish to npm
-        if: github.ref == 'refs/heads/main'
-        run: |
-          cd packages/search-client
-          pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            # Publish to npm (only on main branch push)
+            - name: Publish to npm
+              if: github.ref == 'refs/heads/main'
+              run: |
+                  cd packages/search-client
+                  pnpm publish --access public --no-git-checks
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  # ── Step 3: Build & Publish Python SDK ───────────────────────────
-  build-and-publish-python-sdk:
-    name: Build Python SDK
-    needs: [generate-openapi]
-    runs-on: ubuntu-latest
+    # ── Step 3: Build & Publish Python SDK ───────────────────────────
+    build-and-publish-python-sdk:
+        name: Build Python SDK
+        needs: [generate-openapi]
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: "3.11"
 
-      - name: Install build dependencies
-        run: |
-          pip install build twine
+            - name: Install build dependencies
+              run: |
+                  pip install build twine
 
-      - name: Build Python SDK
-        run: |
-          cd packages/search-client-python
-          python -m build
+            - name: Build Python SDK
+              run: |
+                  cd packages/search-client-python
+                  python -m build
 
-      - name: Install and test
-        run: |
-          cd packages/search-client-python
-          pip install -e .
-          python -c "from aacsearch import SearchClient, AdminClient; print('✅ Python SDK imports OK')"
+            - name: Install and test
+              run: |
+                  cd packages/search-client-python
+                  pip install -e .
+                  python -c "from aacsearch import SearchClient, AdminClient; print('✅ Python SDK imports OK')"
 
-      - name: Check SDK status
-        run: |
-          echo "✅ Python SDK built"
-          ls -lh packages/search-client-python/dist/
+            - name: Check SDK status
+              run: |
+                  echo "✅ Python SDK built"
+                  ls -lh packages/search-client-python/dist/
 
-      # Publish to PyPI (only on main branch push)
-      - name: Publish to PyPI
-        if: github.ref == 'refs/heads/main'
-        run: |
-          cd packages/search-client-python
-          python -m twine upload dist/*
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+            # Publish to PyPI (only on main branch push)
+            - name: Publish to PyPI
+              if: github.ref == 'refs/heads/main'
+              run: |
+                  cd packages/search-client-python
+                  python -m twine upload dist/*
+              env:
+                  TWINE_USERNAME: __token__
+                  TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
 
-  # ── Step 4: Generate & Publish Go SDK ────────────────────────────
-  generate-and-publish-go-sdk:
-    name: Generate Go SDK
-    needs: [generate-openapi]
-    runs-on: ubuntu-latest
+    # ── Step 4: Generate & Publish Go SDK ────────────────────────────
+    generate-and-publish-go-sdk:
+        name: Generate Go SDK
+        needs: [generate-openapi]
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
+            - uses: actions/setup-go@v5
+              with:
+                  go-version: ${{ env.GO_VERSION }}
 
-      - name: Generate Go SDK via openapi-generator
-        uses: openapi-generators/openapitools-generator-action@v1
-        with:
-          generator: go
-          openapi-file: ${{ env.OPENAPI_FILE }}
-          output: packages/search-client-go-gen/
-          config: |-
-            packageName=aacsearch
-            moduleName=github.com/aacsearch/aacsearch-go
+            - name: Generate Go SDK via openapi-generator
+              uses: openapi-generators/openapitools-generator-action@v1
+              with:
+                  generator: go
+                  openapi-file: ${{ env.OPENAPI_FILE }}
+                  output: packages/search-client-go-gen/
+                  config: |-
+                      packageName=aacsearch
+                      moduleName=github.com/aacsearch/aacsearch-go
 
-      - name: Copy hand-written SDK over generated base
-        run: |
-          # Merge hand-written SDK with generated code
-          # Hand-written code lives at packages/search-client-go/
-          # Generated code goes to packages/search-client-go-gen/
-          # For now, use the hand-written SDK directly
-          mkdir -p packages/search-client-go
-          echo "Go SDK maintained at packages/search-client-go/"
+            - name: Copy hand-written SDK over generated base
+              run: |
+                  # Merge hand-written SDK with generated code
+                  # Hand-written code lives at packages/search-client-go/
+                  # Generated code goes to packages/search-client-go-gen/
+                  # For now, use the hand-written SDK directly
+                  mkdir -p packages/search-client-go
+                  echo "Go SDK maintained at packages/search-client-go/"
 
-      - name: Build Go SDK
-        run: |
-          cd packages/search-client-go
-          go build ./...
+            - name: Build Go SDK
+              run: |
+                  cd packages/search-client-go
+                  go build ./...
 
-      - name: Vet Go SDK
-        run: |
-          cd packages/search-client-go
-          go vet ./...
+            - name: Vet Go SDK
+              run: |
+                  cd packages/search-client-go
+                  go vet ./...
 
-      - name: Check SDK status
-        run: |
-          echo "✅ Go SDK builds successfully"
-          ls -lh packages/search-client-go/*.go
+            - name: Check SDK status
+              run: |
+                  echo "✅ Go SDK builds successfully"
+                  ls -lh packages/search-client-go/*.go
 
-      # Publish tag (only on main branch push)
-      - name: Tag Go module version
-        if: github.ref == 'refs/heads/main'
-        run: |
-          VERSION="v0.1.0"
-          git tag "go-sdk/$VERSION"
-          git push origin "go-sdk/$VERSION"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # Publish tag (only on main branch push)
+            - name: Tag Go module version
+              if: github.ref == 'refs/heads/main'
+              run: |
+                  VERSION="v0.1.0"
+                  git tag "go-sdk/$VERSION"
+                  git push origin "go-sdk/$VERSION"
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # ── Step 5: Build PHP SDK ────────────────────────────────────────
-  generate-php-sdk:
-    name: Generate PHP SDK
-    needs: [generate-openapi]
-    runs-on: ubuntu-latest
+    # ── Step 5: Build PHP SDK ────────────────────────────────────────
+    generate-php-sdk:
+        name: Generate PHP SDK
+        needs: [generate-openapi]
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
 
-      - uses: pnpm/action-setup@v4
+            - uses: pnpm/action-setup@v4
 
-      - name: Install dependencies
-        run: pnpm install
+            - name: Install dependencies
+              run: pnpm install
 
-      - name: Generate PHP SDK via openapi-generator
-        uses: openapi-generators/openapitools-generator-action@v1
-        with:
-          generator: php
-          openapi-file: ${{ env.OPENAPI_FILE }}
-          output: packages/search-client-php/
-          config: |-
-            composerPackageName=aacsearch/php-sdk
-            invokerPackage=Aacsearch
-            srcBasePath=src/
-            gitUserId=aacsearch
-            gitRepoId=aacsearch-php-sdk
+            - name: Generate PHP SDK via openapi-generator
+              uses: openapi-generators/openapitools-generator-action@v1
+              with:
+                  generator: php
+                  openapi-file: ${{ env.OPENAPI_FILE }}
+                  output: packages/search-client-php/
+                  config: |-
+                      composerPackageName=aacsearch/php-sdk
+                      invokerPackage=Aacsearch
+                      srcBasePath=src/
+                      gitUserId=aacsearch
+                      gitRepoId=aacsearch-php-sdk
 
-      - name: Validate PHP SDK syntax
-        run: |
-          if command -v php &> /dev/null; then
-              cd packages/search-client-php
-              php -l src/ 2>/dev/null || echo "PHP lint skipped (no PHP available)"
-          else
-              echo "PHP not available — lint skipped"
-          fi
+            - name: Validate PHP SDK syntax
+              run: |
+                  if command -v php &> /dev/null; then
+                      cd packages/search-client-php
+                      php -l src/ 2>/dev/null || echo "PHP lint skipped (no PHP available)"
+                  else
+                      echo "PHP not available — lint skipped"
+                  fi
 
-      - name: Check SDK status
-        run: |
-          echo "✅ PHP SDK generated"
-          ls -lh packages/search-client-php/src/
+            - name: Check SDK status
+              run: |
+                  echo "✅ PHP SDK generated"
+                  ls -lh packages/search-client-php/src/

@@ -70,7 +70,8 @@ const ReferenceManyFieldView = <ReferenceRecordType extends RaRecord = RaRecord>
 ) => {
 	const { children, empty, error: errorElement, loading, pagination, render } = props;
 	const listContext = useListContext();
-	const { isPending, error, total, hasPreviousPage, hasNextPage, data, filterValues } = listContext;
+	const { isPending, error, total, hasPreviousPage, hasNextPage, data, filterValues } =
+		listContext;
 
 	if (isPending && loading !== false) {
 		return loading;

@@ -135,7 +135,9 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 		return (
 			<Card>
 				<CardContent className="py-12 flex flex-col items-center text-center">
-					<p className="text-sm text-muted-foreground">{t("widgetConfigurator.noIndexes")}</p>
+					<p className="text-sm text-muted-foreground">
+						{t("widgetConfigurator.noIndexes")}
+					</p>
 				</CardContent>
 			</Card>
 		);
@@ -179,7 +181,9 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 									<Label>{t("widget.autocompleteSource")}</Label>
 									<Select
 										value={source}
-										onValueChange={(v) => setSource(v as "analytics" | "instant")}
+										onValueChange={(v) =>
+											setSource(v as "analytics" | "instant")
+										}
 									>
 										<SelectTrigger className="w-full">
 											<SelectValue />
@@ -197,7 +201,9 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 
 								<div className="space-y-2">
 									<div className="gap-2 flex items-center justify-between">
-										<Label htmlFor="ac-results">{t("widget.autocompleteResults")}</Label>
+										<Label htmlFor="ac-results">
+											{t("widget.autocompleteResults")}
+										</Label>
 										<span className="text-sm font-mono text-foreground/60 tabular-nums">
 											{resultCount}
 										</span>
@@ -215,7 +221,9 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 
 								<div className="space-y-2">
 									<div className="gap-2 flex items-center justify-between">
-										<Label htmlFor="ac-debounce">{t("widget.autocompleteDebounce")}</Label>
+										<Label htmlFor="ac-debounce">
+											{t("widget.autocompleteDebounce")}
+										</Label>
 										<span className="text-sm font-mono text-foreground/60 tabular-nums">
 											{debounceDelay}ms
 										</span>
@@ -231,12 +239,16 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 								</div>
 
 								<div className="space-y-2">
-									<Label htmlFor="ac-min-query">{t("widget.autocompleteMinQuery")}</Label>
+									<Label htmlFor="ac-min-query">
+										{t("widget.autocompleteMinQuery")}
+									</Label>
 									<div className="gap-2 flex">
 										{[1, 2, 3].map((n) => (
 											<Button
 												key={n}
-												variant={minQueryLength === n ? "default" : "outline"}
+												variant={
+													minQueryLength === n ? "default" : "outline"
+												}
 												size="sm"
 												onClick={() => setMinQueryLength(n)}
 												className="w-12"
@@ -248,7 +260,9 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 								</div>
 
 								<div className="gap-3 flex items-center justify-between">
-									<Label htmlFor="ac-thumbnails">{t("widget.autocompleteThumbnails")}</Label>
+									<Label htmlFor="ac-thumbnails">
+										{t("widget.autocompleteThumbnails")}
+									</Label>
 									<Switch
 										id="ac-thumbnails"
 										checked={showThumbnails}
@@ -257,7 +271,9 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 								</div>
 
 								<div className="gap-3 flex items-center justify-between">
-									<Label htmlFor="ac-highlight">{t("widget.autocompleteHighlight")}</Label>
+									<Label htmlFor="ac-highlight">
+										{t("widget.autocompleteHighlight")}
+									</Label>
 									<Switch
 										id="ac-highlight"
 										checked={highlightText}
@@ -266,13 +282,23 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 								</div>
 
 								<div className="gap-3 flex items-center justify-between">
-									<Label htmlFor="ac-recent">{t("widget.autocompleteRecent")}</Label>
-									<Switch id="ac-recent" checked={showRecent} onCheckedChange={setShowRecent} />
+									<Label htmlFor="ac-recent">
+										{t("widget.autocompleteRecent")}
+									</Label>
+									<Switch
+										id="ac-recent"
+										checked={showRecent}
+										onCheckedChange={setShowRecent}
+									/>
 								</div>
 							</>
 						)}
 
-						<Button onClick={handleSave} loading={saveMutation.isPending} className="w-full">
+						<Button
+							onClick={handleSave}
+							loading={saveMutation.isPending}
+							className="w-full"
+						>
 							{t("widgetConfigurator.saveConfig")}
 						</Button>
 					</CardContent>
@@ -280,7 +306,9 @@ export function WidgetAutocompletePanel({ organizationId }: WidgetAutocompletePa
 
 				<Card className="shadow-sm">
 					<CardHeader>
-						<CardTitle className="text-base">{t("widgetConfigurator.previewTitle")}</CardTitle>
+						<CardTitle className="text-base">
+							{t("widgetConfigurator.previewTitle")}
+						</CardTitle>
 						<CardDescription>{t("widgetConfigurator.previewDesc")}</CardDescription>
 					</CardHeader>
 					<CardContent>

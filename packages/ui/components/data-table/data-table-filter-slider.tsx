@@ -68,7 +68,9 @@ export function DataTableFilterSlider<TData>({
 							value={`${input?.[0] ?? min}`}
 							min={min}
 							max={max}
-							onChange={(e) => setInput((prev) => [Number(e.target.value), prev?.[1] || max])}
+							onChange={(e) =>
+								setInput((prev) => [Number(e.target.value), prev?.[1] || max])
+							}
 						/>
 						{unit ? <InputGroupAddon align="inline-end">{unit}</InputGroupAddon> : null}
 					</InputGroup>
@@ -86,7 +88,9 @@ export function DataTableFilterSlider<TData>({
 							value={`${input?.[1] ?? max}`}
 							min={min}
 							max={max}
-							onChange={(e) => setInput((prev) => [prev?.[0] || min, Number(e.target.value)])}
+							onChange={(e) =>
+								setInput((prev) => [prev?.[0] || min, Number(e.target.value)])
+							}
 						/>
 						{unit ? <InputGroupAddon align="inline-end">{unit}</InputGroupAddon> : null}
 					</InputGroup>

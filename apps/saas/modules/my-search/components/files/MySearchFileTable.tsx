@@ -165,7 +165,9 @@ export function MySearchFileTable({ organizationId, indexId }: MySearchFileTable
 				cell: ({ getValue }) => {
 					const val = getValue() as number;
 					return val > 0 ? (
-						<span className="font-mono text-xs text-muted-foreground">{val.toLocaleString()}</span>
+						<span className="font-mono text-xs text-muted-foreground">
+							{val.toLocaleString()}
+						</span>
 					) : (
 						<span className="text-muted-foreground/40">&mdash;</span>
 					);
@@ -272,7 +274,10 @@ export function MySearchFileTable({ organizationId, indexId }: MySearchFileTable
 													: ""
 											}
 										>
-											{flexRender(header.column.columnDef.header, header.getContext())}
+											{flexRender(
+												header.column.columnDef.header,
+												header.getContext(),
+											)}
 											{{
 												asc: " \u2191",
 												desc: " \u2193",
@@ -303,7 +308,10 @@ export function MySearchFileTable({ organizationId, indexId }: MySearchFileTable
 									>
 										{row.getVisibleCells().map((cell) => (
 											<TableCell key={cell.id}>
-												{flexRender(cell.column.columnDef.cell, cell.getContext())}
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext(),
+												)}
 											</TableCell>
 										))}
 									</TableRow>

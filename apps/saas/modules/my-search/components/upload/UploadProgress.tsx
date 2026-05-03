@@ -68,7 +68,10 @@ export function UploadProgress({ jobs }: UploadProgressProps) {
 								) : (
 									<div className="mt-0.5 gap-1 flex items-center">
 										<XCircleIcon className="h-3.5 w-3.5 shrink-0 text-destructive" />
-										<span className="text-xs truncate text-destructive" title={job.error}>
+										<span
+											className="text-xs truncate text-destructive"
+											title={job.error}
+										>
 											{job.error ?? t("failed")}
 										</span>
 									</div>

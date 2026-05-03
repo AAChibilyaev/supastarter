@@ -20,7 +20,12 @@ export const RefreshButton = () => {
 	};
 
 	return (
-		<Button onClick={handleRefresh} variant="ghost" size="icon" className="sm:inline-flex hidden">
+		<Button
+			onClick={handleRefresh}
+			variant="ghost"
+			size="icon"
+			className="sm:inline-flex hidden"
+		>
 			{loading ? <LoaderCircle className="animate-spin" /> : <RotateCw />}
 		</Button>
 	);

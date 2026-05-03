@@ -16,7 +16,9 @@ export const listIndexes = protectedProcedure
 	.input(
 		z.object({
 			organizationId: z.string().optional(),
-			ownerType: z.enum([SEARCH_OWNER_TYPES.organization, SEARCH_OWNER_TYPES.user]).optional(),
+			ownerType: z
+				.enum([SEARCH_OWNER_TYPES.organization, SEARCH_OWNER_TYPES.user])
+				.optional(),
 			ownerId: z.string().optional(),
 		}),
 	)

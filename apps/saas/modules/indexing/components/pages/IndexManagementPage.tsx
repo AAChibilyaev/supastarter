@@ -58,7 +58,8 @@ export function IndexManagementPage() {
 		}),
 	);
 
-	const indexActivities = activityData?.activities?.filter((a) => a.indexSlug === indexSlug) ?? [];
+	const indexActivities =
+		activityData?.activities?.filter((a) => a.indexSlug === indexSlug) ?? [];
 
 	// Extract last full sync from activity data
 	const lastFullSyncActivity = indexActivities.find((a) => a.kind === "sync_job");
@@ -130,7 +131,9 @@ export function IndexManagementPage() {
 				<div className="min-w-0 flex-1">
 					<div className="gap-2 flex flex-wrap items-center">
 						<h1 className="font-bold text-2xl tracking-tight truncate">{t("title")}</h1>
-						<Badge status={index.enabled ? "success" : "warning"}>v{index.version}</Badge>
+						<Badge status={index.enabled ? "success" : "warning"}>
+							v{index.version}
+						</Badge>
 					</div>
 					<p className="text-sm mt-1 text-muted-foreground">
 						{index.displayName ?? index.slug}

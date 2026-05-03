@@ -195,7 +195,12 @@ export function CollectionsPage() {
 					<p className="text-sm text-muted-foreground">{t("collections.subtitle")}</p>
 				</div>
 				<div className="gap-2 flex items-center">
-					<Button variant="outline" size="sm" onClick={() => void refetch()} disabled={isLoading}>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => void refetch()}
+						disabled={isLoading}
+					>
 						<RefreshCwIcon className="size-4" />
 						{tCommon("refresh")}
 					</Button>
@@ -251,7 +256,9 @@ export function CollectionsPage() {
 				<EmptyState
 					title={searchQuery ? t("collections.noResults") : t("collections.empty")}
 					description={
-						searchQuery ? t("collections.noResultsDescription") : t("collections.emptyDescription")
+						searchQuery
+							? t("collections.noResultsDescription")
+							: t("collections.emptyDescription")
 					}
 					icon={Columns3Icon}
 					action={
@@ -310,7 +317,10 @@ export function CollectionsPage() {
 						<DialogTitle>{t("collection.schemaEditor.title")}</DialogTitle>
 					</DialogHeader>
 					{schemaCollectionSlug && (
-						<SchemaEditorPanel organizationId={orgId ?? ""} slug={schemaCollectionSlug} />
+						<SchemaEditorPanel
+							organizationId={orgId ?? ""}
+							slug={schemaCollectionSlug}
+						/>
 					)}
 				</DialogContent>
 			</Dialog>

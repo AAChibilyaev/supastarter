@@ -41,7 +41,9 @@ export function HeroSection() {
 					<div className="gap-2 px-4 py-1.5 text-sm backdrop-blur-sm inline-flex items-center rounded-full border border-primary/20 bg-primary/5">
 						<span className="font-semibold text-primary">{t("home.hero.new")}</span>
 						<span className="h-4 w-px bg-primary/20" />
-						<span className="font-medium text-muted-foreground">{t("home.hero.featureBadge")}</span>
+						<span className="font-medium text-muted-foreground">
+							{t("home.hero.featureBadge")}
+						</span>
 					</div>
 				</div>
 
@@ -119,7 +121,9 @@ export function HeroSection() {
 							<div className="text-2xl sm:text-3xl font-bold text-foreground tabular-nums">
 								{value}
 							</div>
-							<div className="mt-1 text-xs sm:text-sm text-muted-foreground">{label}</div>
+							<div className="mt-1 text-xs sm:text-sm text-muted-foreground">
+								{label}
+							</div>
 						</div>
 					))}
 				</div>

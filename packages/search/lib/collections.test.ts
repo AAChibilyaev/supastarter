@@ -8,7 +8,9 @@ describe("physicalCollectionName", () => {
 	});
 
 	it("sanitizes non-alphanumeric chars in organization id", () => {
-		expect(physicalCollectionName("org-abc.123", "products", 2)).toBe("ss_org_abc_123_products_v2");
+		expect(physicalCollectionName("org-abc.123", "products", 2)).toBe(
+			"ss_org_abc_123_products_v2",
+		);
 	});
 
 	it("sanitizes slugs with dashes (Typesense disallows '-')", () => {

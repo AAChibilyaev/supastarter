@@ -157,7 +157,9 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 				<div className="gap-3 flex items-center justify-between">
 					<div>
 						<Label htmlFor="embedding-enabled">{t("embeddingModel.enableLabel")}</Label>
-						<p className="text-sm text-muted-foreground">{t("embeddingModel.enableHint")}</p>
+						<p className="text-sm text-muted-foreground">
+							{t("embeddingModel.enableHint")}
+						</p>
 					</div>
 					<Switch
 						id="embedding-enabled"
@@ -192,7 +194,9 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 											</div>
 											{group.models.map((m) => (
 												<SelectItem key={m.name} value={m.name}>
-													<span className="font-mono text-xs">{m.name}</span>
+													<span className="font-mono text-xs">
+														{m.name}
+													</span>
 													<span className="ml-2 text-xs text-muted-foreground">
 														{m.dimensions}d
 													</span>
@@ -219,8 +223,12 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 						{/* Hybrid alpha slider */}
 						<div className="space-y-3">
 							<div className="gap-2 flex items-center justify-between">
-								<Label htmlFor="hybrid-alpha">{t("embeddingModel.hybridAlpha")}</Label>
-								<span className="font-mono text-xs tabular-nums">{hybridAlpha.toFixed(2)}</span>
+								<Label htmlFor="hybrid-alpha">
+									{t("embeddingModel.hybridAlpha")}
+								</Label>
+								<span className="font-mono text-xs tabular-nums">
+									{hybridAlpha.toFixed(2)}
+								</span>
 							</div>
 							<Slider
 								id="hybrid-alpha"
@@ -233,13 +241,17 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 									setChanged(true);
 								}}
 							/>
-							<p className="text-xs text-muted-foreground">{t("embeddingModel.hybridAlphaHint")}</p>
+							<p className="text-xs text-muted-foreground">
+								{t("embeddingModel.hybridAlphaHint")}
+							</p>
 						</div>
 
 						{/* OpenAI-compatible fields */}
 						{isOpenaiCompatible && (
 							<div className="space-y-4 p-4 rounded-lg border">
-								<p className="font-medium text-sm">{t("embeddingModel.openaiCompatibleSection")}</p>
+								<p className="font-medium text-sm">
+									{t("embeddingModel.openaiCompatibleSection")}
+								</p>
 								<div className="space-y-2">
 									<Label htmlFor="openai-compat-url">
 										{t("embeddingModel.openaiCompatibleApiUrl")}
@@ -269,7 +281,9 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 											setOpenaiCompatibleApiKey(e.target.value);
 											setChanged(true);
 										}}
-										placeholder={t("embeddingModel.openaiCompatibleApiKeyPlaceholder")}
+										placeholder={t(
+											"embeddingModel.openaiCompatibleApiKeyPlaceholder",
+										)}
 									/>
 									<p className="text-xs text-muted-foreground">
 										{t("embeddingModel.openaiCompatibleApiKeyHint")}
@@ -281,9 +295,13 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 						{/* Azure-specific fields */}
 						{isAzure && (
 							<div className="space-y-4 p-4 rounded-lg border">
-								<p className="font-medium text-sm">{t("embeddingModel.azureSection")}</p>
+								<p className="font-medium text-sm">
+									{t("embeddingModel.azureSection")}
+								</p>
 								<div className="space-y-2">
-									<Label htmlFor="azure-url">{t("embeddingModel.azureApiUrl")}</Label>
+									<Label htmlFor="azure-url">
+										{t("embeddingModel.azureApiUrl")}
+									</Label>
 									<Input
 										id="azure-url"
 										value={azureApiUrl}
@@ -298,7 +316,9 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 									</p>
 								</div>
 								<div className="space-y-2">
-									<Label htmlFor="azure-version">{t("embeddingModel.azureApiVersion")}</Label>
+									<Label htmlFor="azure-version">
+										{t("embeddingModel.azureApiVersion")}
+									</Label>
 									<Input
 										id="azure-version"
 										value={azureApiVersion}
@@ -316,7 +336,9 @@ export function EmbeddingModelPanel({ organizationId, slug }: EmbeddingModelPane
 
 				{/* Save button */}
 				<Button onClick={handleSave} disabled={!changed || updateMutation.isPending}>
-					{updateMutation.isPending ? t("embeddingModel.saving") : t("embeddingModel.save")}
+					{updateMutation.isPending
+						? t("embeddingModel.saving")
+						: t("embeddingModel.save")}
 				</Button>
 			</CardContent>
 		</Card>

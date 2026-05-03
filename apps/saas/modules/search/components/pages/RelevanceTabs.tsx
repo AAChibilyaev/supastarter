@@ -60,10 +60,16 @@ export function RelevanceTabs({ organizationId }: RelevanceTabsProps) {
 						<TabsTrigger value="curations">{t("search.curations.tab")}</TabsTrigger>
 						<TabsTrigger value="stopwords">{t("search.stopwords.tab")}</TabsTrigger>
 						<TabsTrigger value="stemming">{t("search.stemming.tab")}</TabsTrigger>
-						<TabsTrigger value="spellCorrection">{t("search.spellCorrection.tab")}</TabsTrigger>
+						<TabsTrigger value="spellCorrection">
+							{t("search.spellCorrection.tab")}
+						</TabsTrigger>
 						<TabsTrigger value="ranking">{t("search.ranking.tab")}</TabsTrigger>
-						<TabsTrigger value="analyticsRules">{t("search.analyticsRules.tab")}</TabsTrigger>
-						<TabsTrigger value="nohitsQueries">{t("search.nohitsQueries.tab")}</TabsTrigger>
+						<TabsTrigger value="analyticsRules">
+							{t("search.analyticsRules.tab")}
+						</TabsTrigger>
+						<TabsTrigger value="nohitsQueries">
+							{t("search.nohitsQueries.tab")}
+						</TabsTrigger>
 					</TabsList>
 
 					<TabsContent value="synonyms">

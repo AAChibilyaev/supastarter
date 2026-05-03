@@ -93,7 +93,10 @@ export const SimpleFormIterator = (props: SimpleFormIteratorProps) => {
 			<div className={cn("w-full", disabled && "disabled", className)}>
 				<ul className="p-0 m-0 gap-2 flex flex-col">
 					{fields.map((member, index) => (
-						<RecordContextProvider key={member.id} value={(records && records[index]) || {}}>
+						<RecordContextProvider
+							key={member.id}
+							value={(records && records[index]) || {}}
+						>
 							<SimpleFormIteratorItem
 								disabled={disabled}
 								disableRemove={disableRemove}
@@ -210,7 +213,10 @@ export const SimpleFormIteratorItem = React.forwardRef(
 						<p className="text-sm mb-2 text-muted-foreground">{label}</p>
 					)}
 					<div
-						className={cn("gap-2 flex flex-1", inline ? "sm:flex-row gap-2 flex-col" : "flex-col")}
+						className={cn(
+							"gap-2 flex flex-1",
+							inline ? "sm:flex-row gap-2 flex-col" : "flex-col",
+						)}
 					>
 						{children}
 					</div>
@@ -412,7 +418,11 @@ export const RemoveItemButton = (props: React.ComponentProps<"button">) => {
 						variant="ghost"
 						size="icon"
 						onClick={() => remove()}
-						className={cn("button-remove", `button-remove-${source}-${index}`, className)}
+						className={cn(
+							"button-remove",
+							`button-remove-${source}-${index}`,
+							className,
+						)}
 						{...rest}
 					>
 						<XCircle className="h-5 w-5 text-red-500" />

@@ -99,7 +99,9 @@ export const LandingPricingPlan = ({
 					<p
 						className={cn(
 							"text-sm leading-6 w-full",
-							featured ? "text-gray-300 dark:text-gray-500" : "text-gray-600 dark:text-gray-400",
+							featured
+								? "text-gray-300 dark:text-gray-500"
+								: "text-gray-600 dark:text-gray-400",
 						)}
 					>
 						{description}
@@ -119,12 +121,16 @@ export const LandingPricingPlan = ({
 						{price}
 					</span>
 
-					<span className={cn(featured ? "text-white dark:text-black" : "")}>{discountPrice}</span>
+					<span className={cn(featured ? "text-white dark:text-black" : "")}>
+						{discountPrice}
+					</span>
 
 					{priceSuffix ? (
 						<span
 							className={cn(
-								featured ? "text-gray-300 dark:text-gray-500" : "dark:text-gray-400 text-gray-600",
+								featured
+									? "text-gray-300 dark:text-gray-500"
+									: "dark:text-gray-400 text-gray-600",
 								"text-sm font-semibold leading-6",
 							)}
 						>
@@ -153,7 +159,9 @@ export const LandingPricingPlan = ({
 				{Array.isArray(children) ? (
 					<ul
 						className={cn(
-							featured ? "text-gray-300 dark:text-gray-500" : "text-gray-700 dark:text-gray-400",
+							featured
+								? "text-gray-300 dark:text-gray-500"
+								: "text-gray-700 dark:text-gray-400",
 							"mt-8 space-y-3 text-sm leading-6 xl:mt-10",
 						)}
 					>

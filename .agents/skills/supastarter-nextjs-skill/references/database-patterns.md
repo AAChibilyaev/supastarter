@@ -97,7 +97,9 @@ import { protectedProcedure } from "../../../orpc/procedures";
 
 export const createFeedbackProcedure = protectedProcedure
 	.route({ method: "POST", path: "/feedback", tags: ["Feedback"], summary: "Create feedback" })
-	.input(z.object({ message: z.string().min(1).max(2000), organizationId: z.string().optional() }))
+	.input(
+		z.object({ message: z.string().min(1).max(2000), organizationId: z.string().optional() }),
+	)
 	.output(z.object({ id: z.string() }))
 	.handler(async ({ input, context }) => {
 		const row = await createFeedback({

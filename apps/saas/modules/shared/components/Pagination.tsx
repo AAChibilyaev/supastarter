@@ -31,8 +31,10 @@ const Pagination = ({
 				</Button>
 				<span className="text-sm text-muted-foreground">
 					{currentPage * itemsPerPage - itemsPerPage + 1} -{" "}
-					{currentPage * itemsPerPage > totalItems ? totalItems : currentPage * itemsPerPage} of{" "}
-					{totalItems}
+					{currentPage * itemsPerPage > totalItems
+						? totalItems
+						: currentPage * itemsPerPage}{" "}
+					of {totalItems}
 				</span>
 				<Button
 					variant="ghost"

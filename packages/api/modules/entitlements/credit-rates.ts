@@ -58,6 +58,9 @@ export const CREDIT_RATES = {
 	/** Audio transcription — per minute (5 credits / 500 kopecks per minute) */
 	audio_transcription: BigInt(500),
 
+	/** Image search with Vision API caption → embedding generation — per query (3 credits / 300 kopecks) */
+	image_search: BigInt(300),
+
 	/** Chat / file ingest / voice search generic cost — per operation (5 credits / 500 kopecks) */
 	chat: BigInt(500),
 

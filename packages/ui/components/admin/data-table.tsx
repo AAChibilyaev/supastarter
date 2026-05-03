@@ -104,7 +104,9 @@ export function DataTable<RecordType extends RaRecord = RaRecord>(
 			{bulkActionsToolbar ??
 				(bulkActionButtons !== false && (
 					<BulkActionsToolbar>
-						{isValidElement(bulkActionButtons) ? bulkActionButtons : defaultBulkActionButtons}
+						{isValidElement(bulkActionButtons)
+							? bulkActionButtons
+							: defaultBulkActionButtons}
 					</BulkActionsToolbar>
 				))}
 			<DataTableRenderContext.Provider value="columnsSelector">
@@ -127,7 +129,9 @@ const DataTableHead = ({ children }: { children: ReactNode }) => {
 		onSelect(
 			checked
 				? selectedIds.concat(
-						data.filter((record) => !selectedIds.includes(record.id)).map((record) => record.id),
+						data
+							.filter((record) => !selectedIds.includes(record.id))
+							.map((record) => record.id),
 					)
 				: // We should only unselect the ids present in the current page
 					selectedIds.filter((id) => !data.some((record) => record.id === id)),
@@ -371,7 +375,8 @@ const oppositeOrder: Record<SortPayload["order"], SortPayload["order"]> = {
 function DataTableCell<RecordType extends RaRecord<Identifier> = RaRecord<Identifier>>(
 	props: DataTableColumnProps<RecordType>,
 ) {
-	const { children, render, field, source, className, cellClassName, conditionalClassName } = props;
+	const { children, render, field, source, className, cellClassName, conditionalClassName } =
+		props;
 
 	const { storeKey, defaultHiddenColumns } = useDataTableStoreContext();
 	const [hiddenColumns] = useStore<string[]>(storeKey, defaultHiddenColumns);
@@ -386,7 +391,12 @@ function DataTableCell<RecordType extends RaRecord<Identifier> = RaRecord<Identi
 
 	return (
 		<TableCell
-			className={cn("py-1", className, cellClassName, record && conditionalClassName?.(record))}
+			className={cn(
+				"py-1",
+				className,
+				cellClassName,
+				record && conditionalClassName?.(record),
+			)}
 		>
 			{children ??
 				(render

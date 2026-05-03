@@ -67,7 +67,11 @@ export function OnboardingAddDocumentsStep({ indexSlug, onCompleted }: Props) {
 			</div>
 
 			<div className="gap-3 flex">
-				<Button onClick={handleImport} loading={importMutation.isPending} disabled={!raw.trim()}>
+				<Button
+					onClick={handleImport}
+					loading={importMutation.isPending}
+					disabled={!raw.trim()}
+				>
 					{t("onboarding.addDocuments.importButton")}
 					<ArrowRightIcon className="ml-2 size-4" />
 				</Button>

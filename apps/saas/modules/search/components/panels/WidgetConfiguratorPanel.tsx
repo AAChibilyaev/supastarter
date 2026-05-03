@@ -397,11 +397,17 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 									))}
 								</div>
 							) : (
-								<p className="text-sm text-foreground/50">{t("noSearchableFields")}</p>
+								<p className="text-sm text-foreground/50">
+									{t("noSearchableFields")}
+								</p>
 							)}
 						</div>
 
-						<Button onClick={handleSave} loading={saveMutation.isPending} className="w-full">
+						<Button
+							onClick={handleSave}
+							loading={saveMutation.isPending}
+							className="w-full"
+						>
 							{t("saveConfig")}
 						</Button>
 					</CardContent>
@@ -424,7 +430,11 @@ export function WidgetConfiguratorPanel({ organizationId }: WidgetConfiguratorPa
 										{
 											"--accent-color": accentColor,
 											backgroundColor:
-												theme === "dark" ? "#1a1a2e" : theme === "light" ? "#ffffff" : undefined,
+												theme === "dark"
+													? "#1a1a2e"
+													: theme === "light"
+														? "#ffffff"
+														: undefined,
 										} as React.CSSProperties
 									}
 								>

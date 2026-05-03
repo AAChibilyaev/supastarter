@@ -107,7 +107,11 @@ export function SynonymsPanel({ organizationId, slug }: SynonymsPanelProps) {
 					<Button variant="outline" onClick={handleAddRow}>
 						{t("search.synonyms.add")}
 					</Button>
-					<Button variant="primary" onClick={handleSave} loading={updateMutation.isPending}>
+					<Button
+						variant="primary"
+						onClick={handleSave}
+						loading={updateMutation.isPending}
+					>
 						{t("search.synonyms.save")}
 					</Button>
 				</div>
@@ -125,7 +129,9 @@ export function SynonymsPanel({ organizationId, slug }: SynonymsPanelProps) {
 						<TableRow>
 							<TableHead>{t("search.synonyms.synonymColumn")}</TableHead>
 							<TableHead>{t("search.synonyms.rootColumn")}</TableHead>
-							<TableHead className="w-20 text-right">{t("search.synonyms.tableActions")}</TableHead>
+							<TableHead className="w-20 text-right">
+								{t("search.synonyms.tableActions")}
+							</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -135,7 +141,9 @@ export function SynonymsPanel({ organizationId, slug }: SynonymsPanelProps) {
 									<input
 										type="text"
 										value={row.synonym}
-										onChange={(e) => handleChange(index, "synonym", e.target.value)}
+										onChange={(e) =>
+											handleChange(index, "synonym", e.target.value)
+										}
 										className="p-2.5 rounded text-sm w-full border bg-background"
 										placeholder="e.g. sneakers"
 									/>
@@ -144,13 +152,19 @@ export function SynonymsPanel({ organizationId, slug }: SynonymsPanelProps) {
 									<input
 										type="text"
 										value={row.root}
-										onChange={(e) => handleChange(index, "root", e.target.value)}
+										onChange={(e) =>
+											handleChange(index, "root", e.target.value)
+										}
 										className="p-2.5 rounded text-sm w-full border bg-background"
 										placeholder="e.g. shoes"
 									/>
 								</TableCell>
 								<TableCell className="text-right">
-									<Button variant="ghost" size="sm" onClick={() => handleRemoveRow(index)}>
+									<Button
+										variant="ghost"
+										size="sm"
+										onClick={() => handleRemoveRow(index)}
+									>
 										{t("search.synonyms.remove")}
 									</Button>
 								</TableCell>

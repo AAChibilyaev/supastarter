@@ -153,7 +153,9 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 		return (
 			<Card>
 				<CardContent className="py-12 flex flex-col items-center text-center">
-					<p className="text-sm text-muted-foreground">{t("widgetConfigurator.noIndexes")}</p>
+					<p className="text-sm text-muted-foreground">
+						{t("widgetConfigurator.noIndexes")}
+					</p>
 				</CardContent>
 			</Card>
 		);
@@ -214,8 +216,9 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 									{tConfig("facetSettingsTitle") ?? "Price Range Filter"}
 								</CardTitle>
 								<CardDescription>
-									Configure range sliders for numeric fields. Select a field above and set its type
-									to &quot;Range Slider&quot; to enable min/max and format options.
+									Configure range sliders for numeric fields. Select a field above
+									and set its type to &quot;Range Slider&quot; to enable min/max
+									and format options.
 								</CardDescription>
 							</CardHeader>
 							<CardContent>
@@ -226,8 +229,8 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 									</span>
 								</p>
 								<p className="mt-2 text-xs text-muted-foreground">
-									Tip: Set a facet's type to &quot;Range Slider&quot; above, then configure its min,
-									max, and display format.
+									Tip: Set a facet's type to &quot;Range Slider&quot; above, then
+									configure its min, max, and display format.
 								</p>
 							</CardContent>
 						</Card>
@@ -235,7 +238,11 @@ export function WidgetFiltersPanel({ organizationId }: WidgetFiltersPanelProps) 
 				</>
 			)}
 
-			<Button onClick={handleSave} loading={saveMutation.isPending} className="sm:w-auto w-full">
+			<Button
+				onClick={handleSave}
+				loading={saveMutation.isPending}
+				className="sm:w-auto w-full"
+			>
 				{tConfig("saveConfig")}
 			</Button>
 		</div>

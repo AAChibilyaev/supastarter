@@ -96,7 +96,9 @@ export function OverageStatusCard() {
 									limit: status.searchLimit.toLocaleString(),
 								})}
 							</span>
-							<span className="text-muted-foreground">{Math.round(status.percentUsed)}%</span>
+							<span className="text-muted-foreground">
+								{Math.round(status.percentUsed)}%
+							</span>
 						</div>
 						<Progress
 							value={Math.min(status.percentUsed, 100)}
@@ -124,7 +126,9 @@ export function OverageStatusCard() {
 					</div>
 				) : (
 					!status.isUnlimited && (
-						<p className="text-xs text-muted-foreground">{t("overageStatus.noOverage")}</p>
+						<p className="text-xs text-muted-foreground">
+							{t("overageStatus.noOverage")}
+						</p>
 					)
 				)}
 			</CardContent>

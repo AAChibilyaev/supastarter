@@ -2,6 +2,7 @@ import { getTypesenseClient } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -31,7 +32,7 @@ const sourceSchema = z.object({
  * Falls back to the manual OpenAI RAG approach when no conversationModelId is given.
  */
 export const conversationalSearch = protectedProcedure
-	.use(creditGate("conversational_search_llm", BigInt(500)))
+	.use(creditGate("rag_answer", CREDIT_RATES.rag_answer))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/conversational-search",
@@ -81,7 +82,6 @@ export const conversationalSearch = protectedProcedure
 		const { creditReservationId } = rest as unknown as CreditGateContext;
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
-		const { creditReservationId } = context as unknown as CreditGateContext;
 
 		const client = getTypesenseClient();
 		const searchStartTime = Date.now();
@@ -123,7 +123,9 @@ export const conversationalSearch = protectedProcedure
 
 			// Extract or generate a conversation_id from the response
 			const responseConversationId =
-				(results.conversation_id as string | undefined) ?? input.conversationId ?? undefined;
+				(results.conversation_id as string | undefined) ??
+				input.conversationId ??
+				undefined;
 
 			// Commit flat-fee usage on success (Typesense native RAG)
 			await commitFlatFeeUsage({
@@ -138,7 +140,9 @@ export const conversationalSearch = protectedProcedure
 				answer,
 				sources: hits.map((hit: any) => ({
 					document: hit.document as Record<string, unknown>,
-					textMatch: (hit.text_match_info?.snippet ?? hit.highlight?.snippet) as string | undefined,
+					textMatch: (hit.text_match_info?.snippet ?? hit.highlight?.snippet) as
+						| string
+						| undefined,
 				})),
 				found: results.found ?? 0,
 				searchTimeMs,
@@ -201,11 +205,16 @@ export const conversationalSearch = protectedProcedure
 				temperature: 0.3,
 			});
 			answer = completion.choices[0]?.message?.content ?? "Unable to generate an answer.";
-			await commitFlatFeeUsage(context, creditReservationId, BigInt(500));
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "rag_answer",
+				provider: "openai",
+				model: input.model,
+				flatFeeKopecks: CREDIT_RATES.rag_answer,
+			});
 		} catch {
 			await releaseCreditReservation(creditReservationId, "error");
 			answer = "Conversational search is unavailable at this moment.";
-			await releaseCreditReservation(context, creditReservationId);
 		}
 
 		const searchTimeMs = Date.now() - searchStartTime;

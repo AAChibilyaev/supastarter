@@ -170,7 +170,8 @@ export const crossSearch = protectedProcedure
 				});
 
 				const results =
-					(response as unknown as { results: Array<Record<string, unknown>> }).results ?? [];
+					(response as unknown as { results: Array<Record<string, unknown>> }).results ??
+					[];
 
 				let totalFound = 0;
 				const mergedHits: Record<string, unknown>[] = [];
@@ -180,18 +181,23 @@ export const crossSearch = protectedProcedure
 					totalFound += (result.found as number) ?? 0;
 					const hits = (result.hits as Array<Record<string, unknown>>) ?? [];
 					mergedHits.push(...hits);
-					maxSearchTimeMs = Math.max(maxSearchTimeMs, (result.search_time_ms as number) ?? 0);
+					maxSearchTimeMs = Math.max(
+						maxSearchTimeMs,
+						(result.search_time_ms as number) ?? 0,
+					);
 				}
 
 				// Sort by hybrid score descending
 				mergedHits.sort((a, b) => {
 					const aScore =
 						(a._hybrid_score as number) ??
-						((a.text_match_info as Record<string, unknown> | undefined)?.score as number) ??
+						((a.text_match_info as Record<string, unknown> | undefined)
+							?.score as number) ??
 						0;
 					const bScore =
 						(b._hybrid_score as number) ??
-						((b.text_match_info as Record<string, unknown> | undefined)?.score as number) ??
+						((b.text_match_info as Record<string, unknown> | undefined)
+							?.score as number) ??
 						0;
 					return (bScore as number) - (aScore as number);
 				});

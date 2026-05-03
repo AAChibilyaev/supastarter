@@ -36,7 +36,9 @@ export const FieldToggle = (props: FieldToggleProps) => {
 		}
 		const elementAtDragCoordinates = document.elementFromPoint(x.current, y.current);
 		let dropItem =
-			elementAtDragCoordinates === null ? selectedItem : elementAtDragCoordinates.closest("li");
+			elementAtDragCoordinates === null
+				? selectedItem
+				: elementAtDragCoordinates.closest("li");
 
 		if (!dropItem) {
 			return;
@@ -51,7 +53,11 @@ export const FieldToggle = (props: FieldToggleProps) => {
 			return;
 		}
 		const dropItemParent = dropItem.parentNode;
-		if (list && dropItemParent instanceof HTMLElement && list === dropItemParent.closest("ul")) {
+		if (
+			list &&
+			dropItemParent instanceof HTMLElement &&
+			list === dropItemParent.closest("ul")
+		) {
 			const dataIndex = dropItem.dataset.index;
 			if (dataIndex) {
 				dropIndex.current = parseInt(dataIndex, 10);
@@ -128,7 +134,9 @@ export const FieldToggle = (props: FieldToggleProps) => {
 					<FieldTitle label={label} source={source} resource={resource} />
 				</span>
 			</label>
-			{onMove && <GripVertical className="dragIcon w-4 h-4 cursor-move text-muted-foreground" />}
+			{onMove && (
+				<GripVertical className="dragIcon w-4 h-4 cursor-move text-muted-foreground" />
+			)}
 		</li>
 	);
 };

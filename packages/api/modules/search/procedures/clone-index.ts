@@ -1,7 +1,12 @@
 import { ORPCError } from "@orpc/client";
 import { createSearchIndexByOwner, getSearchIndexByOwnerSlug } from "@repo/database";
 import { logger } from "@repo/logs";
-import { aliasName, cloneCollection, getTypesenseClient, physicalCollectionName } from "@repo/search";
+import {
+	aliasName,
+	cloneCollection,
+	getTypesenseClient,
+	physicalCollectionName,
+} from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";

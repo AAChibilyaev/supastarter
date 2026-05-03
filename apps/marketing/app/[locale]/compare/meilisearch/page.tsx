@@ -11,18 +11,15 @@ import { CompareMeilisearchGrid } from "../../../../modules/compare/components/C
 const FAQ_ITEMS = [
 	{
 		question: "Why switch from Meilisearch to AACsearch?",
-		answer:
-			"AACsearch offers native multi-tenancy, scoped API tokens, simpler flat pricing, and zero vendor lock-in with full Typesense data export.",
+		answer: "AACsearch offers native multi-tenancy, scoped API tokens, simpler flat pricing, and zero vendor lock-in with full Typesense data export.",
 	},
 	{
 		question: "How does AACsearch pricing compare to Meilisearch?",
-		answer:
-			"AACsearch uses flat per-index pricing with unlimited search operations — no per-record or per-query charges. Meilisearch pricing info would go here.",
+		answer: "AACsearch uses flat per-index pricing with unlimited search operations — no per-record or per-query charges. Meilisearch pricing info would go here.",
 	},
 	{
 		question: "Is migration from Meilisearch to AACsearch difficult?",
-		answer:
-			"Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes.",
+		answer: "Migration is straightforward — AACsearch provides full Typesense data export, and the Typesense-compatible API means minimal code changes.",
 	},
 ];
 

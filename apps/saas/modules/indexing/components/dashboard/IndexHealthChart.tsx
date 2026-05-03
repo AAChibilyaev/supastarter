@@ -56,7 +56,9 @@ export function IndexHealthChart({ data, isLoading }: IndexHealthChartProps) {
 			<CardHeader>
 				<CardTitle className="gap-2 text-base flex items-center">
 					{t("indexHealth")}
-					<span className="font-normal text-xs text-muted-foreground">{t("last7Days")}</span>
+					<span className="font-normal text-xs text-muted-foreground">
+						{t("last7Days")}
+					</span>
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
@@ -64,7 +66,11 @@ export function IndexHealthChart({ data, isLoading }: IndexHealthChartProps) {
 					<ResponsiveContainer width="100%" height="100%">
 						<BarChart data={data} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
 							<CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-							<XAxis dataKey="date" tick={{ fontSize: 12 }} className="text-muted-foreground" />
+							<XAxis
+								dataKey="date"
+								tick={{ fontSize: 12 }}
+								className="text-muted-foreground"
+							/>
 							<YAxis tick={{ fontSize: 12 }} className="text-muted-foreground" />
 							<Tooltip />
 							<Bar

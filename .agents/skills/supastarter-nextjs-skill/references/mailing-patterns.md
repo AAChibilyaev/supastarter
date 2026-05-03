@@ -61,22 +61,22 @@ The `template` key matches a file in `packages/mail/emails/<template>.tsx`. The 
 
 1. Create `packages/mail/emails/<name>.tsx`:
 
-   ```tsx
-   import { Html, Body, Container, Heading, Text } from "@react-email/components";
+    ```tsx
+    import { Html, Body, Container, Heading, Text } from "@react-email/components";
 
-   export default function MyEmail({ name }: { name: string }) {
-   	return (
-   		<Html>
-   			<Body>
-   				<Container>
-   					<Heading>Hi {name}</Heading>
-   					<Text>...</Text>
-   				</Container>
-   			</Body>
-   		</Html>
-   	);
-   }
-   ```
+    export default function MyEmail({ name }: { name: string }) {
+    	return (
+    		<Html>
+    			<Body>
+    				<Container>
+    					<Heading>Hi {name}</Heading>
+    					<Text>...</Text>
+    				</Container>
+    			</Body>
+    		</Html>
+    	);
+    }
+    ```
 
 2. Add i18n strings in `packages/i18n/translations/<locale>/mail.json` if needed.
 3. Send via `sendMail({ template: "<name>", data: {...} })`.

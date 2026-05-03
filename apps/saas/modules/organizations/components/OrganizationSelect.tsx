@@ -88,11 +88,12 @@ export function OrganzationSelect({
 								<span className="text-sm font-semibold truncate text-foreground">
 									{activeOrganization.name}
 								</span>
-								{paymentsConfig.billingAttachedTo === "organization" && orgActivePlan && (
-									<span className="text-xs font-medium truncate text-primary">
-										{getPlanTitle(orgActivePlan.id)}
-									</span>
-								)}
+								{paymentsConfig.billingAttachedTo === "organization" &&
+									orgActivePlan && (
+										<span className="text-xs font-medium truncate text-primary">
+											{getPlanTitle(orgActivePlan.id)}
+										</span>
+									)}
 							</div>
 						)}
 					</>

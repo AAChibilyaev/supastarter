@@ -69,7 +69,9 @@ export function PricingRateCard() {
 										{fmt(rule.embeddingPer1MTokensKopecks)}
 									</TableCell>
 									<TableCell className="text-xs text-right tabular-nums">
-										{BigInt(rule.flatFeeKopecks) > 0n ? fmt(rule.flatFeeKopecks) : "—"}
+										{BigInt(rule.flatFeeKopecks) > 0n
+											? fmt(rule.flatFeeKopecks)
+											: "—"}
 									</TableCell>
 								</TableRow>
 							))}

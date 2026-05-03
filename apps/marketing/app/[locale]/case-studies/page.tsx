@@ -5,7 +5,13 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateStaticParams() {
-	return [{ locale: "en" }, { locale: "de" }, { locale: "es" }, { locale: "fr" }, { locale: "ru" }];
+	return [
+		{ locale: "en" },
+		{ locale: "de" },
+		{ locale: "es" },
+		{ locale: "fr" },
+		{ locale: "ru" },
+	];
 }
 
 export async function generateMetadata(props: {

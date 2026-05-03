@@ -50,7 +50,10 @@ export function AppSidebar() {
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>
-						<SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+						<SidebarMenuButton
+							asChild
+							className="data-[slot=sidebar-menu-button]:!p-1.5"
+						>
 							<Link to="/">
 								<Shell className="!size-5" />
 								<span className="text-base font-semibold">Acme Inc.</span>
@@ -67,7 +70,11 @@ export function AppSidebar() {
 							{Object.keys(resources)
 								.filter((name) => resources[name].hasList)
 								.map((name) => (
-									<ResourceMenuItem key={name} name={name} onClick={handleClick} />
+									<ResourceMenuItem
+										key={name}
+										name={name}
+										onClick={handleClick}
+									/>
 								))}
 						</SidebarMenu>
 					</SidebarGroupContent>

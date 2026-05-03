@@ -143,7 +143,9 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 	};
 
 	const setWeight = (fieldName: string, weight: number) => {
-		setFieldWeights((prev) => prev.map((fw) => (fw.name === fieldName ? { ...fw, weight } : fw)));
+		setFieldWeights((prev) =>
+			prev.map((fw) => (fw.name === fieldName ? { ...fw, weight } : fw)),
+		);
 		setChanged(true);
 	};
 
@@ -190,7 +192,9 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 			<div className="space-y-3">
 				<div>
 					<h4 className="text-sm font-medium">{t("rankingRules.fieldWeights")}</h4>
-					<p className="text-xs text-muted-foreground">{t("rankingRules.fieldWeightsHint")}</p>
+					<p className="text-xs text-muted-foreground">
+						{t("rankingRules.fieldWeightsHint")}
+					</p>
 				</div>
 
 				{fieldWeights.length === 0 ? (
@@ -207,7 +211,9 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 									<TableRow>
 										<TableHead className="w-8" />
 										<TableHead>{t("rankingRules.fieldColumn")}</TableHead>
-										<TableHead className="w-24">{t("rankingRules.weightColumn")}</TableHead>
+										<TableHead className="w-24">
+											{t("rankingRules.weightColumn")}
+										</TableHead>
 									</TableRow>
 								</TableHeader>
 								<TableBody>
@@ -216,14 +222,18 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 											<TableCell className="text-muted-foreground">
 												<GripVertical className="size-4" />
 											</TableCell>
-											<TableCell className="font-mono text-xs">{fw.name}</TableCell>
+											<TableCell className="font-mono text-xs">
+												{fw.name}
+											</TableCell>
 											<TableCell>
 												<Input
 													type="number"
 													min={1}
 													max={100}
 													value={fw.weight}
-													onChange={(e) => setWeight(fw.name, Number(e.target.value))}
+													onChange={(e) =>
+														setWeight(fw.name, Number(e.target.value))
+													}
 													className="h-7 w-20 text-xs"
 												/>
 											</TableCell>
@@ -240,7 +250,9 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 			<div className="space-y-4">
 				<div>
 					<h4 className="text-sm font-medium">{t("rankingRules.generalSettings")}</h4>
-					<p className="text-xs text-muted-foreground">{t("rankingRules.generalSettingsHint")}</p>
+					<p className="text-xs text-muted-foreground">
+						{t("rankingRules.generalSettingsHint")}
+					</p>
 				</div>
 
 				<div className="gap-4 md:grid-cols-2 grid">
@@ -296,7 +308,9 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 
 					{/* Infix search */}
 					<div className="space-y-1.5">
-						<Label className="text-xs text-muted-foreground">{t("rankingRules.infixSearch")}</Label>
+						<Label className="text-xs text-muted-foreground">
+							{t("rankingRules.infixSearch")}
+						</Label>
 						<Select
 							value={infixSearch}
 							onValueChange={(v: "off" | "fallback" | "always") => {
@@ -309,8 +323,12 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 							</SelectTrigger>
 							<SelectContent>
 								<SelectItem value="off">{t("rankingRules.infixOff")}</SelectItem>
-								<SelectItem value="fallback">{t("rankingRules.infixFallback")}</SelectItem>
-								<SelectItem value="always">{t("rankingRules.infixAlways")}</SelectItem>
+								<SelectItem value="fallback">
+									{t("rankingRules.infixFallback")}
+								</SelectItem>
+								<SelectItem value="always">
+									{t("rankingRules.infixAlways")}
+								</SelectItem>
 							</SelectContent>
 						</Select>
 					</div>
@@ -352,7 +370,9 @@ export function RankingRulesPanel({ organizationId, slug }: RankingRulesPanelPro
 				<div className="sm:flex-row sm:items-center sm:justify-between gap-2 flex flex-col">
 					<div>
 						<h4 className="text-sm font-medium">{t("rankingRules.customRules")}</h4>
-						<p className="text-xs text-muted-foreground">{t("rankingRules.customRulesHint")}</p>
+						<p className="text-xs text-muted-foreground">
+							{t("rankingRules.customRulesHint")}
+						</p>
 					</div>
 					<Button variant="outline" size="sm" onClick={addCustomRule}>
 						<PlusIcon className="size-3.5 mr-1" />

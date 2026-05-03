@@ -50,7 +50,11 @@ export default async function FeaturesConnectorsPage(props: {
 				</div>
 			</section>
 			<ConnectorsGrid />
-			<CodeExampleSection namespace="featuresConnectors" code={CONNECTORS_CODE} language="bash" />
+			<CodeExampleSection
+				namespace="featuresConnectors"
+				code={CONNECTORS_CODE}
+				language="bash"
+			/>
 			<SoftwareApplicationSchema locale={locale} />
 			<CtaFooter />
 		</>

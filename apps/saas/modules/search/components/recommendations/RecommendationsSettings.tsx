@@ -126,7 +126,9 @@ export function RecommendationsSettings({ organizationId }: RecommendationsSetti
 					</div>
 					<Badge
 						status={
-							form.sourceEvents.length > 0 && form.minEventsPerUser <= 50 ? "success" : "warning"
+							form.sourceEvents.length > 0 && form.minEventsPerUser <= 50
+								? "success"
+								: "warning"
 						}
 					>
 						{form.sourceEvents.length > 0
@@ -144,10 +146,15 @@ export function RecommendationsSettings({ organizationId }: RecommendationsSetti
 					</p>
 					<div className="gap-3 flex flex-wrap">
 						{(["click", "purchase", "view"] as const).map((event) => (
-							<Label key={event} className="gap-2 text-sm flex cursor-pointer items-center">
+							<Label
+								key={event}
+								className="gap-2 text-sm flex cursor-pointer items-center"
+							>
 								<Checkbox
 									checked={form.sourceEvents.includes(event)}
-									onCheckedChange={(checked) => handleToggleEvent(event, checked === true)}
+									onCheckedChange={(checked) =>
+										handleToggleEvent(event, checked === true)
+									}
 								/>
 								{tr(
 									`recommendations.settings.source${event.charAt(0).toUpperCase() + event.slice(1)}`,
@@ -181,7 +188,9 @@ export function RecommendationsSettings({ organizationId }: RecommendationsSetti
 				<div className="space-y-3">
 					<div className="gap-2 flex items-center justify-between">
 						<Label>{tr("recommendations.settings.minEventsPerUser")}</Label>
-						<span className="text-sm font-mono text-muted-foreground">{form.minEventsPerUser}</span>
+						<span className="text-sm font-mono text-muted-foreground">
+							{form.minEventsPerUser}
+						</span>
 					</div>
 					<p className="text-sm text-muted-foreground">
 						{tr("recommendations.settings.minEventsPerUserHint")}

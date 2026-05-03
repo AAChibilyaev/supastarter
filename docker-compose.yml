@@ -2,110 +2,110 @@
 # Provides PostgreSQL database, MinIO S3-compatible storage, and Typesense search
 
 networks:
-  default:
-    enable_ipv6: true
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
-        - subnet: fd00:dead:beef:20::/56
+    default:
+        enable_ipv6: true
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+                - subnet: fd00:dead:beef:20::/56
 
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: supastarter-postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: supastarter
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    postgres:
+        image: postgres:16-alpine
+        container_name: supastarter-postgres
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: supastarter
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
-  minio:
-    image: minio/minio:latest
-    container_name: supastarter-minio
-    restart: unless-stopped
-    command: server /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    ports:
-      - "9000:9000" # S3 API
-      - "9001:9001" # MinIO Console
-    volumes:
-      - minio_data:/data
-    healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    minio:
+        image: minio/minio:latest
+        container_name: supastarter-minio
+        restart: unless-stopped
+        command: server /data --console-address ":9001"
+        environment:
+            MINIO_ROOT_USER: minioadmin
+            MINIO_ROOT_PASSWORD: minioadmin
+        ports:
+            - "9000:9000" # S3 API
+            - "9001:9001" # MinIO Console
+        volumes:
+            - minio_data:/data
+        healthcheck:
+            test: ["CMD", "mc", "ready", "local"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
-  # Creates the default bucket on startup
-  minio-setup:
-    image: minio/mc:latest
-    container_name: supastarter-minio-setup
-    depends_on:
-      minio:
-        condition: service_healthy
-    entrypoint: >
-      /bin/sh -c "
-      mc alias set local http://minio:9000 minioadmin minioadmin;
-      mc mb local/avatars --ignore-existing;
-      mc anonymous set download local/avatars;
-      echo 'Bucket setup complete';
-      exit 0;
-      "
+    # Creates the default bucket on startup
+    minio-setup:
+        image: minio/mc:latest
+        container_name: supastarter-minio-setup
+        depends_on:
+            minio:
+                condition: service_healthy
+        entrypoint: >
+            /bin/sh -c "
+            mc alias set local http://minio:9000 minioadmin minioadmin;
+            mc mb local/avatars --ignore-existing;
+            mc anonymous set download local/avatars;
+            echo 'Bucket setup complete';
+            exit 0;
+            "
 
-  typesense:
-    image: typesense/typesense:30.2
-    container_name: supastarter-typesense
-    restart: unless-stopped
-    command: >
-      --data-dir /data
-      --api-key=xyz_change_me_in_production
-      --enable-cors
-    environment:
-      TYPESENSE_DATA_DIR: /data
-    ports:
-      - "8108:8108"
-    volumes:
-      - typesense_data:/data
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:8108/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    typesense:
+        image: typesense/typesense:30.2
+        container_name: supastarter-typesense
+        restart: unless-stopped
+        command: >
+            --data-dir /data
+            --api-key=xyz_change_me_in_production
+            --enable-cors
+        environment:
+            TYPESENSE_DATA_DIR: /data
+        ports:
+            - "8108:8108"
+        volumes:
+            - typesense_data:/data
+        healthcheck:
+            test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:8108/health"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
-  neo4j:
-    image: neo4j:5-enterprise
-    container_name: supastarter-neo4j
-    restart: unless-stopped
-    environment:
-      NEO4J_AUTH: neo4j/changeme_in_production
-      NEO4J_ACCEPT_LICENSE_AGREEMENT: "yes"
-      NEO4J_PLUGINS: '["apoc", "graph-data-science"]'
-    ports:
-      - "7687:7687" # Bolt protocol
-      - "7474:7474" # HTTP browser
-    volumes:
-      - neo4j_data:/data
-      - neo4j_logs:/logs
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:7474"]
-      interval: 15s
-      timeout: 10s
-      retries: 5
+    neo4j:
+        image: neo4j:5-enterprise
+        container_name: supastarter-neo4j
+        restart: unless-stopped
+        environment:
+            NEO4J_AUTH: neo4j/changeme_in_production
+            NEO4J_ACCEPT_LICENSE_AGREEMENT: "yes"
+            NEO4J_PLUGINS: '["apoc", "graph-data-science"]'
+        ports:
+            - "7687:7687" # Bolt protocol
+            - "7474:7474" # HTTP browser
+        volumes:
+            - neo4j_data:/data
+            - neo4j_logs:/logs
+        healthcheck:
+            test: ["CMD", "wget", "--quiet", "--spider", "http://localhost:7474"]
+            interval: 15s
+            timeout: 10s
+            retries: 5
 
 volumes:
-  postgres_data:
-  minio_data:
-  typesense_data:
-  neo4j_data:
-  neo4j_logs:
+    postgres_data:
+    minio_data:
+    typesense_data:
+    neo4j_data:
+    neo4j_logs:

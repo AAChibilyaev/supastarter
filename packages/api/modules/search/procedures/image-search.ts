@@ -3,6 +3,7 @@ import { getTypesenseClient, generateEmbedding, formatVectorQuery } from "@repo/
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -18,7 +19,7 @@ const hitSchema = z.object({
 });
 
 export const imageSearch = protectedProcedure
-	.use(creditGate("image_search", BigInt(300)))
+	.use(creditGate("image_search", CREDIT_RATES.image_search))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/image-search",
@@ -122,10 +123,10 @@ export const imageSearch = protectedProcedure
 			// Commit flat-fee usage on success
 			await commitFlatFeeUsage({
 				reservationId: creditReservationId,
-				operation: "embedding",
+				operation: "image_search",
 				provider: "openai",
 				model: input.visionModel,
-				flatFeeKopecks: BigInt(300),
+				flatFeeKopecks: CREDIT_RATES.image_search,
 			});
 
 			return {
@@ -143,6 +144,7 @@ export const imageSearch = protectedProcedure
 				},
 			};
 		} catch (err) {
+			await releaseCreditReservation(creditReservationId);
 			throw err;
 		}
 	});

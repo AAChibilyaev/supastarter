@@ -257,7 +257,10 @@ export class WeightedTrie {
 			const children = data.c as Record<string, unknown>;
 			if (children) {
 				for (const [char, childData] of Object.entries(children)) {
-					node.children.set(char, deserialize(childData as Record<string, unknown>, depth + 1));
+					node.children.set(
+						char,
+						deserialize(childData as Record<string, unknown>, depth + 1),
+					);
 				}
 			}
 			return node;

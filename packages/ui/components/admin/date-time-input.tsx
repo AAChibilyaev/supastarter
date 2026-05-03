@@ -158,7 +158,12 @@ export const DateTimeInput = ({
 		<FormField id={id} className={className} name={field.name}>
 			{label !== false && (
 				<FormLabel>
-					<FieldTitle label={label} source={source} resource={resource} isRequired={isRequired} />
+					<FieldTitle
+						label={label}
+						source={source}
+						resource={resource}
+						isRequired={isRequired}
+					/>
 				</FormLabel>
 			)}
 			<FormControl>

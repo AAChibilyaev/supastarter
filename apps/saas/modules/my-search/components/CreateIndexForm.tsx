@@ -101,12 +101,17 @@ export function CreateIndexForm({ onSuccess: _onSuccess, onCancel }: CreateIndex
 					id="index-slug"
 					placeholder={t("indexSlugPlaceholder")}
 					value={slug}
-					onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+					onChange={(e) =>
+						setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))
+					}
 				/>
 			</div>
 
 			{/* Drop Zone */}
-			<DropZone onFilesSelected={addFiles} disabled={!indexId && !createIndexMutation.isPending} />
+			<DropZone
+				onFilesSelected={addFiles}
+				disabled={!indexId && !createIndexMutation.isPending}
+			/>
 
 			{/* URL Input */}
 			<UrlInput onUrlAdd={addUrl} disabled={!indexId && !createIndexMutation.isPending} />

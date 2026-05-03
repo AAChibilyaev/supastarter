@@ -250,18 +250,22 @@ export function ExportDialog({
 								<SelectItem value="all">{t("search.export.scopeAll")}</SelectItem>
 								{selectedCount > 0 && (
 									<SelectItem value="selected">
-										{t("search.export.scopeSelected")} ({selectedCount} {t("search.export.rows")})
+										{t("search.export.scopeSelected")} ({selectedCount}{" "}
+										{t("search.export.rows")})
 									</SelectItem>
 								)}
 								{hasFilter && (
-									<SelectItem value="filtered">{t("search.export.scopeFiltered")}</SelectItem>
+									<SelectItem value="filtered">
+										{t("search.export.scopeFiltered")}
+									</SelectItem>
 								)}
 							</SelectContent>
 						</Select>
 						<p className="text-xs text-muted-foreground">
 							{scope === "all" && t("search.export.scopeAllDesc")}
 							{scope === "filtered" && t("search.export.scopeFilteredDesc")}
-							{scope === "selected" && t("search.export.scopeSelected") + ` (${selectedCount})`}
+							{scope === "selected" &&
+								t("search.export.scopeSelected") + ` (${selectedCount})`}
 							{" — "}
 							{formatFileSize(estimatedRows * 1024 * 2)}
 						</p>

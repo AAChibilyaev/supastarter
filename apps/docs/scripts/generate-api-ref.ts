@@ -20,7 +20,9 @@ async function main(): Promise<void> {
 	const outputDir = path.resolve(process.cwd(), "content/docs/en/api-reference");
 
 	// Import and execute the v1 OpenAPI spec generator
-	const { generateOpenApiSpec } = await import(path.join(REPO_ROOT, "packages/api/v1/openapi.ts"));
+	const { generateOpenApiSpec } = await import(
+		path.join(REPO_ROOT, "packages/api/v1/openapi.ts")
+	);
 
 	const spec = generateOpenApiSpec();
 

@@ -193,8 +193,8 @@ ${children.map((child) => `            ${child.getRepresentation()}`).join("\n")
                <ArrayField source="${props.source}">
                     <SingleFieldList>
                         <BadgeField source="${
-													children.length > 0 && children[0].getProps().source
-												}" />
+							children.length > 0 && children[0].getProps().source
+						}" />
                    </SingleFieldList>
                 </ArrayField>
             </DataTable.Col>`,

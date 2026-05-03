@@ -97,7 +97,9 @@ export const updateGlobalCurations = protectedProcedure
 			// Retrieve existing global curation sets
 			const existing = await typesenseFetch<CurationSetList>("GET", "/curation_sets");
 			const existingIds = new Set(
-				(existing.curation_sets ?? []).filter((s) => s.id.startsWith(prefix)).map((s) => s.id),
+				(existing.curation_sets ?? [])
+					.filter((s) => s.id.startsWith(prefix))
+					.map((s) => s.id),
 			);
 
 			const newIds = new Set<string>();

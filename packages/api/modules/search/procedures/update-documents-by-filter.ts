@@ -21,7 +21,10 @@ export const updateDocumentsByFilterProcedure = protectedProcedure
 			slug: searchIndexSlugSchema,
 			filterBy: z
 				.string()
-				.min(1, "Filter expression cannot be empty — prevents accidental full-collection update"),
+				.min(
+					1,
+					"Filter expression cannot be empty — prevents accidental full-collection update",
+				),
 			updates: z.record(z.string(), z.unknown()),
 		}),
 	)

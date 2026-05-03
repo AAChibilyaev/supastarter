@@ -378,7 +378,9 @@ export function KnowledgeWorkbench({
 					</CardHeader>
 					<CardContent className="space-y-3">
 						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-space-select">{t("search.knowledge.activeSpace")}</Label>
+							<Label htmlFor="knowledge-space-select">
+								{t("search.knowledge.activeSpace")}
+							</Label>
 							<Select
 								value={selectedSpaceSlug}
 								onValueChange={(value) => setSelectedSpaceSlug(value)}
@@ -396,7 +398,9 @@ export function KnowledgeWorkbench({
 							</Select>
 						</div>
 						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-space-slug">{t("search.knowledge.newSpaceSlug")}</Label>
+							<Label htmlFor="knowledge-space-slug">
+								{t("search.knowledge.newSpaceSlug")}
+							</Label>
 							<Input
 								id="knowledge-space-slug"
 								value={spaceSlug}
@@ -405,7 +409,9 @@ export function KnowledgeWorkbench({
 							/>
 						</div>
 						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-space-name">{t("search.knowledge.newSpaceName")}</Label>
+							<Label htmlFor="knowledge-space-name">
+								{t("search.knowledge.newSpaceName")}
+							</Label>
 							<Input
 								id="knowledge-space-name"
 								value={spaceName}
@@ -430,7 +436,9 @@ export function KnowledgeWorkbench({
 					</CardHeader>
 					<CardContent className="space-y-3">
 						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-source-name">{t("search.knowledge.sourceName")}</Label>
+							<Label htmlFor="knowledge-source-name">
+								{t("search.knowledge.sourceName")}
+							</Label>
 							<Input
 								id="knowledge-source-name"
 								value={sourceName}
@@ -439,7 +447,9 @@ export function KnowledgeWorkbench({
 							/>
 						</div>
 						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-source-type">{t("search.knowledge.sourceType")}</Label>
+							<Label htmlFor="knowledge-source-type">
+								{t("search.knowledge.sourceType")}
+							</Label>
 							<Select
 								value={sourceType}
 								onValueChange={(value) => setSourceType(value as SourceType)}
@@ -457,7 +467,9 @@ export function KnowledgeWorkbench({
 							</Select>
 						</div>
 						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-source-config">{t("search.knowledge.sourceConfig")}</Label>
+							<Label htmlFor="knowledge-source-config">
+								{t("search.knowledge.sourceConfig")}
+							</Label>
 							<Textarea
 								id="knowledge-source-config"
 								rows={4}
@@ -468,7 +480,9 @@ export function KnowledgeWorkbench({
 						<Button
 							type="button"
 							onClick={handleCreateSource}
-							disabled={createSourceMutation.isPending || !selectedSpaceSlug || !canManage}
+							disabled={
+								createSourceMutation.isPending || !selectedSpaceSlug || !canManage
+							}
 						>
 							{t("search.knowledge.addSource")}
 						</Button>
@@ -492,7 +506,9 @@ export function KnowledgeWorkbench({
 					</CardHeader>
 					<CardContent className="space-y-3">
 						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-file-input">{t("search.knowledge.fileInput")}</Label>
+							<Label htmlFor="knowledge-file-input">
+								{t("search.knowledge.fileInput")}
+							</Label>
 							<Input
 								id="knowledge-file-input"
 								type="file"
@@ -515,30 +531,44 @@ export function KnowledgeWorkbench({
 				<Card>
 					<CardHeader>
 						<CardTitle>{t("search.knowledge.jobsAndMetrics")}</CardTitle>
-						<CardDescription>{t("search.knowledge.jobsAndMetricsDesc")}</CardDescription>
+						<CardDescription>
+							{t("search.knowledge.jobsAndMetricsDesc")}
+						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-3">
 						{usageQuery.data ? (
 							<div className="text-sm gap-2 grid grid-cols-2">
 								<div className="rounded p-2 border">
-									<div className="text-muted-foreground">{t("search.knowledge.sourcesMetric")}</div>
-									<div className="text-lg font-semibold">{usageQuery.data.sourceCount}</div>
+									<div className="text-muted-foreground">
+										{t("search.knowledge.sourcesMetric")}
+									</div>
+									<div className="text-lg font-semibold">
+										{usageQuery.data.sourceCount}
+									</div>
 								</div>
 								<div className="rounded p-2 border">
 									<div className="text-muted-foreground">
 										{t("search.knowledge.documentsMetric")}
 									</div>
-									<div className="text-lg font-semibold">{usageQuery.data.documentCount}</div>
+									<div className="text-lg font-semibold">
+										{usageQuery.data.documentCount}
+									</div>
 								</div>
 								<div className="rounded p-2 border">
-									<div className="text-muted-foreground">{t("search.knowledge.chunksMetric")}</div>
-									<div className="text-lg font-semibold">{usageQuery.data.chunkCount}</div>
+									<div className="text-muted-foreground">
+										{t("search.knowledge.chunksMetric")}
+									</div>
+									<div className="text-lg font-semibold">
+										{usageQuery.data.chunkCount}
+									</div>
 								</div>
 								<div className="rounded p-2 border">
 									<div className="text-muted-foreground">
 										{t("search.knowledge.graphEdgesMetric")}
 									</div>
-									<div className="text-lg font-semibold">{usageQuery.data.graphEdgeCount}</div>
+									<div className="text-lg font-semibold">
+										{usageQuery.data.graphEdgeCount}
+									</div>
 								</div>
 							</div>
 						) : null}
@@ -566,7 +596,9 @@ export function KnowledgeWorkbench({
 					</CardHeader>
 					<CardContent className="space-y-3">
 						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-question">{t("search.knowledge.question")}</Label>
+							<Label htmlFor="knowledge-question">
+								{t("search.knowledge.question")}
+							</Label>
 							<Textarea
 								id="knowledge-question"
 								rows={3}
@@ -599,9 +631,13 @@ export function KnowledgeWorkbench({
 												[{citation.sourceIndex}]
 											</span>
 											<span>{t("search.knowledge.citedFrom")}:</span>
-											<span className="font-bold">{citation.documentTitle}</span>
+											<span className="font-bold">
+												{citation.documentTitle}
+											</span>
 										</div>
-										<div className="mt-1 text-muted-foreground">{citation.snippet}</div>
+										<div className="mt-1 text-muted-foreground">
+											{citation.snippet}
+										</div>
 									</div>
 								))}
 							</div>
@@ -616,7 +652,9 @@ export function KnowledgeWorkbench({
 					</CardHeader>
 					<CardContent className="space-y-3">
 						<div className="space-y-1.5">
-							<Label htmlFor="knowledge-graph-query">{t("search.knowledge.graphQueryLabel")}</Label>
+							<Label htmlFor="knowledge-graph-query">
+								{t("search.knowledge.graphQueryLabel")}
+							</Label>
 							<Input
 								id="knowledge-graph-query"
 								value={graphQuery}
@@ -634,21 +672,29 @@ export function KnowledgeWorkbench({
 						{graphResult ? (
 							<div className="space-y-2">
 								<div className="rounded p-2 text-xs border">
-									<div className="font-medium mb-1">{t("search.knowledge.seedNodes")}</div>
+									<div className="font-medium mb-1">
+										{t("search.knowledge.seedNodes")}
+									</div>
 									{graphResult.seedNodes.length === 0
 										? t("search.knowledge.noSeedNodes")
 										: graphResult.seedNodes
-												.map((node) => `${node.canonicalName} (${node.nodeType})`)
+												.map(
+													(node) =>
+														`${node.canonicalName} (${node.nodeType})`,
+												)
 												.join(", ")}
 								</div>
 								<div className="rounded p-2 text-xs border">
-									<div className="font-medium mb-1">{t("search.knowledge.edges")}</div>
+									<div className="font-medium mb-1">
+										{t("search.knowledge.edges")}
+									</div>
 									{graphResult.edges.length === 0
 										? t("search.knowledge.noEdges")
 										: graphResult.edges
 												.slice(0, 12)
 												.map(
-													(edge) => `${edge.relationType}: ${edge.fromNodeId} -> ${edge.toNodeId}`,
+													(edge) =>
+														`${edge.relationType}: ${edge.fromNodeId} -> ${edge.toNodeId}`,
 												)
 												.join("\n")}
 								</div>
@@ -669,7 +715,9 @@ export function KnowledgeWorkbench({
 			)}
 
 			{spacesQuery.isLoading ? (
-				<p className="text-sm text-muted-foreground">{t("search.knowledge.loadingSpaces")}</p>
+				<p className="text-sm text-muted-foreground">
+					{t("search.knowledge.loadingSpaces")}
+				</p>
 			) : null}
 			{selectedSpace ? (
 				<p className="text-xs text-muted-foreground">

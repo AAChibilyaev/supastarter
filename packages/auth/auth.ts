@@ -132,7 +132,10 @@ export const auth = betterAuth({
 			}
 		}),
 		before: createAuthMiddleware(async (ctx) => {
-			if (ctx.path.startsWith("/delete-user") || ctx.path.startsWith("/organization/delete")) {
+			if (
+				ctx.path.startsWith("/delete-user") ||
+				ctx.path.startsWith("/organization/delete")
+			) {
 				const userId = ctx.context.session?.session.userId;
 				const { organizationId } = ctx.body;
 
@@ -142,7 +145,8 @@ export const auth = betterAuth({
 						: // oxlint-disable-next-line typescript/no-non-null-assertion -- This is a valid case
 							await getPurchasesByUserId(userId!);
 					const subscriptions = purchases.filter(
-						(purchase) => purchase.type === "SUBSCRIPTION" && purchase.subscriptionId !== null,
+						(purchase) =>
+							purchase.type === "SUBSCRIPTION" && purchase.subscriptionId !== null,
 					);
 
 					if (subscriptions.length > 0) {

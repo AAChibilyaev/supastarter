@@ -32,17 +32,13 @@ function ReindexJobsTab({ organizationId }: { organizationId: string }) {
 	);
 
 	if (isLoading) {
-		return (
-			<div className="p-6 text-foreground/60">{t("loading")}</div>
-		);
+		return <div className="p-6 text-foreground/60">{t("loading")}</div>;
 	}
 
 	const activeJobs = pipeline?.activeReindexJobs ?? [];
 
 	if (activeJobs.length === 0) {
-		return (
-			<div className="p-6 text-foreground/60">{t("jobs.reindexEmpty")}</div>
-		);
+		return <div className="p-6 text-foreground/60">{t("jobs.reindexEmpty")}</div>;
 	}
 
 	return (
@@ -67,11 +63,13 @@ function ReindexJobsTab({ organizationId }: { organizationId: string }) {
 								</TableCell>
 								<TableCell className="text-xs">{job.slug}</TableCell>
 								<TableCell>
-									<div className="flex items-center gap-2">
+									<div className="gap-2 flex items-center">
 										<Badge status="info">
 											{job.processed}/{job.total}
 										</Badge>
-										<span className="text-xs text-muted-foreground">{pct}%</span>
+										<span className="text-xs text-muted-foreground">
+											{pct}%
+										</span>
 									</div>
 								</TableCell>
 								<TableCell className="text-xs whitespace-nowrap">
@@ -96,17 +94,10 @@ function SyncJobsTab({ organizationId }: { organizationId: string }) {
 	);
 
 	if (!isLoading && (!syncJobs || syncJobs.length === 0)) {
-		return (
-			<div className="p-6 text-foreground/60">{t("jobs.syncJobsEmpty")}</div>
-		);
+		return <div className="p-6 text-foreground/60">{t("jobs.syncJobsEmpty")}</div>;
 	}
 
-	return (
-		<SyncJobsTable
-			jobs={syncJobs ?? []}
-			isLoading={isLoading}
-		/>
-	);
+	return <SyncJobsTable jobs={syncJobs ?? []} isLoading={isLoading} />;
 }
 
 export function JobsDashboardPage({ organizationId }: JobsDashboardPageProps) {

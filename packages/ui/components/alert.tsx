@@ -31,7 +31,10 @@ const Alert = ({
 
 const AlertTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
 	// oxlint-disable-next-line jsx_a11y/heading-has-content
-	<h5 className={cn("font-semibold text-sm leading-tight tracking-tight", className)} {...props} />
+	<h5
+		className={cn("font-semibold text-sm leading-tight tracking-tight", className)}
+		{...props}
+	/>
 );
 
 const AlertDescription = ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (

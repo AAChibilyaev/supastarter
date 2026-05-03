@@ -12,13 +12,13 @@ Use Supabase as the **database + storage** provider for supastarter Next.js. Aut
 In the Supabase dashboard click **Connect** in the top row → **ORM** tab → **Prisma**. You'll need both:
 
 - **Transaction Pooler URL (DATABASE_URL)** — pooled via Supavisor; use at runtime
-  ```
-  postgres://postgres.<supabase-project>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres?pgbouncer=true
-  ```
+    ```
+    postgres://postgres.<supabase-project>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres?pgbouncer=true
+    ```
 - **Direct URL (DIRECT_URL)** — direct database connection; use for migrations
-  ```
-  postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/postgres
-  ```
+    ```
+    postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/postgres
+    ```
 
 Replace `<password>`, `<supabase-project>`, `<region>`, `<project-ref>` with your values.
 

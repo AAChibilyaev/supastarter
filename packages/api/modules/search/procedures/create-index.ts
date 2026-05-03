@@ -23,7 +23,9 @@ export const createIndex = protectedProcedure
 	.input(
 		z.object({
 			organizationId: z.string().optional(),
-			ownerType: z.enum([SEARCH_OWNER_TYPES.organization, SEARCH_OWNER_TYPES.user]).optional(),
+			ownerType: z
+				.enum([SEARCH_OWNER_TYPES.organization, SEARCH_OWNER_TYPES.user])
+				.optional(),
 			ownerId: z.string().optional(),
 			slug: searchIndexSlugSchema,
 			displayName: z.string().min(1).max(120),

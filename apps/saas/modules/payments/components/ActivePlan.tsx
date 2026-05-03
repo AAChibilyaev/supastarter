@@ -37,7 +37,9 @@ export function ActivePlan({ organizationId }: { organizationId?: string; seats?
 						<h4 className="font-bold text-lg text-primary">
 							<span>{activePlanData.title}</span>
 						</h4>
-						{activePlan.status && <SubscriptionStatusBadge status={activePlan.status} />}
+						{activePlan.status && (
+							<SubscriptionStatusBadge status={activePlan.status} />
+						)}
 					</div>
 
 					{!!activePlanData.features?.length && (

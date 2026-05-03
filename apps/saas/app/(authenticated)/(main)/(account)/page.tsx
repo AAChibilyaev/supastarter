@@ -30,7 +30,8 @@ export default async function AppStartPage() {
 	// If user has organizations, always redirect to the first one's overview
 	if (config.organizations.enable && organizations.length > 0) {
 		const org =
-			organizations.find((o) => o.id === session?.session.activeOrganizationId) ?? organizations[0];
+			organizations.find((o) => o.id === session?.session.activeOrganizationId) ??
+			organizations[0];
 		redirect(`/${org.slug}/overview`);
 	}
 
@@ -38,7 +39,10 @@ export default async function AppStartPage() {
 
 	return (
 		<div className="">
-			<PageHeader title={t("welcome", { name: session?.user.name })} subtitle={t("subtitle")} />
+			<PageHeader
+				title={t("welcome", { name: session?.user.name })}
+				subtitle={t("subtitle")}
+			/>
 
 			<div>
 				{config.organizations.enable && <OrganizationsGrid />}

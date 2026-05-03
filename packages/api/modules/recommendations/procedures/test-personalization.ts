@@ -58,7 +58,10 @@ export const testPersonalization = protectedProcedure
 		}),
 	)
 	.handler(
-		async ({ input: { organizationId, anonymousUserId, sessionId, limit }, context: { user } }) => {
+		async ({
+			input: { organizationId, anonymousUserId, sessionId, limit },
+			context: { user },
+		}) => {
 			await requireOrganizationAccess(organizationId, user.id);
 
 			try {
@@ -143,7 +146,12 @@ export const testPersonalization = protectedProcedure
 				personalized.sort((a, b) => b.score - a.score);
 
 				// Baseline: top trending products (non-personalized)
-				const baselineRecs = await getTrendingFromAnalytics(organizationId, undefined, 30, limit);
+				const baselineRecs = await getTrendingFromAnalytics(
+					organizationId,
+					undefined,
+					30,
+					limit,
+				);
 
 				const baseline = baselineRecs.map((rec) => ({
 					productId: rec.productId,

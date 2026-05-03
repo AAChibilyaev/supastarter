@@ -39,7 +39,9 @@ export const LandingFooter = ({
 		<footer
 			className={cn(
 				"mt-auto w-full bg-gradient-to-r",
-				withBackground && variant === "primary" ? "bg-primary-100/20 dark:bg-primary-900/10" : "",
+				withBackground && variant === "primary"
+					? "bg-primary-100/20 dark:bg-primary-900/10"
+					: "",
 				withBackground && variant === "secondary"
 					? "bg-secondary-100/20 dark:bg-secondary-900/10"
 					: "",

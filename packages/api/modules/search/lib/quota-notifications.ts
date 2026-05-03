@@ -85,7 +85,13 @@ export function triggerQuotaNotificationsAsync(
 	void Promise.resolve().then(async () => {
 		try {
 			const threshold = softCapThreshold ?? (await resolveSoftCapThreshold(orgId));
-			await triggerQuotaNotificationsImpl(orgId, indexId, percentUsed, periodStart, threshold);
+			await triggerQuotaNotificationsImpl(
+				orgId,
+				indexId,
+				percentUsed,
+				periodStart,
+				threshold,
+			);
 		} catch (error) {
 			logger.error("quota-notifications: unhandled error", {
 				error,

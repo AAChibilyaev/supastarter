@@ -57,7 +57,11 @@ export class SpellCorrector {
 	public correct(word: string, options?: CorrectionOptions): CorrectionResult[] {
 		const cfg: Required<CorrectionOptions> = {
 			maxDistance: options?.maxDistance ?? 2,
-			algorithms: options?.algorithms ?? ["levenshtein", "damerau-levenshtein", "jaro-winkler"],
+			algorithms: options?.algorithms ?? [
+				"levenshtein",
+				"damerau-levenshtein",
+				"jaro-winkler",
+			],
 			minScore: options?.minScore ?? 0.6,
 			maxResults: options?.maxResults ?? 10,
 			language: options?.language ?? "en",
@@ -131,7 +135,11 @@ export class SpellCorrector {
 		return this.correct(word, {
 			...options,
 			language: "ru",
-			algorithms: options?.algorithms ?? ["levenshtein", "damerau-levenshtein", "jaro-winkler"],
+			algorithms: options?.algorithms ?? [
+				"levenshtein",
+				"damerau-levenshtein",
+				"jaro-winkler",
+			],
 		});
 	}
 
@@ -142,7 +150,11 @@ export class SpellCorrector {
 		return this.correct(word, {
 			...options,
 			maxDistance: (options?.maxDistance ?? 2) + 1, // Transliteration adds ambiguity
-			algorithms: options?.algorithms ?? ["jaro-winkler", "levenshtein", "damerau-levenshtein"],
+			algorithms: options?.algorithms ?? [
+				"jaro-winkler",
+				"levenshtein",
+				"damerau-levenshtein",
+			],
 		});
 	}
 

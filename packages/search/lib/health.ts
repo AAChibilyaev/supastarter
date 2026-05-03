@@ -31,7 +31,10 @@ const ERROR_RATE_THRESHOLD = 0.01; // 1%
 function computeStatus(result: Omit<IndexHealthResult, "status">): HealthStatus {
 	let worst: HealthStatus = "healthy";
 
-	if (result.ingestLagSeconds !== null && result.ingestLagSeconds > INGEST_LAG_THRESHOLD_SECONDS) {
+	if (
+		result.ingestLagSeconds !== null &&
+		result.ingestLagSeconds > INGEST_LAG_THRESHOLD_SECONDS
+	) {
 		worst = "warning";
 	}
 

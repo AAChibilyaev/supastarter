@@ -66,12 +66,19 @@ export function DataTableToolbar({ renderActions }: DataTableToolbarProps) {
 				</div>
 				<div>
 					<p className="text-sm sm:block hidden text-muted-foreground">
-						<span className="font-mono font-medium">{formatCompactNumber(rows.filtered)}</span> of{" "}
-						<span className="font-mono font-medium">{formatCompactNumber(rows.total)}</span> row(s){" "}
-						<span className="sm:not-sr-only sr-only">filtered</span>
+						<span className="font-mono font-medium">
+							{formatCompactNumber(rows.filtered)}
+						</span>{" "}
+						of{" "}
+						<span className="font-mono font-medium">
+							{formatCompactNumber(rows.total)}
+						</span>{" "}
+						row(s) <span className="sm:not-sr-only sr-only">filtered</span>
 					</p>
 					<p className="text-sm sm:hidden block text-muted-foreground">
-						<span className="font-mono font-medium">{formatCompactNumber(rows.filtered)}</span>{" "}
+						<span className="font-mono font-medium">
+							{formatCompactNumber(rows.filtered)}
+						</span>{" "}
 						row(s)
 					</p>
 				</div>

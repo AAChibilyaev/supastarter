@@ -121,7 +121,12 @@ export const RadioButtonGroupInput = (inProps: RadioButtonGroupInputProps) => {
 		<FormField id={id} className={className} name={field.name}>
 			{label && (
 				<FormLabel>
-					<FieldTitle label={label} source={source} resource={resource} isRequired={isRequired} />
+					<FieldTitle
+						label={label}
+						source={source}
+						resource={resource}
+						isRequired={isRequired}
+					/>
 				</FormLabel>
 			)}
 
@@ -139,7 +144,11 @@ export const RadioButtonGroupInput = (inProps: RadioButtonGroupInputProps) => {
 
 						return (
 							<div key={value} className="space-x-2 flex items-center">
-								<RadioGroupItem value={value} id={`${id}-${value}`} disabled={isDisabled} />
+								<RadioGroupItem
+									value={value}
+									id={`${id}-${value}`}
+									disabled={isDisabled}
+								/>
 								<Label
 									htmlFor={`${id}-${value}`}
 									className={cn(
@@ -164,6 +173,9 @@ export interface RadioButtonGroupInputProps
 	extends
 		Partial<InputProps>,
 		ChoicesProps,
-		Omit<React.ComponentProps<typeof RadioGroup>, "defaultValue" | "onBlur" | "onChange" | "type"> {
+		Omit<
+			React.ComponentProps<typeof RadioGroup>,
+			"defaultValue" | "onBlur" | "onChange" | "type"
+		> {
 	row?: boolean;
 }

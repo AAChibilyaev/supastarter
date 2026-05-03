@@ -190,11 +190,15 @@ function formatContextPrompt(input: {
 	}
 
 	parts.push("--- Task ---");
-	parts.push(`Select the best ${input.limit} recommendations for this product. For each, provide:`);
+	parts.push(
+		`Select the best ${input.limit} recommendations for this product. For each, provide:`,
+	);
 	parts.push("1. The product ID");
 	parts.push("2. A natural language explanation of WHY this is recommended (1-2 sentences)");
 	parts.push("3. A relevance score from 0.0 to 1.0");
-	parts.push("4. The connection type: 'similar_content', 'category_match', or 'purchase_pattern'");
+	parts.push(
+		"4. The connection type: 'similar_content', 'category_match', or 'purchase_pattern'",
+	);
 	parts.push("");
 	parts.push("Format your response as a JSON object:");
 	parts.push(
@@ -324,7 +328,9 @@ export async function getGraphRagRecommendations(
 	// If additional seed IDs provided, fetch their context too
 	const additionalContexts = additionalSeedIds?.length
 		? await Promise.all(
-				additionalSeedIds.map((seedId) => fetchGraphContext(seedId, driver).catch(() => null)),
+				additionalSeedIds.map((seedId) =>
+					fetchGraphContext(seedId, driver).catch(() => null),
+				),
 			)
 		: [];
 
@@ -484,7 +490,9 @@ export async function getMultiSeedGraphRagRecommendations(
 								title:
 									allRecs.find((n) => n.id === r.id)?.title ??
 									seeds
-										.find((s) => s.recommendations.some((rec) => rec.id === r.id))
+										.find((s) =>
+											s.recommendations.some((rec) => rec.id === r.id),
+										)
 										?.recommendations.find((rec) => rec.id === r.id)?.title ??
 									r.id,
 								explanation: r.explanation,

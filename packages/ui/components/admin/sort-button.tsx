@@ -91,7 +91,12 @@ const SortButtonComponent = (props: SortButtonProps) => {
 					<Tooltip>
 						<DropdownMenuTrigger asChild>
 							<TooltipTrigger asChild>
-								<Button variant="outline" size="icon" aria-label={buttonLabel} {...rest}>
+								<Button
+									variant="outline"
+									size="icon"
+									aria-label={buttonLabel}
+									{...rest}
+								>
 									{icon}
 								</Button>
 							</TooltipTrigger>
@@ -117,7 +122,9 @@ const SortButtonComponent = (props: SortButtonProps) => {
 							resource,
 							source: field,
 						})}{" "}
-						{translate(`ra.sort.${sort.field === field ? inverseOrder(sort.order) : "ASC"}`)}
+						{translate(
+							`ra.sort.${sort.field === field ? inverseOrder(sort.order) : "ASC"}`,
+						)}
 					</DropdownMenuItem>
 				))}
 			</DropdownMenuContent>

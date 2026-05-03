@@ -122,6 +122,7 @@
       "title": "Analiticas",
       "description": "Sigue el uso de busqueda, las consultas principales, los resultados vacios y las tendencias.",
       "totalSearches": "Búsquedas totales",
+      "impressions": "Impresiones",
       "totalSessions": "Aperturas del widget",
       "ctr": "Tasa de clics",
       "zeroResults": "Sin resultados",

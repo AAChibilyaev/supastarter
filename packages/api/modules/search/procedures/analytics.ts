@@ -4,6 +4,8 @@ import { z } from "zod";
 import { protectedProcedure } from "../../../orpc/procedures";
 import { requireOrganizationMember } from "../lib/access";
 
+export const WIDGET_OPEN_EVENT = "widget_open";
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 export const analytics = protectedProcedure
@@ -25,6 +27,7 @@ export const analytics = protectedProcedure
 		z.object({
 			totalSearches: z.number(),
 			totalSessions: z.number(),
+			impressionsCount: z.number(),
 			topQueries: z.array(z.object({ query: z.string(), count: z.number() })),
 			zeroResultQueries: z.array(z.object({ query: z.string(), count: z.number() })),
 			topClickedProducts: z.array(
@@ -65,6 +68,11 @@ export const analytics = protectedProcedure
 				.map((e) => e.createdAt.toISOString().slice(0, 10)),
 		);
 		const totalSessions = uniqueDays.size > 0 ? uniqueDays.size : 1;
+
+		// ── Impressions (widget_open events) ──
+		const impressionsCount = events
+			.filter((e) => e.type === WIDGET_OPEN_EVENT)
+			.reduce((sum, e) => sum + e.count, 0);
 
 		// ── Top queries ──
 		// Since we don't store query text in the event table, aggregate by type
@@ -169,6 +177,7 @@ export const analytics = protectedProcedure
 		return {
 			totalSearches,
 			totalSessions,
+			impressionsCount,
 			topQueries,
 			zeroResultQueries,
 			topClickedProducts,

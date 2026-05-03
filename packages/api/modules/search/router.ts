@@ -22,6 +22,7 @@ import { createScopedToken } from "./procedures/create-scoped-token";
 import { ctrAnalytics } from "./procedures/ctr-analytics";
 import { getCurations, updateCurations } from "./procedures/curations";
 import { deleteIndex } from "./procedures/delete-index";
+import { truncateIndex } from "./procedures/truncate-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
 import { exportIndexDocuments } from "./procedures/export-documents";
 import { facetSearch } from "./procedures/facet-search";
@@ -86,6 +87,7 @@ export const searchRouter = {
 	listIndexes,
 	createIndex,
 	deleteIndex,
+	truncateIndex,
 	importDocuments,
 	importJobs,
 	upsertDocument,

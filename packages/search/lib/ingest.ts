@@ -70,3 +70,8 @@ export async function deleteByQuery(collection: string, filterBy: string) {
 	const client = getTypesenseClient();
 	return client.collections(collection).documents().delete({ filter_by: filterBy });
 }
+
+export async function truncateCollection(collection: string) {
+	const client = getTypesenseClient();
+	return client.collections(collection).documents().delete();
+}

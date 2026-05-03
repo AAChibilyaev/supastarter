@@ -10,11 +10,12 @@ import { EmptyState } from "@search/components/cards/EmptyState";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Columns3Icon, PlusIcon, SearchIcon, UploadIcon, XIcon } from "lucide-react";
+import { Columns3Icon, PlusIcon, SearchIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { CollectionCard, type CollectionData } from "../cards/CollectionCard";
+import { ExportDialog } from "../export/ExportDialog";
 import { ImportDialog } from "../import/ImportDialog";
 
 // ─── Skeleton grid ──────────────────────────────────────────────────────────
@@ -48,6 +49,7 @@ export function CollectionsPage() {
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const [importCollectionSlug, setImportCollectionSlug] = useState<string | null>(null);
+	const [exportCollectionSlug, setExportCollectionSlug] = useState<string | null>(null);
 
 	// ── Fetch indexes (collections = search indexes) ──────────────────────
 
@@ -123,6 +125,10 @@ export function CollectionsPage() {
 		if (collection) {
 			setImportCollectionSlug(collection.slug);
 		}
+	};
+
+	const handleExport = (slug: string) => {
+		setExportCollectionSlug(slug);
 	};
 
 	// ── Render ─────────────────────────────────────────────────────────────
@@ -215,6 +221,7 @@ export function CollectionsPage() {
 							onDelete={handleDelete}
 							onDuplicate={handleDuplicate}
 							onImport={handleImport}
+							onExport={handleExport}
 						/>
 					))}
 				</div>
@@ -228,6 +235,14 @@ export function CollectionsPage() {
 				organizationId={orgId ?? ""}
 				slug={importCollectionSlug ?? ""}
 				schemaFields={[]}
+			/>
+			<ExportDialog
+				open={exportCollectionSlug !== null}
+				onOpenChange={(open) => {
+					if (!open) setExportCollectionSlug(null);
+				}}
+				organizationId={orgId ?? ""}
+				slug={exportCollectionSlug ?? ""}
 			/>
 		</div>
 	);

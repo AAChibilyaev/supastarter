@@ -283,7 +283,53 @@ export async function deleteDocument(id: string): Promise<void> {
 	});
 }
 
-// ─── Bulk Operations ─────────────────────────────────────────────────────
+// ─── Export ─────────────────────────────────────────────────────────────────
+
+export type ExportFormat = "csv" | "json" | "jsonl" | "xlsx";
+
+export async function exportCollectionDocuments(
+	collectionId: string,
+	_options: { schemaFields?: string[] } = {},
+): Promise<CollectionDocumentView[]> {
+	const rows = await db.collectionDocument.findMany({
+		where: { collectionId },
+		orderBy: { rowNumber: "asc" },
+	});
+	return rows.map(mapDocument);
+}
+
+export async function buildCsvContent(
+	documents: CollectionDocumentView[],
+	schemaFields: string[],
+): Promise<string> {
+	const headers = schemaFields.join(",");
+	const rows = documents
+		.map((doc) => {
+			const data = doc.data as Record<string, unknown>;
+			return schemaFields
+				.map((field) => {
+					const val = data?.[field];
+					if (val == null) return "";
+					const str = String(val);
+					// Escape CSV: wrap in quotes if contains comma, quote, or newline
+					if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+						return `"${str.replace(/"/g, '""')}"`;
+					}
+					return str;
+				})
+				.join(",");
+		})
+		.join("\n");
+	return `${headers}\n${rows}`;
+}
+
+export function buildJsonContent(
+	documents: CollectionDocumentView[],
+	pretty: boolean = true,
+): string {
+	const extracted = documents.map((doc) => doc.data);
+	return pretty ? JSON.stringify(extracted, null, 2) : JSON.stringify(extracted);
+}
 
 export interface CreateBatchDocumentsInput {
 	collectionId: string;

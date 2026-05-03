@@ -123,6 +123,7 @@
       "title": "Analytics",
       "description": "Track search usage, top queries, zero-results, and trends.",
       "totalSearches": "Total Searches",
+      "impressions": "Impressions",
       "totalSessions": "Widget Opens",
       "ctr": "Click-through Rate",
       "zeroResults": "Zero results",

@@ -16,6 +16,7 @@ import {
 	updateBatchDocuments,
 	updateDocument,
 } from "./procedures/documents";
+import { exportDocuments } from "./procedures/export";
 
 export const collectionsRouter = {
 	list: listCollections,
@@ -24,6 +25,7 @@ export const collectionsRouter = {
 	update: updateCollection,
 	delete: deleteCollection,
 	duplicate: duplicateCollection,
+	export: exportDocuments,
 	documents: {
 		list: listDocuments,
 		get: getDocument,

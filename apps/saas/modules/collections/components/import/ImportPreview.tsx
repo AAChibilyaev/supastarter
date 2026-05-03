@@ -11,7 +11,6 @@ import {
 } from "@repo/ui/components/table";
 import { FileJsonIcon, FileSpreadsheetIcon, FileTextIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 

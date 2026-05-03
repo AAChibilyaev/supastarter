@@ -526,6 +526,7 @@
       "title": "Analytique",
       "description": "Suivez l'utilisation de la recherche, les principales requêtes, les zéros résultats et les tendances.",
       "totalSearches": "Recherches totales",
+      "impressions": "Impressions",
       "totalSessions": "Ouvertures du widget",
       "ctr": "Taux de clics",
       "zeroResults": "Zéro résultat",

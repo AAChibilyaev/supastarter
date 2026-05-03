@@ -123,6 +123,7 @@
       "title": "Analysen",
       "description": "Verfolgen Sie Suchnutzung, Top-Suchanfragen, Null-Ergebnisse und Trends.",
       "totalSearches": "Suchanfragen insgesamt",
+      "impressions": "Impressions",
       "totalSessions": "Widget-Öffnungen",
       "ctr": "Klickrate",
       "zeroResults": "Null Ergebnisse",

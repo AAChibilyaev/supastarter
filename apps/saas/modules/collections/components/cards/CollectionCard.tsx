@@ -29,14 +29,6 @@ export interface CollectionData {
 	createdAt: string;
 }
 
-interface CollectionCardProps {
-	collection: CollectionData;
-	organizationSlug: string;
-	onDelete?: (id: string) => void;
-	onDuplicate?: (id: string) => void;
-	onImport?: (id: string) => void;
-}
-
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatBytes(mb: number): string {
@@ -58,6 +50,15 @@ function formatRelativeTime(dateStr: string): string {
 	return `${diffDay}d ago`;
 }
 
+interface CollectionCardProps {
+	collection: CollectionData;
+	organizationSlug: string;
+	onDelete?: (id: string) => void;
+	onDuplicate?: (id: string) => void;
+	onImport?: (id: string) => void;
+	onExport?: (slug: string) => void;
+}
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export function CollectionCard({
@@ -66,6 +67,7 @@ export function CollectionCard({
 	onDelete,
 	onDuplicate,
 	onImport,
+	onExport,
 }: CollectionCardProps) {
 	const t = useTranslations();
 
@@ -158,13 +160,9 @@ export function CollectionCard({
 						variant="ghost"
 						size="icon"
 						title={t("common.export") || "Export"}
-						asChild
+						onClick={() => onExport?.(collection.slug)}
 					>
-						<Link
-							href={`/api/companies/${organizationSlug}/collections/${collection.slug}/export`}
-						>
-							<DownloadIcon className="size-3.5" />
-						</Link>
+						<DownloadIcon className="size-3.5" />
 					</Button>
 					<Button
 						variant="ghost"

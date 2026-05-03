@@ -1,11 +1,6 @@
 "use client";
 
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "@repo/ui/components/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import {
 	ChartContainer,
 	ChartTooltip,
@@ -84,9 +79,7 @@ export function BillingAnalyticsSection() {
 				/>
 				<KpiCard
 					title={t("churnRate")}
-					value={
-						data ? `${data.churnRateLastMonth}%` : undefined
-					}
+					value={data ? `${data.churnRateLastMonth}%` : undefined}
 					isLoading={isLoading}
 				/>
 			</div>
@@ -111,10 +104,7 @@ export function BillingAnalyticsSection() {
 										bottom: 0,
 									}}
 								>
-									<CartesianGrid
-										strokeDasharray="3 3"
-										vertical={false}
-									/>
+									<CartesianGrid strokeDasharray="3 3" vertical={false} />
 									<XAxis
 										dataKey="month"
 										tickLine={false}
@@ -125,9 +115,7 @@ export function BillingAnalyticsSection() {
 										tickLine={false}
 										axisLine={false}
 										tickMargin={8}
-										tickFormatter={(value: number) =>
-											`$${value}`
-										}
+										tickFormatter={(value: number) => `$${value}`}
 									/>
 									<ChartTooltip
 										cursor={false}
@@ -157,12 +145,10 @@ export function BillingAnalyticsSection() {
 						<Skeleton className="h-32 w-full" />
 					) : (
 						<div className="overflow-x-auto">
-							<table className="w-full text-sm">
+							<table className="text-sm w-full">
 								<thead>
 									<tr className="border-b text-left text-muted-foreground">
-										<th className="pb-2 font-medium">
-											{t("plan")}
-										</th>
+										<th className="pb-2 font-medium">{t("plan")}</th>
 										<th className="pb-2 font-medium text-right">
 											{t("subscribers")}
 										</th>
@@ -172,24 +158,20 @@ export function BillingAnalyticsSection() {
 									</tr>
 								</thead>
 								<tbody>
-									{(data?.subscriptionsByPlan ?? []).map(
-										(plan) => (
-											<tr
-												key={plan.planId}
-												className="border-b last:border-b-0"
-											>
-												<td className="py-2 capitalize">
-													{plan.planId}
-												</td>
-												<td className="py-2 text-right tabular-nums">
-													{plan.count}
-												</td>
-												<td className="py-2 text-right tabular-nums font-mono">
-													${plan.mrr.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-												</td>
-											</tr>
-										),
-									)}
+									{(data?.subscriptionsByPlan ?? []).map((plan) => (
+										<tr key={plan.planId} className="border-b last:border-b-0">
+											<td className="py-2 capitalize">{plan.planId}</td>
+											<td className="py-2 text-right tabular-nums">
+												{plan.count}
+											</td>
+											<td className="py-2 font-mono text-right tabular-nums">
+												$
+												{plan.mrr.toLocaleString(undefined, {
+													maximumFractionDigits: 2,
+												})}
+											</td>
+										</tr>
+									))}
 								</tbody>
 							</table>
 						</div>

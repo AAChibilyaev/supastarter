@@ -58,6 +58,11 @@ export default async function AdminLayout({ children }: PropsWithChildren) {
 								icon: <WalletIcon className="size-4 opacity-50" />,
 							},
 							{
+								title: "Billing",
+								href: "/admin/billing-analytics",
+								icon: <BanknoteIcon className="size-4 opacity-50" />,
+							},
+							{
 								title: "Audit",
 								href: "/admin/audit",
 								icon: <ClipboardListIcon className="size-4 opacity-50" />,

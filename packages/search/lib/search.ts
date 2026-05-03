@@ -32,6 +32,12 @@ interface TypesenseSearchParams {
 	per_page?: number;
 	page?: number;
 	highlight_fields?: string;
+	// ── Text Match Strategy (Typesense v0.30+) ─────────────────────
+	text_match_type?: "all" | "any" | "max_score";
+	// ── Search Timeout (Typesense v0.30+) ──────────────────────────
+	search_cutoff_ms?: number;
+	// ── Query Cache (Typesense v0.30+) ─────────────────────────────
+	use_cache?: boolean;
 	// ── Typo Tolerance (Typesense v0.30+) ──────────────────────────
 	num_typos?: number;
 	typo_tokens_threshold?: number;
@@ -77,6 +83,12 @@ export interface SearchDocumentsInput {
 	perPage?: number;
 	page?: number;
 	highlightFields?: string;
+	// ── Text Match Strategy (Typesense v0.30+) ─────────────────────
+	textMatchType?: "all" | "any" | "max_score";
+	// ── Search Timeout (Typesense v0.30+) ──────────────────────────
+	searchCutoffMs?: number;
+	// ── Query Cache (Typesense v0.30+) ─────────────────────────────
+	useCache?: boolean;
 	// ── Typo Tolerance ─────────────────────────────────────────────
 	numTypos?: number;
 	typoTokensThreshold?: number;
@@ -162,6 +174,12 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		per_page: perPage,
 		page: input.page ?? 1,
 		highlight_fields: input.highlightFields,
+		// ── Text Match Strategy ──
+		...(input.textMatchType !== undefined && { text_match_type: input.textMatchType }),
+		// ── Search Timeout ──
+		...(input.searchCutoffMs !== undefined && { search_cutoff_ms: input.searchCutoffMs }),
+		// ── Query Cache ──
+		...(input.useCache !== undefined && { use_cache: input.useCache }),
 		// ── Typo Tolerance ──
 		...(input.numTypos !== undefined && { num_typos: input.numTypos }),
 		...(input.typoTokensThreshold !== undefined && {
@@ -272,6 +290,12 @@ export async function multiSearchDocuments(
 			per_page: perPage,
 			page: entry.page ?? 1,
 			highlight_fields: entry.highlightFields,
+			// ── Text Match Strategy ──
+			...(entry.textMatchType !== undefined && { text_match_type: entry.textMatchType }),
+			// ── Search Timeout ──
+			...(entry.searchCutoffMs !== undefined && { search_cutoff_ms: entry.searchCutoffMs }),
+			// ── Query Cache ──
+			...(entry.useCache !== undefined && { use_cache: entry.useCache }),
 			// ── Typo Tolerance ──
 			...(entry.numTypos !== undefined && { num_typos: entry.numTypos }),
 			...(entry.typoTokensThreshold !== undefined && {

@@ -9,7 +9,6 @@ import {
 	collectIngestQueueDepth,
 	collectActiveApiKeys,
 	collectErrorRate,
-	httpMetricsMiddleware,
 	getTracer,
 	initTracing,
 	tracedHonoMiddleware,

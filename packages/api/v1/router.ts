@@ -22,6 +22,7 @@
  *   DELETE /v1/indexes/:indexId/documents/:documentId         — delete doc
  *   POST   /v1/indexes/:indexId/search             — search index
  *   POST   /v1/multi-search                        — multi-search
+ *   POST   /v1/indexes/:indexId/suggest            — query suggestions / autocomplete
  *   POST   /v1/projects/:projectId/keys             — create API key
  *   GET    /v1/projects/:projectId/keys             — list API keys
  *   DELETE /v1/keys/:keyId                          — revoke API key
@@ -54,6 +55,7 @@ import { generateOpenApiSpec } from "./openapi";
 import { projectsApp } from "./projects";
 import { searchApp } from "./search";
 import { spellCheckApp } from "./spell-check";
+import { suggestApp } from "./suggest";
 import { synonymsApp } from "./synonyms";
 
 const v1Router = new Hono()
@@ -62,6 +64,7 @@ const v1Router = new Hono()
 	.route("/", documentsApp)
 	.route("/", searchApp)
 	.route("/", spellCheckApp)
+	.route("/", suggestApp)
 	.route("/", keysApp)
 	.route("/", analyticsApp)
 	.route("/", synonymsApp);

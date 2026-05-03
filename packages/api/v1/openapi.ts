@@ -2078,6 +2078,149 @@ export function generateOpenApiSpec() {
 					},
 				},
 			},
+			// ─── Suggest / Autocomplete ────────────────────────────
+			"/indexes/{indexId}/suggest": {
+				post: {
+					summary: "Query suggestions / autocomplete",
+					description:
+						"Returns autocomplete suggestions for a search query prefix. " +
+						"Combines prefix field matching, popular queries from analytics, " +
+						"and fuzzy completion. Results are grouped by source (products, phrases, popular).",
+					tags: ["Search"],
+					security: [{ BearerAuth: [] }],
+					parameters: [
+						{
+							name: "indexId",
+							in: "path",
+							required: true,
+							schema: { type: "string" },
+							description: "Search index slug or ID",
+						},
+					],
+					requestBody: {
+						required: true,
+						content: {
+							"application/json": {
+								schema: {
+									type: "object",
+									required: ["q"],
+									properties: {
+										q: {
+											type: "string",
+											minLength: 1,
+											maxLength: 200,
+											description:
+												"The search query prefix to get suggestions for",
+										},
+										limit: {
+											type: "integer",
+											minimum: 1,
+											maximum: 50,
+											default: 10,
+											description: "Maximum number of suggestions",
+										},
+										fuzzy: {
+											type: "boolean",
+											default: true,
+											description:
+												"Enable fuzzy matching with typo tolerance",
+										},
+										fuzzyDistance: {
+											type: "integer",
+											minimum: 1,
+											maximum: 4,
+											default: 2,
+											description: "Maximum edit distance for fuzzy matching",
+										},
+										minPrefix: {
+											type: "integer",
+											minimum: 1,
+											maximum: 10,
+											default: 2,
+											description:
+												"Minimum prefix length to trigger suggestions",
+										},
+										popular: {
+											type: "boolean",
+											default: true,
+											description:
+												"Include popular query suggestions from analytics",
+										},
+										trending: {
+											type: "boolean",
+											default: true,
+											description: "Include trending suggestions",
+										},
+									},
+								},
+							},
+						},
+					},
+					responses: {
+						"200": {
+							description: "Suggestions result",
+							content: {
+								"application/json": {
+									schema: {
+										type: "object",
+										properties: {
+											prefix: { type: "string" },
+											suggestions: {
+												type: "array",
+												items: {
+													type: "object",
+													properties: {
+														text: { type: "string" },
+														score: { type: "number" },
+														source: { type: "string" },
+														type: { type: "string" },
+														highlights: {
+															type: "array",
+															items: {
+																type: "object",
+																properties: {
+																	start: { type: "integer" },
+																	end: { type: "integer" },
+																},
+															},
+														},
+													},
+												},
+											},
+											groups: {
+												type: "array",
+												items: {
+													type: "object",
+													properties: {
+														name: { type: "string" },
+														label: { type: "string" },
+														suggestions: {
+															type: "array",
+															items: {
+																type: "object",
+																properties: {
+																	text: { type: "string" },
+																	score: { type: "number" },
+																	source: { type: "string" },
+																	type: { type: "string" },
+																},
+															},
+														},
+													},
+												},
+											},
+											total: { type: "integer" },
+										},
+									},
+								},
+							},
+						},
+						"400": { $ref: "#/components/responses/BadRequest" },
+						"401": { $ref: "#/components/responses/Unauthorized" },
+						"403": { $ref: "#/components/responses/Forbidden" },
+					},
+				},
+			},
 		},
 		components: {
 			securitySchemes: {

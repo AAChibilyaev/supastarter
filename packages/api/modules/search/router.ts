@@ -55,6 +55,7 @@ import {
 	upsertStemmingOverride,
 } from "./procedures/stemming";
 import { deleteStopwords, listStopwords, upsertStopwords } from "./procedures/stopwords";
+import { getSuggestConfig, updateSuggestConfig } from "./procedures/suggest-config";
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
 import { topQueries } from "./procedures/top-queries";
 import { upsertDocument } from "./procedures/upsert-document";
@@ -115,6 +116,10 @@ export const searchRouter = {
 	spellConfig: {
 		get: getSpellConfig,
 		update: updateSpellConfig,
+	},
+	suggestConfig: {
+		get: getSuggestConfig,
+		update: updateSuggestConfig,
 	},
 	listModels,
 	modelConfig: {

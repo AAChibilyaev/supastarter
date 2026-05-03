@@ -1,4 +1,6 @@
 {
-	"title": "multi-search",
-	"pages": ["post"]
+  "title": "multi-search",
+  "pages": [
+    "post"
+  ]
 }

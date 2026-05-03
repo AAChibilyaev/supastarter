@@ -1,926 +1,926 @@
 {
-  "comparePage": {
-    "title": "AACsearch vs. die Alternativen",
-    "description": "Erfahren Sie, wie sich AACsearch mit Algolia, Elasticsearch und MeiliSearch vergleicht – und warum Tausende von Entwicklern uns wählen.",
-    "table": {
-      "feature": "Funktion",
-      "aacsearch": "AACsearch",
-      "features": {
-        "fulltext": "Volltextsuche",
-        "vector": "Vektor- / semantische Suche",
-        "hybrid": "Hybridsuche",
-        "realtime": "Echtzeit-Indizierung",
-        "pricing": "Vorhersehbare Preise",
-        "managed": "Verwaltete Cloud",
-        "connector": "Connector-API",
-        "cms": "CMS-Integrationen",
-        "setup": "Einrichtungszeit",
-        "free": "Kostenloses Angebot"
-      },
-      "values": {
-        "minutes": "Minuten",
-        "hours": "Stunden",
-        "days": "Tage",
-        "yes": "Ja",
-        "no": "Nein",
-        "partial": "Teilweise"
-      }
-    },
-    "cta": {
-      "title": "Bereit zum Wechseln?",
-      "description": "Die Migration von Algolia oder Elasticsearch dauert mit unserer Connector-API weniger als einen Tag."
-    }
-  },
-  "compare": {
-    "title": "Der ehrliche Vergleich",
-    "subtitle": "Wir sind nicht für jedes Team die richtige Wahl. Hier ist ein offener Überblick, wo AACsearch gewinnt und wo nicht.",
-    "items": {
-      "vsAlgolia": {
-        "title": "AACsearch vs. Algolia",
-        "description": "Algolia ist ausgereift und hat ausgezeichnete Dokumentation. AACsearch ist erschwinglicher und für Multi-Tenant-Teams konzipiert. Wenn Sie $500+/Monat für Algolia ausgeben, wird AACsearch das deutlich reduzieren."
-      },
-      "vsElasticsearch": {
-        "title": "AACsearch vs. Elasticsearch",
-        "description": "Elasticsearch ist unendlich flexibel und unendlich komplex. AACsearch ist meinungsstark und einfach. Wenn Sie ein SIEM oder Log-Analytics brauchen, nutzen Sie Elastic. Wenn Sie Produktsuche brauchen, nutzen Sie uns."
-      },
-      "vsMeilisearch": {
-        "title": "AACsearch vs. Meilisearch",
-        "description": "Meilisearch ist eine ausgezeichnete Open-Source-Engine. AACsearch fügt die gehostete Ebene hinzu: Scoped Tokens, Multi-Tenancy, Analytics und eine Control Plane."
-      },
-      "vsTypesense": {
-        "title": "AACsearch vs. Typesense Cloud",
-        "description": "AACsearch basiert auf Typesense. Wir ergänzen Multi-Tenancy, API-Key-Management, Scoped Tokens und eine SaaS-Control-Plane auf der Engine."
-      },
-      "vsCustom": {
-        "title": "AACsearch vs. DIY",
-        "description": "Eine eigene gehostete Suche zu bauen bedeutet, Nodes, Upgrades, Backups und Monitoring zu verwalten. AACsearch übernimmt das, damit Sie Features liefern können."
-      },
-      "whenNotUs": {
-        "title": "Wann Sie etwas anderes nutzen sollten",
-        "description": "Log-Analytics → Elasticsearch. Volltext-Enterprise-Suche mit Compliance → Coveo. Einfaches Autocomplete über 1.000 Datensätze → kein Dienst nötig."
-      }
-    }
-  },
-  "compareAlgoliaPage": {
-    "title": "AACsearch vs Algolia: 5x günstigere Suche ohne Vendor Lock-In (2026)",
-    "description": "Ausführlicher AACsearch vs Algolia Vergleich. AACsearch bietet dieselbe Suchqualität zu 1/5 der Kosten — mit sofortiger Bereitstellung, integrierter Analytik und Typesense-betriebener Relevanz."
-  },
-  "compareAlgolia": {
-    "title": "AACsearch vs Algolia — Der ehrliche Vergleich",
-    "subtitle": "Algolia ist der Marktführer mit ausgezeichneter DX. AACsearch ist erschwinglicher und bietet Multi-Tenant-Isolation, ein Such-Widget und CMS-Connectors — alles inklusive.",
-    "items": {
-      "pricing": {
-        "title": "Preise",
-        "description": "Algolia berechnet pro Such-Operation und pro gespeichertem Datensatz, mit Mindestbeträgen. AACsearch berechnet pro Search-Unit ohne Minimum über dem kostenlosen Tarif."
-      },
-      "multiTenancy": {
-        "title": "Multi-Tenancy",
-        "description": "Algolia nutzt Index-spezifische API-Keys mit User-Tokens. AACsearch nutzt HMAC Scoped Tokens mit obligatorischen AND-kombinierten Filtern."
-      },
-      "migration": {
-        "title": "Migration",
-        "description": "Die AACsearch REST-API ist strukturell ähnlich zu Algolias. Ein Migrationsskript kann Ihre Daten in Stunden re-indizieren."
-      },
-      "verdict": {
-        "title": "Wann Sie AACsearch wählen sollten",
-        "description": "Wenn Sie $200+/Monat für Algolia ausgeben, oder wenn Multi-Tenancy-Isolation und planbare Preise für Sie wichtig sind."
-      },
-      "performance": {
-        "title": "Leistung",
-        "description": "AACsearch basiert auf Typesense — der schnellsten Open-Source-Suchmaschine mit unter 10 ms Suchlatenz. Algolia bietet vergleichbare Geschwindigkeit, kostet aber deutlich mehr pro Abfrage."
-      },
-      "security": {
-        "title": "Sicherheit & Lock-in",
-        "description": "Algolia verwendet ein proprietäres Backend — Ihre Daten sind eingesperrt. AACsearch basiert auf Typesense (Open-Source). Exportieren Sie Ihre Daten jederzeit und hosten Sie sie selbst — ohne Migrationskosten."
-      }
-    },
-    "codeTitle": "Migration dauert Stunden, nicht Wochen",
-    "codeSubtitle": "Die AACsearch Such-API spiegelt Algolias wider. Client tauschen, Filter behalten.",
-    "table": {
-      "title": "Feature Comparison",
-      "subtitle": "A side-by-side look at what each platform offers",
-      "aacsearch": "AACsearch",
-      "algolia": "Algolia",
-      "features": {
-        "pricingModel": {
-          "title": "Preismodell",
-          "aacsearch": "Per-index, unlimited operations",
-          "algolia": "Per search op + per record"
-        },
-        "entryPrice": {
-          "title": "Einstiegspreis",
-          "aacsearch": "Free (1 index, 10k docs)",
-          "algolia": "Free (10k ops/mo, 10k records)"
-        },
-        "midMarket": {
-          "title": "100k Dokumente, 500k Suchanfragen/Monat",
-          "aacsearch": "$99/mo",
-          "algolia": "~$499/mo (Growth plan)",
-          "highlight": true
-        },
-        "enterprise": {
-          "title": "1M Dokumente, 5M Suchanfragen/Monat",
-          "aacsearch": "$499/mo",
-          "algolia": "Custom (~$2,500+/mo)",
-          "highlight": true
-        },
-        "multiTenancy": {
-          "title": "Multi-Tenancy",
-          "aacsearch": "Native (org-scoped API keys)",
-          "algolia": "Requires separate apps or middleware"
-        },
-        "analytics": {
-          "title": "Analyse-Dashboard",
-          "aacsearch": "Built-in (all plans)",
-          "algolia": "Additional $299/mo"
-        },
-        "widget": {
-          "title": "Widget (einbettbare UI)",
-          "aacsearch": "Included",
-          "algolia": "Requires InstantSearch (self-hosted)"
-        },
-        "connectors": {
-          "title": "CMS-Connectors",
-          "aacsearch": "PrestaShop, Bitrix — native sync",
-          "algolia": "None — custom integration needed"
-        },
-        "scopedTokens": {
-          "title": "Scoped API-Tokens",
-          "aacsearch": "Built-in HMAC tokens",
-          "algolia": "Requires Secured API Keys (manual)"
-        },
-        "geosearch": {
-          "title": "Geo-Suche",
-          "aacsearch": "Yes",
-          "algolia": "Yes"
-        },
-        "typoTolerance": {
-          "title": "Tippfehlertoleranz",
-          "aacsearch": "Configurable per-index",
-          "algolia": "Configurable"
-        },
-        "relevanceTuning": {
-          "title": "Relevanzoptimierung",
-          "aacsearch": "Rank formula, synonyms, custom ranking",
-          "algolia": "Ranking rules, custom ranking"
-        },
-        "selfHost": {
-          "title": "Self-Hosting",
-          "aacsearch": "Full Typesense export, migrate anytime",
-          "algolia": "No — proprietary backend"
-        },
-        "searchEngine": {
-          "title": "Suchmaschine",
-          "aacsearch": "Typesense (open-source)",
-          "algolia": "Proprietary (Elasticsearch-based)"
-        },
-        "sla": {
-          "title": "SLA",
-          "aacsearch": "99.9% uptime",
-          "algolia": "99.9% (higher tiers)"
-        },
-        "logRetention": {
-          "title": "Log-Aufbewahrung",
-          "aacsearch": "30 days (all plans)",
-          "algolia": "7 days (free), 30 days (paid)"
-        }
-      }
-    },
-    "scenarios": {
-      "title": "Pricing Comparison Scenarios",
-      "scenario1": {
-        "heading": "Small e-commerce (10k products, 50k searches/mo)",
-        "algolia": "Algolia: Free tier (10k ops + 10k records) — hits record limit, needs Growth at $299/mo",
-        "aacsearch": "AACsearch: Free tier (1 index, 10k docs) fits perfectly — $0/mo",
-        "saving": "Saving: $299/mo"
-      },
-      "scenario2": {
-        "heading": "Mid-market (100k products, 500k searches/mo)",
-        "algolia": "Algolia: Growth $499/mo + $250/additional ops ≈ $749/mo",
-        "aacsearch": "AACsearch: Scale plan $99/mo",
-        "saving": "Saving: ~$650/mo"
-      },
-      "scenario3": {
-        "heading": "Enterprise (1M products, 5M searches/mo)",
-        "algolia": "Algolia: Enterprise (custom, typically $2,500-$5,000/mo)",
-        "aacsearch": "AACsearch: Pro plan $499/mo",
-        "saving": "Saving: ~$2,000+/mo"
-      }
-    },
-    "whyMigrate": {
-      "title": "Why Teams Migrate to AACsearch",
-      "items": [
-        "Pricing shock — Algolia's per-operation billing becomes unpredictable as traffic grows",
-        "No vendor lock-in — AACsearch is built on Typesense. Your data is portable.",
-        "All-in-one — Search + analytics + widget + connectors in one product, not 3 add-ons",
-        "Self-serve migration — Import your Algolia data directly, reindex in minutes"
-      ]
-    },
-    "testimonial": {
-      "quote": "We were paying Algolia $499/mo for a basic e-commerce search. Migrated to AACsearch in an afternoon — same relevance, 5x cheaper, and the built-in analytics showed us exactly what customers were searching for but not finding.",
-      "author": "Founder, mid-market e-commerce company"
-    },
-    "decisionMatrix": {
-      "title": "When to Choose Each Platform",
-      "whenAACsearch": {
-        "heading": "Choose AACsearch if you:",
-        "items": [
-          "Want search-as-a-service with zero DevOps",
-          "Need multi-tenant search for your SaaS product",
-          "Want analytics, widget, and connectors without building them",
-          "Are paying $200+/mo on Algolia and want predictable pricing",
-          "Value Typesense portability — export and self-host anytime"
-        ]
-      },
-      "whenAlgolia": {
-        "heading": "Choose Algolia if you:",
-        "items": [
-          "Rely on Algolia-specific features (AI recommendations, personalization)",
-          "Need enterprise compliance certifications (SOC 2, HIPAA via Enterprise plan)",
-          "Have an existing Algolia integration with minimal search volume",
-          "Need advanced Algolia APIs (AB testing, dynamic re-ranking)"
-        ]
-      }
-    },
-    "cta": {
-      "heading": "Ready to switch?",
-      "description": "Start a free trial — no credit card required. Import your Algolia data in minutes.",
-      "button": "Start Free Trial →"
-    }
-  },
-  "compareElasticsearchPage": {
-    "title": "AACsearch vs Elasticsearch: The Honest Alternative (2026)",
-    "description": "Detailed AACsearch vs Elasticsearch comparison. AACsearch delivers zero-ops search, automatic scaling, built-in analytics, and predictable flat pricing — without Elasticsearch cluster management overhead. The true elasticsearch alternative for modern applications."
-  },
-  "compareElasticsearch": {
-    "title": "AACsearch vs Elasticsearch — The Honest Comparison",
-    "subtitle": "Elasticsearch is a powerful general-purpose data platform. AACsearch is a purpose-built search API. Different tools for different jobs — here is when each makes sense.",
-    "items": {
-      "complexity": {
-        "title": "Operational complexity",
-        "description": "Elasticsearch requires cluster management, JVM tuning, shard optimization, and ongoing maintenance. AACsearch is a hosted API — zero-ops, no infrastructure to manage."
-      },
-      "latency": {
-        "title": "Search latency",
-        "description": "Elasticsearch p99 search latency is typically 100-400ms depending on cluster size and query complexity. AACsearch targets under 50ms p99 for product and document search workloads."
-      },
-      "useCase": {
-        "title": "Use case fit",
-        "description": "Elasticsearch excels at log analytics, observability pipelines, full-text enterprise search, and complex aggregations. AACsearch excels at product search, help center search, and SaaS application search."
-      },
-      "cost": {
-        "title": "Cost",
-        "description": "Elasticsearch Cloud is expensive for pure search workloads — you pay for cluster nodes you don't need. AACsearch pricing is based on search-units — pay only for what you use."
-      },
-      "schema": {
-        "title": "Schema management",
-        "description": "Elasticsearch mapping changes are complex and often require reindexing with downtime. AACsearch has zero-downtime alias-swap reindex — schema changes without any interruption."
-      },
-      "verdict": {
-        "title": "When to choose AACsearch",
-        "description": "If your use case is product search, help center, or SaaS full-text search — and you do not need log analytics or complex aggregations — AACsearch is the simpler, cheaper, faster option."
-      }
-    },
-    "codeTitle": "Zero-ops search, not cluster management",
-    "codeSubtitle": "AACsearch is a managed search API. Elasticsearch requires cluster provisioning, JVM tuning, and ongoing maintenance.",
-    "table": {
-      "title": "Feature Comparison",
-      "subtitle": "A side-by-side look at how AACsearch and Elasticsearch compare across key dimensions",
-      "aacsearch": "AACsearch",
-      "elasticsearch": "Elasticsearch",
-      "features": {
-        "pricingModel": {
-          "title": "Pricing model",
-          "aacsearch": "Per-index, unlimited operations",
-          "elasticsearch": "Per node-hour + storage (cloud) or self-hosted infra cost"
-        },
-        "entryPrice": {
-          "title": "Entry price",
-          "aacsearch": "Free (1 index, 10k docs)",
-          "elasticsearch": "Free (self-hosted) / ~$95/mo Elastic Cloud (2 nodes)"
-        },
-        "midMarket": {
-          "title": "100k docs, 500k searches/mo",
-          "aacsearch": "$99/mo",
-          "elasticsearch": "~$350-600/mo (Elastic Cloud, 3-node cluster, 120GB storage)"
-        },
-        "enterprise": {
-          "title": "1M docs, 5M searches/mo",
-          "aacsearch": "$499/mo",
-          "elasticsearch": "~$1,200-2,500/mo (Elastic Cloud, 5-10 node cluster)"
-        },
-        "multiTenancy": {
-          "title": "Multi-tenancy",
-          "aacsearch": "Native (org-scoped API keys)",
-          "elasticsearch": "Requires separate indices or cross-cluster search setup"
-        },
-        "analytics": {
-          "title": "Analytics dashboard",
-          "aacsearch": "Built-in (all plans)",
-          "elasticsearch": "Requires Kibana setup and maintenance"
-        },
-        "widget": {
-          "title": "Widget (embeddable UI)",
-          "aacsearch": "Included",
-          "elasticsearch": "Requires custom UI with Elasticsearch JS client"
-        },
-        "connectors": {
-          "title": "CMS Connectors",
-          "aacsearch": "PrestaShop, Bitrix — native sync",
-          "elasticsearch": "None — custom integration needed"
-        },
-        "scopedTokens": {
-          "title": "Scoped API tokens",
-          "aacsearch": "Built-in HMAC tokens",
-          "elasticsearch": "Requires API key setup with role-based access control"
-        },
-        "geosearch": {
-          "title": "Geo-search",
-          "aacsearch": "Yes",
-          "elasticsearch": "Yes (geo_shape, geo_point)"
-        },
-        "typoTolerance": {
-          "title": "Typo tolerance",
-          "aacsearch": "Configurable per-index",
-          "elasticsearch": "Requires custom analyzer configuration (fuzzy queries)"
-        },
-        "relevanceTuning": {
-          "title": "Relevance tuning",
-          "aacsearch": "Rank formula, synonyms, custom ranking",
-          "elasticsearch": "BM25 scoring, function_score, custom similarity"
-        },
-        "selfHost": {
-          "title": "Self-host option",
-          "aacsearch": "Full Typesense export, migrate anytime",
-          "elasticsearch": "Fully self-hostable — Elastic's main strength"
-        },
-        "searchEngine": {
-          "title": "Search engine",
-          "aacsearch": "Typesense (open-source, C++)",
-          "elasticsearch": "Apache Lucene (open-source, Java)"
-        },
-        "sla": {
-          "title": "SLA",
-          "aacsearch": "99.9% uptime",
-          "elasticsearch": "99.9% (Elastic Cloud, higher tiers available)"
-        },
-        "logRetention": {
-          "title": "Log retention",
-          "aacsearch": "30 days (all plans)",
-          "elasticsearch": "Configurable (self-managed) / varies by Elastic Cloud plan"
-        }
-      }
-    },
-    "scenarios": {
-      "title": "Pricing Comparison Scenarios",
-      "scenario1": {
-        "heading": "Small e-commerce (10k products, 50k searches/mo)",
-        "elasticsearch": "Elasticsearch: Self-hosted (free) or Elastic Cloud ~$95/mo (2-node cluster)",
-        "aacsearch": "AACsearch: Free tier (1 index, 10k docs) fits perfectly — $0/mo",
-        "saving": "Saving: Up to $95/mo vs Elastic Cloud"
-      },
-      "scenario2": {
-        "heading": "Mid-market (100k products, 500k searches/mo)",
-        "elasticsearch": "Elasticsearch: Elastic Cloud ~$350-600/mo (3-node, 120GB) + DevOps time for cluster management",
-        "aacsearch": "AACsearch: Scale plan $99/mo — zero ops, automatic scaling",
-        "saving": "Saving: ~$250-500/mo plus no DevOps overhead"
-      },
-      "scenario3": {
-        "heading": "Enterprise (1M products, 5M searches/mo)",
-        "elasticsearch": "Elasticsearch: Elastic Cloud ~$1,200-2,500/mo (5-10 nodes) + dedicated SRE team",
-        "aacsearch": "AACsearch: Pro plan $499/mo",
-        "saving": "Saving: ~$700-2,000/mo plus full SRE cost elimination"
-      }
-    },
-    "whyMigrate": {
-      "title": "Why Teams Migrate from Elasticsearch to AACsearch",
-      "items": [
-        "Zero-ops — No cluster provisioning, JVM tuning, or shard management. AACsearch is fully managed.",
-        "Automatic scaling — AACsearch handles traffic spikes without capacity planning or cluster resizing.",
-        "Predictable pricing — Flat per-index cost vs unpredictable node-hour + storage bills from Elastic Cloud.",
-        "Built-in analytics — Search analytics out of the box. No Kibana setup, no dashboard maintenance."
-      ]
-    },
-    "testimonial": {
-      "quote": "We spent more time managing our Elasticsearch cluster than actually building search features. Migrated to AACsearch in a weekend — zero ops, lower latency, and the dashboard showed us search gaps we had no visibility into before.",
-      "author": "CTO, B2B SaaS company (migrated from Elasticsearch Cloud)"
-    },
-    "decisionMatrix": {
-      "title": "When to Choose Each Platform",
-      "whenAACsearch": {
-        "heading": "Choose AACsearch if you:",
-        "items": [
-          "Want zero-ops search — no cluster provisioning or JVM tuning",
-          "Need automatic scaling without capacity planning",
-          "Want search analytics, widget, and connectors included",
-          "Are paying Elastic Cloud bills and want predictable pricing",
-          "Build product search, help center, or SaaS application search"
-        ]
-      },
-      "whenElasticsearch": {
-        "heading": "Choose Elasticsearch if you:",
-        "items": [
-          "Need log analytics / observability pipelines (ELK stack)",
-          "Require complex aggregations and data analytics queries",
-          "Need on-prem control with full self-hosting flexibility",
-          "Have an existing Elasticsearch infrastructure with committed investment",
-          "Require advanced ES features (machine learning, graph exploration)"
-        ]
-      }
-    },
-    "cta": {
-      "heading": "Ready to switch from Elasticsearch?",
-      "description": "Start a free trial — no credit card required. Zero-ops search in minutes, not weeks.",
-      "button": "Start Free Trial →"
-    }
-  },
-  "compareMeilisearchPage": {
-    "title": "AACsearch vs. Meilisearch",
-    "description": "AACsearch vs. Meilisearch — Engine-Vergleich, gehostete Ebene, Multi-Tenancy und wann Sie welches wählen sollten."
-  },
-  "compareMeilisearch": {
-    "title": "AACsearch vs. Meilisearch",
-    "subtitle": "Meilisearch ist eine ausgezeichnete Open-Source-Engine. AACsearch fügt die gehostete Ebene hinzu, die Ihr Produktions-Deployment benötigt.",
-    "items": {
-      "engine": {
-        "title": "Zugrunde liegende Engine",
-        "description": "Meilisearch ist Engine und Produkt zugleich. AACsearch nutzt eine andere Open-Source-Engine mit eingebauter Vektorsuche."
-      },
-      "hosted": {
-        "title": "Managed Cloud",
-        "description": "Meilisearch Cloud ist deren gehostete Option. AACsearch's gehostete Ebene fügt Scoped Tokens, Multi-Tenancy und eine Management-Control-Plane hinzu."
-      },
-      "multiTenancy": {
-        "title": "Multi-Tenancy",
-        "description": "Meilisearchs Multi-Tenancy nutzt Tenant-Tokens. AACsearchs Scoped Tokens tragen AND-kombinierte Pflichtfilter für stärkere Isolation."
-      },
-      "analytics": {
-        "title": "Analytics",
-        "description": "Meilisearch hat grundlegende Such-Analytics. AACsearch verfolgt jedes Such-Event mit vollständigen Metadaten: Query, Filter, Latenz, CTR."
-      },
-      "connectors": {
-        "title": "CMS-Connectors",
-        "description": "Meilisearch verfolgt einen JavaScript-SDK-First-Ansatz. AACsearch hat native PHP-Module für PrestaShop und 1C-Bitrix."
-      },
-      "verdict": {
-        "title": "Wann Sie AACsearch wählen sollten",
-        "description": "Wenn Sie Multi-Tenant-Isolation, eine Management-API, CMS-Connectors oder Analytics über grundlegende Query-Zählungen hinaus benötigen."
-      }
-    }
-  },
-  "compareOpenSearchPage": {
-    "title": "AACsearch vs. OpenSearch",
-    "description": "AACsearch ist eine fokussierte, schnelle Such-API. OpenSearch ist eine vollständige Analyseplattform. Hier steht, wann welches sinnvoll ist."
-  },
-  "compareOpenSearch": {
-    "title": "Fokussierte Suche vs. Analyseplattform",
-    "subtitle": "OpenSearch ist leistungsstark, aber komplex. AACsearch ist speziell für Anwendungssuche gebaut – einfacheres Schema, schnelleres Setup, geringere Latenz.",
-    "items": {
-      "complexity": {
-        "title": "Tage statt Wochen",
-        "description": "AACsearch indiziert deine erste Kollektion an einem Nachmittag. Das Setup eines OpenSearch-Clusters dauert Wochen."
-      },
-      "performance": {
-        "title": "Unter 50 ms vs. 100–500 ms",
-        "description": "AACsearch P99-Latenz liegt unter 50 ms. OpenSearch-Abfragelatenz beträgt typischerweise 100–500 ms auf vergleichbarer Hardware."
-      },
-      "schema": {
-        "title": "Schema-Einfachheit",
-        "description": "AACsearch-Kollektionen haben ein flaches, typisiertes Schema. Das OpenSearch-Mapping-Design ist ein Spezialgebiet."
-      },
-      "multiTenancy": {
-        "title": "Native Multi-Tenancy",
-        "description": "AACsearch org-scoped Keys und Scoped Tokens sind erstklassige Features. OpenSearch benötigt Plugins für Multi-Tenancy."
-      },
-      "analytics": {
-        "title": "Suchspezifische Analytik",
-        "description": "AACsearch liefert Query-Logs, Zero-Result-Raten und CTR – für Produktteams. OpenSearch-Analytik zielt auf Infrastruktur-Monitoring."
-      },
-      "pricing": {
-        "title": "Vorhersehbare Kosten",
-        "description": "AACsearch berechnet pro Sucheinheit. OpenSearch-Kosten hängen von Instanztyp, Speicher-I/O und Datentransfer ab."
-      },
-      "cost": {
-        "title": "Kostenvergleich",
-        "description": "OpenSearch Self-Hosted erfordert dedizierte Infrastruktur, Entwicklungszeit und laufende Wartung. AACsearch ist vollständig verwaltet mit vorhersagbaren Preisen pro Einheit."
-      },
-      "relevance": {
-        "title": "Suchrelevanz",
-        "description": "AACsearch verwendet BM25-Scoring mit konfigurierbaren Feldgewichten, Boost-Regeln und Tippfehlertoleranz. OpenSearch erfordert manuelle Anpassung der Ähnlichkeitskonfigurationen."
-      },
-      "setup": {
-        "title": "Einrichtungszeit",
-        "description": "AACsearch ist in Minuten API-bereit. OpenSearch Self-Hosted benötigt Tage für Bereitstellung, Konfiguration und Sicherung vor der Indexierung."
-      },
-      "speed": {
-        "title": "Abfragegeschwindigkeit",
-        "description": "AACsearch liefert sub-50ms P99-Abfragelatenz. OpenSearch-Latenz variiert stark mit Indexgröße, Shard-Anzahl und Clusterlast."
-      }
-    }
-  },
-  "comparePineconePage": {
-    "title": "AACsearch vs. Pinecone",
-    "description": "Pinecone ist eine reine Vektordatenbank. AACsearch kombiniert Keyword- und Vektorsuche für Anwendungen, bei denen beide Relevanzmodi wichtig sind."
-  },
-  "comparePinecone": {
-    "title": "Reiner Vektor vs. vollständige Suchplattform",
-    "subtitle": "Pinecone glänzt bei reinem Vektor-Recall. AACsearch ergänzt die Keyword-Suche, Facetten und die Produkt-UX-Schicht, die die meisten Anwendungen brauchen.",
-    "items": {
-      "keywordSearch": {
-        "title": "Keyword + Semantik",
-        "description": "AACsearch verarbeitet typolerante Keyword-Suche und semantische Vektorsuche. Pinecone ist rein vektor-basiert."
-      },
-      "facets": {
-        "title": "Facettierte Navigation",
-        "description": "AACsearch berechnet Facettenzählungen mit jeder Anfrage. Pinecone hat Metadaten-Filterung, aber keine Facettenzählung."
-      },
-      "hybridSearch": {
-        "title": "Konfigurierbare Hybrid-Gewichte",
-        "description": "AACsearch lässt dich die Balance zwischen BM25 und Vektorähnlichkeit pro Anfrage einstellen."
-      },
-      "pricing": {
-        "title": "Einfachere Preisgestaltung",
-        "description": "AACsearch berechnet pro Sucheinheit. Pinecones Preismodell ist komplex."
-      },
-      "performance": {
-        "title": "Such-API, nicht nur ein Vektorspeicher",
-        "description": "AACsearch liefert gereigte, gefilterte, hervorgehobene Ergebnisse in unter 50 ms."
-      },
-      "widget": {
-        "title": "Vollständige Such-UX inklusive",
-        "description": "AACsearch enthält ein gehostetes Widget, ein Analyse-Dashboard und ein SDK. Pinecone ist eine API."
-      },
-      "ecommerce": {
-        "title": "E-Commerce-Suche",
-        "description": "AACsearch kombiniert Schlüsselwort- und Vektorsuche für E-Commerce. Pinecone ist rein vektorbasiert und hat keine BM25-, Tippfehler-, Facetten- oder Filterfunktionen."
-      },
-      "hybrid": {
-        "title": "Hybride Suche",
-        "description": "AACsearch unterstützt hybride Schlüsselwort + Vektorsuche direkt. Pinecone benötigt einen separaten Schlüsselwortsuchdienst."
-      },
-      "latency": {
-        "title": "Suchlatenz",
-        "description": "AACsearch hält sub-50ms Latenz bei gemischten Keyword-Vektor-Abfragen. Pinecone reine Vektorabfragen sind schnell, aber die Kombination mit Schlüsselwortsuche erhöht die Latenz."
-      }
-    }
-  },
-  "compareSolrPage": {
-    "title": "AACsearch vs. Apache Solr",
-    "description": "Solr ist bewährt, erfordert aber Spezialisten. AACsearch bietet dieselbe Zuverlässigkeit mit einer modernen API und null Betriebsaufwand."
-  },
-  "compareSolr": {
-    "title": "Moderne API vs. Legacy-Komplexität",
-    "subtitle": "Solr unterstützt Enterprise-Suche seit 20 Jahren. AACsearch gibt einem Junior-Entwickler dieselben Fähigkeiten mit einem halbtägigen Setup.",
-    "items": {
-      "modernApi": {
-        "title": "REST-API vs. Solr-Query-DSL",
-        "description": "AACsearch verwendet eine saubere JSON-REST-API. Solr-Abfragen nutzen eine eigene DSL mit steiler Lernkurve."
-      },
-      "setup": {
-        "title": "Minuten statt Tage",
-        "description": "AACsearch-Setup: Index erstellen, Dokumente einlesen, API aufrufen. Solr erfordert Java, ZooKeeper, Schema-Design und Core-Management."
-      },
-      "performance": {
-        "title": "Schneller out of the box",
-        "description": "AACsearch liefert Ergebnisse in unter 50 ms ohne Tuning. Solr-Performance erfordert Experten-Konfiguration."
-      },
-      "multiTenancy": {
-        "title": "Eingebaute Multi-Tenancy",
-        "description": "AACsearch isoliert Mandanten auf API-Key-Ebene. Solr-Multi-Tenancy erfordert separate Cores."
-      },
-      "analyticsBuiltin": {
-        "title": "Eingebaute Analytik",
-        "description": "AACsearch zeichnet jede Anfrage auf und bietet ein Dashboard. Solr hat keine eingebaute Query-Analytik."
-      },
-      "pricing": {
-        "title": "Keine Infrastrukturkosten",
-        "description": "AACsearch ist vollständig managed. Solr bedeutet eigenes Cluster-Betreiben und -Skalieren."
-      },
-      "devex": {
-        "title": "Entwicklererfahrung",
-        "description": "AACsearch bietet eine moderne REST-API mit typisierten SDKs, OpenAPI-Spezifikation und Dashboard. Solrs XML-Konfiguration und Java-zentrierte Tools haben eine steile Lernkurve."
-      },
-      "migration": {
-        "title": "Migrationspfad",
-        "description": "Migration von Solr zu AACsearch über die REST-API. Dokumente neu indexieren, Schema über das Dashboard konfigurieren und die Anwendung auf AACsearch umstellen."
-      },
-      "ops": {
-        "title": "Betrieb",
-        "description": "AACsearch verwaltet Infrastruktur, Skalierung, Upgrades und Überwachung. Solr Self-Hosted erfordert dedizierte Ops-Teams für ZooKeeper und Shard-Management."
-      },
-      "search": {
-        "title": "Suchqualität",
-        "description": "AACsearch bietet Tippfehlertoleranz, Synonyme, Facettensuche, Relevanzeinstellung und Analysen. Solr erfordert Plugin-Konfiguration und benutzerdefinierte Entwicklung."
-      }
-    }
-  },
-  "compareTypesensePage": {
-    "title": "AACsearch vs. Typesense",
-    "description": "AACsearch basiert auf Typesense. Der Unterschied: Wir fügen Multi-Tenancy, Analytik, eine gehostete Steuerungsebene und verwalteten Betrieb hinzu."
-  },
-  "compareTypesense": {
-    "title": "Engine vs. Managed-Cloud-Plattform",
-    "subtitle": "Typesense ist der Motor, den wir betreiben. AACsearch umhüllt ihn mit der SaaS-Ebene, die Ihr Team braucht – Multi-Tenancy, Analyse, Widget, Connectors und Support.",
-    "codeTitle": "Gleicher Motor, reichhaltigere Plattform",
-    "codeSubtitle": "AACsearch fügt Multi-Tenancy, Analyse und verwaltete Infrastruktur auf der Typesense-Basis hinzu. Ihre Daten. Unser Betrieb.",
-    "items": {
-      "hosting": {
-        "title": "Kein Betriebsaufwand",
-        "description": "AACsearch verwaltet Typesense-Upgrades, Cluster-Größenanpassung, Backups und Monitoring. Sie erhalten eine fertige Such-API, keinen zu wartenden Cluster."
-      },
-      "multiTenancy": {
-        "title": "Multi-Tenancy integriert",
-        "description": "Org-bezogene API-Schlüssel, bereichsgebundene Tokens und Origin-Allow-Listen pro Schlüssel sind AACsearch-Funktionen ab Tag null. Bei Typesense Cloud müssen Sie dies selbst entwickeln."
-      },
-      "analytics": {
-        "title": "Suchanalyse",
-        "description": "AACsearch bietet eine vollständige Analyse-Pipeline: Abfrageprotokolle, Null-Ergebnis-Verfolgung, Top-Abfragen, Click-Through-Raten und Widget-Ereignisse. Keine zusätzliche Instrumentierung."
-      },
-      "connectors": {
-        "title": "CMS-Connectoren",
-        "description": "PrestaShop-, Bitrix-, WordPress- und Shopify-Connectoren sind AACsearch-Erweiterungen. Typesense Cloud hat keine vorgefertigten Connectoren."
-      },
-      "pricing": {
-        "title": "Vorhersagbare Preise",
-        "description": "AACsearch wird pro Sucheinheit abgerechnet – Sie kennen Ihre Rechnung vor Monatsende. Keine stündlichen Knotengebühren, keine Speicherkosten, keine Überraschungen."
-      },
-      "support": {
-        "title": "Dedizierter Support",
-        "description": "AACsearch-Tarife beinhalten E-Mail-Support und eine SLA. Der Typesense-Community-Support erfolgt über Discord."
-      }
-    },
-    "table": {
-      "title": "Funktionsvergleich",
-      "subtitle": "Ein direkter Vergleich, was jede Plattform bietet",
-      "aacsearch": "AACsearch",
-      "typesenseCloud": "Typesense Cloud",
-      "features": {
-        "searchEngine": {
-          "title": "Suchmaschinenkern",
-          "aacsearch": "Typesense (gleicher Motor)",
-          "typesenseCloud": "Typesense (gleicher Motor)"
-        },
-        "managedHosting": {
-          "title": "Managed Hosting",
-          "aacsearch": "Inbegriffen",
-          "typesenseCloud": "Inbegriffen"
-        },
-        "analytics": {
-          "title": "Analyse-Dashboard",
-          "aacsearch": "Integriert (alle Tarife)",
-          "typesenseCloud": "Nicht verfügbar"
-        },
-        "widget": {
-          "title": "Such-Widget (einbettbar)",
-          "aacsearch": "Inbegriffen (Vanilla JS, React, Vue)",
-          "typesenseCloud": "Nicht verfügbar"
-        },
-        "connectors": {
-          "title": "CMS-Connectoren",
-          "aacsearch": "PrestaShop, Bitrix – native Synchronisation",
-          "typesenseCloud": "Nicht verfügbar"
-        },
-        "multiTenancy": {
-          "title": "Multi-Tenant (Organisationen)",
-          "aacsearch": "Nativ, API-Schlüssel pro Organisation",
-          "typesenseCloud": "Muss selbst entwickelt werden"
-        },
-        "scopedTokens": {
-          "title": "Bereichsgebundene API-Tokens",
-          "aacsearch": "Integrierte HMAC-Tokens",
-          "typesenseCloud": "Muss selbst entwickelt werden"
-        },
-        "rateLimiting": {
-          "title": "Ratenbegrenzung",
-          "aacsearch": "Pro Schlüssel, konfigurierbar",
-          "typesenseCloud": "Muss selbst entwickelt werden"
-        },
-        "apiKeyManagement": {
-          "title": "API-Schlüsselverwaltung",
-          "aacsearch": "Dashboard-UI",
-          "typesenseCloud": "Nur Cloud-Konsole"
-        },
-        "publicApi": {
-          "title": "Öffentliche API (Suche)",
-          "aacsearch": "REST + gRPC",
-          "typesenseCloud": "REST"
-        },
-        "userManagement": {
-          "title": "Benutzerverwaltung",
-          "aacsearch": "Integrierte Authentifizierung",
-          "typesenseCloud": "Muss selbst entwickelt werden"
-        },
-        "pricing": {
-          "title": "Preismodell",
-          "aacsearch": "Pro Index, unbegrenzte Operationen",
-          "typesenseCloud": "Pro Knoten/Stunde + pro GB Speicher"
-        },
-        "entryPrice": {
-          "title": "Einstiegspreis",
-          "aacsearch": "Kostenlos (1 Index, 10k Dokumente)",
-          "typesenseCloud": "~49 $/Monat (1 Knoten, 4 GB)"
-        },
-        "midMarket": {
-          "title": "100k Dokumente, 500k Suchanfragen/Monat",
-          "aacsearch": "99 $/Monat",
-          "typesenseCloud": "~99 $/Monat (2-Knoten-Cluster) + Middleware"
-        },
-        "sla": {
-          "title": "SLA",
-          "aacsearch": "99,9 % Verfügbarkeit",
-          "typesenseCloud": "99,9 % Verfügbarkeit"
-        },
-        "selfHost": {
-          "title": "Self-Host-Fallback",
-          "aacsearch": "Vollständiger Typesense-Export",
-          "typesenseCloud": "Gleicher Motor – portabel"
-        }
-      }
-    },
-    "scenarios": {
-      "title": "Preisvergleichsszenarien",
-      "scenario1": {
-        "heading": "Starten (10k Dokumente, einfache Suche)",
-        "typesenseCloud": "Typesense Cloud: 49 $/Monat (1 Knoten, keine Analyse, kein Multi-Tenant)",
-        "aacsearch": "AACsearch: Kostenlose Stufe (1 Index, 10k Dokumente) – alle Funktionen inbegriffen",
-        "saving": "Ersparnis: 49 $/Monat zzgl. Middleware-Entwicklungskosten"
-      },
-      "scenario2": {
-        "heading": "Wachstum (100k Dokumente, Multi-Tenant)",
-        "typesenseCloud": "Typesense Cloud: 99 $/Monat (2 Knoten) + 5.000–20.000 $ einmalige Entwicklung",
-        "aacsearch": "AACsearch: Scale-Tarif 99 $/Monat – alles integriert, keine Entwicklung nötig",
-        "saving": "Ersparnis: ~5.000–20.000 $ einmalig zzgl. laufender Wartung"
-      },
-      "scenario3": {
-        "heading": "Skalieren (1M Dokumente, Analyse + Connectoren)",
-        "typesenseCloud": "Typesense Cloud: ~299 $/Monat (4 Knoten) + laufende Entwicklung",
-        "aacsearch": "AACsearch: Pro-Tarif 499 $/Monat – alles integriert, kein Entwicklungsaufwand",
-        "saving": "Ersparnis: Erhebliche Einsparung bei Entwicklungskosten"
-      }
-    },
-    "whyMigrate": {
-      "title": "Warum Teams AACsearch gegenüber Typesense Cloud wählen",
-      "items": [
-        "Vollständiges Produkt, nicht nur Infrastruktur – AACsearch ist Search-as-a-Service mit API, Dashboard, Widget und Connectoren. Typesense Cloud gibt Ihnen einen Cluster, den Rest müssen Sie bauen.",
-        "Multi-Tenancy ohne Boilerplate – Jede Organisation erhält isolierte Suchkonfigurationen und API-Schlüssel. Kein Code für die Mandantentrennung erforderlich.",
-        "Keine Middleware zu bauen – Ratenbegrenzung, Benutzerverwaltung, Webhook-Benachrichtigungen und Analysen sind in AACsearch integriert. Typesense Cloud erfordert, dass Sie diese selbst erstellen."
-      ]
-    },
-    "testimonial": {
-      "quote": "Wir haben mit Typesense Cloud angefangen, aber schnell gemerkt, dass wir mehr Zeit mit dem Bau von Infrastruktur um den Cluster herum verbrachten als mit der Suchoptimierung. AACsearch hat all das eliminiert.",
-      "author": "Engineering Lead, B2B-SaaS-Plattform"
-    },
-    "decisionMatrix": {
-      "title": "Wann Sie welche Plattform wählen sollten",
-      "whenAACsearch": {
-        "heading": "Wählen Sie AACsearch, wenn Sie:",
-        "items": [
-          "Search-as-a-Service möchten – nicht nur einen Datenbank-Cluster",
-          "Multi-Tenant-Suche für Ihr SaaS-Produkt benötigen",
-          "Analyse, Widget und Connectoren ohne Eigenentwicklung nutzen möchten",
-          "Vorhersagbare Preise ohne Überraschungen brauchen",
-          "Einen dedizierten Support mit SLA wünschen"
-        ]
-      },
-      "whenTypesenseCloud": {
-        "heading": "Wählen Sie Typesense Cloud, wenn Sie:",
-        "items": [
-          "Raw Typesense API benötigen und planen, Ihre eigene Infrastruktur zu bauen",
-          "Bereits eine eigene Multi-Tenancy-Lösung haben",
-          "Keine Analyse, Widgets oder CMS-Connectoren benötigen",
-          "Direkten Serverzugriff für benutzerdefinierte Konfiguration brauchen",
-          "Das Budget haben, Ihre eigene Suchplattform zu warten"
-        ]
-      }
-    },
-    "analogy": {
-      "heading": "Der einfache Unterschied",
-      "line1": "Typesense Cloud ist wie das Mieten eines Servers bei AWS.",
-      "line2": "AACsearch ist wie Heroku für die Suche – Sie erhalten die Plattform, die Werkzeuge und das Dashboard. Kein Server-Management, kein Middleware-Bau."
-    },
-    "cta": {
-      "heading": "Bereit zum Wechsel?",
-      "description": "Starten Sie eine kostenlose Testversion – keine Kreditkarte erforderlich. Angetrieben von Typesense, kein Vendor-Lock-in, vollständiger Export jederzeit möglich.",
-      "button": "Kostenlose Testversion starten →"
-    }
-  },
-  "compareWeaviatePage": {
-    "title": "AACsearch vs. Weaviate",
-    "description": "Weaviate ist eine Vektordatenbank. AACsearch ist eine hybride Volltext-plus-Vektor-Such-API."
-  },
-  "compareWeaviate": {
-    "title": "Vektordatenbank vs. hybride Such-API",
-    "subtitle": "Beide unterstützen Vektoren, aber AACsearch ergänzt Keyword-Suche, Facetten, Typo-Toleranz und eine Multi-Tenant-Hosting-Schicht.",
-    "items": {
-      "hybridSearch": {
-        "title": "Keyword + Vektor in einem Aufruf",
-        "description": "AACsearch-Hybridsuche kombiniert BM25-Keyword-Relevanz mit Vektorähnlichkeit in einer Anfrage."
-      },
-      "facets": {
-        "title": "Facettierte Navigation",
-        "description": "AACsearch berechnet Facettenzählungen bei jeder Anfrage – unverzichtbar für E-Commerce und Dokumentationssuche."
-      },
-      "typoTolerance": {
-        "title": "Typo-Toleranz",
-        "description": "AACsearch hat eingebautes Fuzzy-Matching für Endbenutzeranfragen. Vektorsuche hilft nicht bei Rechtschreibfehlern."
-      },
-      "multiTenancy": {
-        "title": "Native Multi-Tenancy",
-        "description": "AACsearch org-scoped Keys und Per-Tenant-Analytik sind erstklassige Features."
-      },
-      "pricing": {
-        "title": "Transparente Preise",
-        "description": "AACsearch berechnet pro Sucheinheit mit einer vorhersehbaren Monatsrechnung."
-      },
-      "widget": {
-        "title": "Drop-in-Such-Widget",
-        "description": "AACsearch liefert ein 14-KB-Browser-Widget mit sofortiger Suche, Facetten und Analytik."
-      },
-      "features": {
-        "title": "Funktionstiefe",
-        "description": "AACsearch bietet Volltextsuche, Vektorsuche, hybride Suche, Tippfehlertoleranz, Synonyme, Facettennavigation und Analysen. Weaviate konzentriert sich hauptsächlich auf Vektorsuche."
-      },
-      "schema": {
-        "title": "Schema-Verwaltung",
-        "description": "AACsearch Schema-Verwaltung ist einfach über Dashboard oder API. Weaviate folgt einem Klassen-Eigenschaften-Schema-Modell."
-      },
-      "support": {
-        "title": "Support und SLAs",
-        "description": "AACsearch bietet E-Mail-Support in bezahlten Tarifen und SLAs auf Enterprise-Ebene. Weaviate bietet Community-Support für Open-Source."
-      },
-      "usecase": {
-        "title": "Anwendungsfall",
-        "description": "AACsearch eignet sich hervorragend für Produktsuche, Websuche und Wissensdatenbanksuche. Weaviate ist am stärksten für KI-native Anwendungen und semantische Suche."
-      }
-    }
-  },
-  "vsAlgoliaPage": {
-    "title": "AACsearch vs Algolia — 5x günstigere Alternative",
-    "description": "Detailvergleich von AACsearch vs Algolia: Preise, Multi-Tenancy, Leistung, Open-Source-Typesense-Engine und Migrationsleitfaden. Erfahren Sie, warum Teams mit 200+$/Monat auf Algolia zu AACsearch für 5x Ersparnis wechseln."
-  },
-  "vsAlgolia": {
-    "title": "AACsearch vs Algolia — Direkter Vergleich",
-    "subtitle": "Algolia ist der Marktführer mit ausgezeichneter DX. AACsearch ist 5x günstiger, basiert auf Open-Source-Typesense und bietet native Multi-Tenancy mit Scoped Tokens.",
-    "items": {
-      "pricing": {
-        "title": "Preise (5x günstiger)",
-        "description": "Algolia berechnet pro Such-Operation und pro gespeichertem Datensatz mit gestaffelten Mindestbeträgen, die Teams im Skalierungsprozess überraschen. AACsearch berechnet pro Search-Unit ohne Minimum über dem kostenlosen Tarif — typischerweise 5x günstiger bei 100K+ monatlichen Suchanfragen."
-      },
-      "performance": {
-        "title": "Leistung",
-        "description": "Beide liefern Suchresultate unter 50ms. AACsearch nutzt eine Open-Source-Typesense-Engine mit konsistenter p99-Latenz. Algolias gemeinsam genutzte Infrastruktur kann zu Latenzspitzen bei Spitzenlast führen."
-      },
-      "multiTenancy": {
-        "title": "Multi-Tenancy",
-        "description": "Algolia nutzt Index-spezifische API-Keys mit optionalen User-Tokens. AACsearch verwendet HMAC-Scoped-Tokens mit obligatorischen AND-kombinierten Filtern — Tenant-Isolation wird architektonisch erzwungen, nicht nur als Richtlinie."
-      },
-      "security": {
-        "title": "Sicherheit",
-        "description": "AACsearch fügt pro-Key Origin-Allow-Listen, Ratenbegrenzung, Kontingentdurchsetzung und Tenant-Isolation auf jeder Abfrageebene hinzu. Algolia bietet API-Key-Verwaltung mit IP-Bereichen und grundlegender Ratenbegrenzung. AACsearch deckt ab, wofür Algolia extra berechnet."
-      },
-      "migration": {
-        "title": "Migration",
-        "description": "Beide APIs sind strukturell ähnlich. AACsearch bietet vollständigen Typesense-Datenexport und eine Typesense-kompatible API. Die meisten Teams schließen die Migration in Stunden mit einem Re-Index-Skript ab. Algolias proprietäres Format bedeutet Vendor-Lock-in."
-      },
-      "openSource": {
-        "title": "Open-Source-Engine",
-        "description": "AACsearch läuft auf Typesense, einer vollständig Open-Source-Suchmaschine (GPLv3). Sie können Ihre Daten jederzeit exportieren und selbst betreiben. Algolia verwendet eine proprietäre Engine — keine Datenportabilität bei einem Wechsel."
-      },
-      "ecosystem": {
-        "title": "Ökosystem & Integrationen",
-        "description": "Algolia hat ein ausgereiftes Ökosystem — InstantSearch-Widgets, Konnektoren und umfangreiche Dokumentation. AACsearch bietet ein UI-Widget (React, Vue, vanilla JS), Echtzeit-Webhook-Konnektoren (PrestaShop, Bitrix, Shopify) und eine REST-API mit Browser-SDK."
-      },
-      "verdict": {
-        "title": "Wann Sie AACsearch wählen sollten",
-        "description": "Wenn Sie 200+$/Monat für Algolia ausgeben, native Multi-Tenancy mit Scoped Tokens benötigen, Open-Source-Portabilität wünschen oder planbare Preise bevorzugen — ist AACsearch die klare Wahl."
-      }
-    },
-    "codeTitle": "Client tauschen, Abfrage behalten",
-    "codeSubtitle": "Migration dauert Stunden, nicht Wochen. AACsearchs Typesense-kompatible API spiegelt Algolias Abfragemuster wider.",
-    "decision": {
-      "title": "Entscheidungsmatrix",
-      "subtitle": "Nutzen Sie diese Kurzreferenz, um zu entscheiden, welche Plattform am besten zu Ihrem Anwendungsfall passt.",
-      "criterion": "Kriterium",
-      "price": "Monatliche Kosten bei 100K Suchanfragen",
-      "timeToShip": "Zeit bis zum ersten Suchergebnis",
-      "multiTenant": "Multi-Tenant-Isolation",
-      "lockIn": "Vendor-Lock-in-Risiko",
-      "vendorFit": "Am besten geeignet für",
-      "aacsearch": {
-        "price": "29 $ pauschal",
-        "timeToShip": "1 Nachmittag",
-        "multiTenant": "Integriert (Scoped Tokens)",
-        "lockIn": "Keines (Open-Source-Engine)",
-        "vendorFit": "Teams, die Suche skalieren, SaaS-Produkte, Multi-Tenant-Apps"
-      },
-      "algolia": {
-        "price": "150 $+ gemessen",
-        "timeToShip": "1 Nachmittag",
-        "multiTenant": "Erfordert benutzerdefinierte Infrastruktur",
-        "lockIn": "Hoch (proprietär)",
-        "vendorFit": "Teams, die in das Algolia-Ökosystem investiert haben"
-      },
-      "footnote": "Die Kosten sind Näherungswerte und basieren auf 100K monatlichen Suchoperationen und 10K Datensätzen. Die tatsächlichen Preise variieren je nach Nutzungsmuster."
-    }
-  }
+	"comparePage": {
+		"title": "AACsearch vs. die Alternativen",
+		"description": "Erfahren Sie, wie sich AACsearch mit Algolia, Elasticsearch und MeiliSearch vergleicht – und warum Tausende von Entwicklern uns wählen.",
+		"table": {
+			"feature": "Funktion",
+			"aacsearch": "AACsearch",
+			"features": {
+				"fulltext": "Volltextsuche",
+				"vector": "Vektor- / semantische Suche",
+				"hybrid": "Hybridsuche",
+				"realtime": "Echtzeit-Indizierung",
+				"pricing": "Vorhersehbare Preise",
+				"managed": "Verwaltete Cloud",
+				"connector": "Connector-API",
+				"cms": "CMS-Integrationen",
+				"setup": "Einrichtungszeit",
+				"free": "Kostenloses Angebot"
+			},
+			"values": {
+				"minutes": "Minuten",
+				"hours": "Stunden",
+				"days": "Tage",
+				"yes": "Ja",
+				"no": "Nein",
+				"partial": "Teilweise"
+			}
+		},
+		"cta": {
+			"title": "Bereit zum Wechseln?",
+			"description": "Die Migration von Algolia oder Elasticsearch dauert mit unserer Connector-API weniger als einen Tag."
+		}
+	},
+	"compare": {
+		"title": "Der ehrliche Vergleich",
+		"subtitle": "Wir sind nicht für jedes Team die richtige Wahl. Hier ist ein offener Überblick, wo AACsearch gewinnt und wo nicht.",
+		"items": {
+			"vsAlgolia": {
+				"title": "AACsearch vs. Algolia",
+				"description": "Algolia ist ausgereift und hat ausgezeichnete Dokumentation. AACsearch ist erschwinglicher und für Multi-Tenant-Teams konzipiert. Wenn Sie $500+/Monat für Algolia ausgeben, wird AACsearch das deutlich reduzieren."
+			},
+			"vsElasticsearch": {
+				"title": "AACsearch vs. Elasticsearch",
+				"description": "Elasticsearch ist unendlich flexibel und unendlich komplex. AACsearch ist meinungsstark und einfach. Wenn Sie ein SIEM oder Log-Analytics brauchen, nutzen Sie Elastic. Wenn Sie Produktsuche brauchen, nutzen Sie uns."
+			},
+			"vsMeilisearch": {
+				"title": "AACsearch vs. Meilisearch",
+				"description": "Meilisearch ist eine ausgezeichnete Open-Source-Engine. AACsearch fügt die gehostete Ebene hinzu: Scoped Tokens, Multi-Tenancy, Analytics und eine Control Plane."
+			},
+			"vsTypesense": {
+				"title": "AACsearch vs. Typesense Cloud",
+				"description": "AACsearch basiert auf Typesense. Wir ergänzen Multi-Tenancy, API-Key-Management, Scoped Tokens und eine SaaS-Control-Plane auf der Engine."
+			},
+			"vsCustom": {
+				"title": "AACsearch vs. DIY",
+				"description": "Eine eigene gehostete Suche zu bauen bedeutet, Nodes, Upgrades, Backups und Monitoring zu verwalten. AACsearch übernimmt das, damit Sie Features liefern können."
+			},
+			"whenNotUs": {
+				"title": "Wann Sie etwas anderes nutzen sollten",
+				"description": "Log-Analytics → Elasticsearch. Volltext-Enterprise-Suche mit Compliance → Coveo. Einfaches Autocomplete über 1.000 Datensätze → kein Dienst nötig."
+			}
+		}
+	},
+	"compareAlgoliaPage": {
+		"title": "AACsearch vs Algolia: 5x günstigere Suche ohne Vendor Lock-In (2026)",
+		"description": "Ausführlicher AACsearch vs Algolia Vergleich. AACsearch bietet dieselbe Suchqualität zu 1/5 der Kosten — mit sofortiger Bereitstellung, integrierter Analytik und Typesense-betriebener Relevanz."
+	},
+	"compareAlgolia": {
+		"title": "AACsearch vs Algolia — Der ehrliche Vergleich",
+		"subtitle": "Algolia ist der Marktführer mit ausgezeichneter DX. AACsearch ist erschwinglicher und bietet Multi-Tenant-Isolation, ein Such-Widget und CMS-Connectors — alles inklusive.",
+		"items": {
+			"pricing": {
+				"title": "Preise",
+				"description": "Algolia berechnet pro Such-Operation und pro gespeichertem Datensatz, mit Mindestbeträgen. AACsearch berechnet pro Search-Unit ohne Minimum über dem kostenlosen Tarif."
+			},
+			"multiTenancy": {
+				"title": "Multi-Tenancy",
+				"description": "Algolia nutzt Index-spezifische API-Keys mit User-Tokens. AACsearch nutzt HMAC Scoped Tokens mit obligatorischen AND-kombinierten Filtern."
+			},
+			"migration": {
+				"title": "Migration",
+				"description": "Die AACsearch REST-API ist strukturell ähnlich zu Algolias. Ein Migrationsskript kann Ihre Daten in Stunden re-indizieren."
+			},
+			"verdict": {
+				"title": "Wann Sie AACsearch wählen sollten",
+				"description": "Wenn Sie $200+/Monat für Algolia ausgeben, oder wenn Multi-Tenancy-Isolation und planbare Preise für Sie wichtig sind."
+			},
+			"performance": {
+				"title": "Leistung",
+				"description": "AACsearch basiert auf Typesense — der schnellsten Open-Source-Suchmaschine mit unter 10 ms Suchlatenz. Algolia bietet vergleichbare Geschwindigkeit, kostet aber deutlich mehr pro Abfrage."
+			},
+			"security": {
+				"title": "Sicherheit & Lock-in",
+				"description": "Algolia verwendet ein proprietäres Backend — Ihre Daten sind eingesperrt. AACsearch basiert auf Typesense (Open-Source). Exportieren Sie Ihre Daten jederzeit und hosten Sie sie selbst — ohne Migrationskosten."
+			}
+		},
+		"codeTitle": "Migration dauert Stunden, nicht Wochen",
+		"codeSubtitle": "Die AACsearch Such-API spiegelt Algolias wider. Client tauschen, Filter behalten.",
+		"table": {
+			"title": "Feature Comparison",
+			"subtitle": "A side-by-side look at what each platform offers",
+			"aacsearch": "AACsearch",
+			"algolia": "Algolia",
+			"features": {
+				"pricingModel": {
+					"title": "Preismodell",
+					"aacsearch": "Per-index, unlimited operations",
+					"algolia": "Per search op + per record"
+				},
+				"entryPrice": {
+					"title": "Einstiegspreis",
+					"aacsearch": "Free (1 index, 10k docs)",
+					"algolia": "Free (10k ops/mo, 10k records)"
+				},
+				"midMarket": {
+					"title": "100k Dokumente, 500k Suchanfragen/Monat",
+					"aacsearch": "$99/mo",
+					"algolia": "~$499/mo (Growth plan)",
+					"highlight": true
+				},
+				"enterprise": {
+					"title": "1M Dokumente, 5M Suchanfragen/Monat",
+					"aacsearch": "$499/mo",
+					"algolia": "Custom (~$2,500+/mo)",
+					"highlight": true
+				},
+				"multiTenancy": {
+					"title": "Multi-Tenancy",
+					"aacsearch": "Native (org-scoped API keys)",
+					"algolia": "Requires separate apps or middleware"
+				},
+				"analytics": {
+					"title": "Analyse-Dashboard",
+					"aacsearch": "Built-in (all plans)",
+					"algolia": "Additional $299/mo"
+				},
+				"widget": {
+					"title": "Widget (einbettbare UI)",
+					"aacsearch": "Included",
+					"algolia": "Requires InstantSearch (self-hosted)"
+				},
+				"connectors": {
+					"title": "CMS-Connectors",
+					"aacsearch": "PrestaShop, Bitrix — native sync",
+					"algolia": "None — custom integration needed"
+				},
+				"scopedTokens": {
+					"title": "Scoped API-Tokens",
+					"aacsearch": "Built-in HMAC tokens",
+					"algolia": "Requires Secured API Keys (manual)"
+				},
+				"geosearch": {
+					"title": "Geo-Suche",
+					"aacsearch": "Yes",
+					"algolia": "Yes"
+				},
+				"typoTolerance": {
+					"title": "Tippfehlertoleranz",
+					"aacsearch": "Configurable per-index",
+					"algolia": "Configurable"
+				},
+				"relevanceTuning": {
+					"title": "Relevanzoptimierung",
+					"aacsearch": "Rank formula, synonyms, custom ranking",
+					"algolia": "Ranking rules, custom ranking"
+				},
+				"selfHost": {
+					"title": "Self-Hosting",
+					"aacsearch": "Full Typesense export, migrate anytime",
+					"algolia": "No — proprietary backend"
+				},
+				"searchEngine": {
+					"title": "Suchmaschine",
+					"aacsearch": "Typesense (open-source)",
+					"algolia": "Proprietary (Elasticsearch-based)"
+				},
+				"sla": {
+					"title": "SLA",
+					"aacsearch": "99.9% uptime",
+					"algolia": "99.9% (higher tiers)"
+				},
+				"logRetention": {
+					"title": "Log-Aufbewahrung",
+					"aacsearch": "30 days (all plans)",
+					"algolia": "7 days (free), 30 days (paid)"
+				}
+			}
+		},
+		"scenarios": {
+			"title": "Pricing Comparison Scenarios",
+			"scenario1": {
+				"heading": "Small e-commerce (10k products, 50k searches/mo)",
+				"algolia": "Algolia: Free tier (10k ops + 10k records) — hits record limit, needs Growth at $299/mo",
+				"aacsearch": "AACsearch: Free tier (1 index, 10k docs) fits perfectly — $0/mo",
+				"saving": "Saving: $299/mo"
+			},
+			"scenario2": {
+				"heading": "Mid-market (100k products, 500k searches/mo)",
+				"algolia": "Algolia: Growth $499/mo + $250/additional ops ≈ $749/mo",
+				"aacsearch": "AACsearch: Scale plan $99/mo",
+				"saving": "Saving: ~$650/mo"
+			},
+			"scenario3": {
+				"heading": "Enterprise (1M products, 5M searches/mo)",
+				"algolia": "Algolia: Enterprise (custom, typically $2,500-$5,000/mo)",
+				"aacsearch": "AACsearch: Pro plan $499/mo",
+				"saving": "Saving: ~$2,000+/mo"
+			}
+		},
+		"whyMigrate": {
+			"title": "Why Teams Migrate to AACsearch",
+			"items": [
+				"Pricing shock — Algolia's per-operation billing becomes unpredictable as traffic grows",
+				"No vendor lock-in — AACsearch is built on Typesense. Your data is portable.",
+				"All-in-one — Search + analytics + widget + connectors in one product, not 3 add-ons",
+				"Self-serve migration — Import your Algolia data directly, reindex in minutes"
+			]
+		},
+		"testimonial": {
+			"quote": "We were paying Algolia $499/mo for a basic e-commerce search. Migrated to AACsearch in an afternoon — same relevance, 5x cheaper, and the built-in analytics showed us exactly what customers were searching for but not finding.",
+			"author": "Founder, mid-market e-commerce company"
+		},
+		"decisionMatrix": {
+			"title": "When to Choose Each Platform",
+			"whenAACsearch": {
+				"heading": "Choose AACsearch if you:",
+				"items": [
+					"Want search-as-a-service with zero DevOps",
+					"Need multi-tenant search for your SaaS product",
+					"Want analytics, widget, and connectors without building them",
+					"Are paying $200+/mo on Algolia and want predictable pricing",
+					"Value Typesense portability — export and self-host anytime"
+				]
+			},
+			"whenAlgolia": {
+				"heading": "Choose Algolia if you:",
+				"items": [
+					"Rely on Algolia-specific features (AI recommendations, personalization)",
+					"Need enterprise compliance certifications (SOC 2, HIPAA via Enterprise plan)",
+					"Have an existing Algolia integration with minimal search volume",
+					"Need advanced Algolia APIs (AB testing, dynamic re-ranking)"
+				]
+			}
+		},
+		"cta": {
+			"heading": "Ready to switch?",
+			"description": "Start a free trial — no credit card required. Import your Algolia data in minutes.",
+			"button": "Start Free Trial →"
+		}
+	},
+	"compareElasticsearchPage": {
+		"title": "AACsearch vs Elasticsearch: The Honest Alternative (2026)",
+		"description": "Detailed AACsearch vs Elasticsearch comparison. AACsearch delivers zero-ops search, automatic scaling, built-in analytics, and predictable flat pricing — without Elasticsearch cluster management overhead. The true elasticsearch alternative for modern applications."
+	},
+	"compareElasticsearch": {
+		"title": "AACsearch vs Elasticsearch — The Honest Comparison",
+		"subtitle": "Elasticsearch is a powerful general-purpose data platform. AACsearch is a purpose-built search API. Different tools for different jobs — here is when each makes sense.",
+		"items": {
+			"complexity": {
+				"title": "Operational complexity",
+				"description": "Elasticsearch requires cluster management, JVM tuning, shard optimization, and ongoing maintenance. AACsearch is a hosted API — zero-ops, no infrastructure to manage."
+			},
+			"latency": {
+				"title": "Search latency",
+				"description": "Elasticsearch p99 search latency is typically 100-400ms depending on cluster size and query complexity. AACsearch targets under 50ms p99 for product and document search workloads."
+			},
+			"useCase": {
+				"title": "Use case fit",
+				"description": "Elasticsearch excels at log analytics, observability pipelines, full-text enterprise search, and complex aggregations. AACsearch excels at product search, help center search, and SaaS application search."
+			},
+			"cost": {
+				"title": "Cost",
+				"description": "Elasticsearch Cloud is expensive for pure search workloads — you pay for cluster nodes you don't need. AACsearch pricing is based on search-units — pay only for what you use."
+			},
+			"schema": {
+				"title": "Schema management",
+				"description": "Elasticsearch mapping changes are complex and often require reindexing with downtime. AACsearch has zero-downtime alias-swap reindex — schema changes without any interruption."
+			},
+			"verdict": {
+				"title": "When to choose AACsearch",
+				"description": "If your use case is product search, help center, or SaaS full-text search — and you do not need log analytics or complex aggregations — AACsearch is the simpler, cheaper, faster option."
+			}
+		},
+		"codeTitle": "Zero-ops search, not cluster management",
+		"codeSubtitle": "AACsearch is a managed search API. Elasticsearch requires cluster provisioning, JVM tuning, and ongoing maintenance.",
+		"table": {
+			"title": "Feature Comparison",
+			"subtitle": "A side-by-side look at how AACsearch and Elasticsearch compare across key dimensions",
+			"aacsearch": "AACsearch",
+			"elasticsearch": "Elasticsearch",
+			"features": {
+				"pricingModel": {
+					"title": "Pricing model",
+					"aacsearch": "Per-index, unlimited operations",
+					"elasticsearch": "Per node-hour + storage (cloud) or self-hosted infra cost"
+				},
+				"entryPrice": {
+					"title": "Entry price",
+					"aacsearch": "Free (1 index, 10k docs)",
+					"elasticsearch": "Free (self-hosted) / ~$95/mo Elastic Cloud (2 nodes)"
+				},
+				"midMarket": {
+					"title": "100k docs, 500k searches/mo",
+					"aacsearch": "$99/mo",
+					"elasticsearch": "~$350-600/mo (Elastic Cloud, 3-node cluster, 120GB storage)"
+				},
+				"enterprise": {
+					"title": "1M docs, 5M searches/mo",
+					"aacsearch": "$499/mo",
+					"elasticsearch": "~$1,200-2,500/mo (Elastic Cloud, 5-10 node cluster)"
+				},
+				"multiTenancy": {
+					"title": "Multi-tenancy",
+					"aacsearch": "Native (org-scoped API keys)",
+					"elasticsearch": "Requires separate indices or cross-cluster search setup"
+				},
+				"analytics": {
+					"title": "Analytics dashboard",
+					"aacsearch": "Built-in (all plans)",
+					"elasticsearch": "Requires Kibana setup and maintenance"
+				},
+				"widget": {
+					"title": "Widget (embeddable UI)",
+					"aacsearch": "Included",
+					"elasticsearch": "Requires custom UI with Elasticsearch JS client"
+				},
+				"connectors": {
+					"title": "CMS Connectors",
+					"aacsearch": "PrestaShop, Bitrix — native sync",
+					"elasticsearch": "None — custom integration needed"
+				},
+				"scopedTokens": {
+					"title": "Scoped API tokens",
+					"aacsearch": "Built-in HMAC tokens",
+					"elasticsearch": "Requires API key setup with role-based access control"
+				},
+				"geosearch": {
+					"title": "Geo-search",
+					"aacsearch": "Yes",
+					"elasticsearch": "Yes (geo_shape, geo_point)"
+				},
+				"typoTolerance": {
+					"title": "Typo tolerance",
+					"aacsearch": "Configurable per-index",
+					"elasticsearch": "Requires custom analyzer configuration (fuzzy queries)"
+				},
+				"relevanceTuning": {
+					"title": "Relevance tuning",
+					"aacsearch": "Rank formula, synonyms, custom ranking",
+					"elasticsearch": "BM25 scoring, function_score, custom similarity"
+				},
+				"selfHost": {
+					"title": "Self-host option",
+					"aacsearch": "Full Typesense export, migrate anytime",
+					"elasticsearch": "Fully self-hostable — Elastic's main strength"
+				},
+				"searchEngine": {
+					"title": "Search engine",
+					"aacsearch": "Typesense (open-source, C++)",
+					"elasticsearch": "Apache Lucene (open-source, Java)"
+				},
+				"sla": {
+					"title": "SLA",
+					"aacsearch": "99.9% uptime",
+					"elasticsearch": "99.9% (Elastic Cloud, higher tiers available)"
+				},
+				"logRetention": {
+					"title": "Log retention",
+					"aacsearch": "30 days (all plans)",
+					"elasticsearch": "Configurable (self-managed) / varies by Elastic Cloud plan"
+				}
+			}
+		},
+		"scenarios": {
+			"title": "Pricing Comparison Scenarios",
+			"scenario1": {
+				"heading": "Small e-commerce (10k products, 50k searches/mo)",
+				"elasticsearch": "Elasticsearch: Self-hosted (free) or Elastic Cloud ~$95/mo (2-node cluster)",
+				"aacsearch": "AACsearch: Free tier (1 index, 10k docs) fits perfectly — $0/mo",
+				"saving": "Saving: Up to $95/mo vs Elastic Cloud"
+			},
+			"scenario2": {
+				"heading": "Mid-market (100k products, 500k searches/mo)",
+				"elasticsearch": "Elasticsearch: Elastic Cloud ~$350-600/mo (3-node, 120GB) + DevOps time for cluster management",
+				"aacsearch": "AACsearch: Scale plan $99/mo — zero ops, automatic scaling",
+				"saving": "Saving: ~$250-500/mo plus no DevOps overhead"
+			},
+			"scenario3": {
+				"heading": "Enterprise (1M products, 5M searches/mo)",
+				"elasticsearch": "Elasticsearch: Elastic Cloud ~$1,200-2,500/mo (5-10 nodes) + dedicated SRE team",
+				"aacsearch": "AACsearch: Pro plan $499/mo",
+				"saving": "Saving: ~$700-2,000/mo plus full SRE cost elimination"
+			}
+		},
+		"whyMigrate": {
+			"title": "Why Teams Migrate from Elasticsearch to AACsearch",
+			"items": [
+				"Zero-ops — No cluster provisioning, JVM tuning, or shard management. AACsearch is fully managed.",
+				"Automatic scaling — AACsearch handles traffic spikes without capacity planning or cluster resizing.",
+				"Predictable pricing — Flat per-index cost vs unpredictable node-hour + storage bills from Elastic Cloud.",
+				"Built-in analytics — Search analytics out of the box. No Kibana setup, no dashboard maintenance."
+			]
+		},
+		"testimonial": {
+			"quote": "We spent more time managing our Elasticsearch cluster than actually building search features. Migrated to AACsearch in a weekend — zero ops, lower latency, and the dashboard showed us search gaps we had no visibility into before.",
+			"author": "CTO, B2B SaaS company (migrated from Elasticsearch Cloud)"
+		},
+		"decisionMatrix": {
+			"title": "When to Choose Each Platform",
+			"whenAACsearch": {
+				"heading": "Choose AACsearch if you:",
+				"items": [
+					"Want zero-ops search — no cluster provisioning or JVM tuning",
+					"Need automatic scaling without capacity planning",
+					"Want search analytics, widget, and connectors included",
+					"Are paying Elastic Cloud bills and want predictable pricing",
+					"Build product search, help center, or SaaS application search"
+				]
+			},
+			"whenElasticsearch": {
+				"heading": "Choose Elasticsearch if you:",
+				"items": [
+					"Need log analytics / observability pipelines (ELK stack)",
+					"Require complex aggregations and data analytics queries",
+					"Need on-prem control with full self-hosting flexibility",
+					"Have an existing Elasticsearch infrastructure with committed investment",
+					"Require advanced ES features (machine learning, graph exploration)"
+				]
+			}
+		},
+		"cta": {
+			"heading": "Ready to switch from Elasticsearch?",
+			"description": "Start a free trial — no credit card required. Zero-ops search in minutes, not weeks.",
+			"button": "Start Free Trial →"
+		}
+	},
+	"compareMeilisearchPage": {
+		"title": "AACsearch vs. Meilisearch",
+		"description": "AACsearch vs. Meilisearch — Engine-Vergleich, gehostete Ebene, Multi-Tenancy und wann Sie welches wählen sollten."
+	},
+	"compareMeilisearch": {
+		"title": "AACsearch vs. Meilisearch",
+		"subtitle": "Meilisearch ist eine ausgezeichnete Open-Source-Engine. AACsearch fügt die gehostete Ebene hinzu, die Ihr Produktions-Deployment benötigt.",
+		"items": {
+			"engine": {
+				"title": "Zugrunde liegende Engine",
+				"description": "Meilisearch ist Engine und Produkt zugleich. AACsearch nutzt eine andere Open-Source-Engine mit eingebauter Vektorsuche."
+			},
+			"hosted": {
+				"title": "Managed Cloud",
+				"description": "Meilisearch Cloud ist deren gehostete Option. AACsearch's gehostete Ebene fügt Scoped Tokens, Multi-Tenancy und eine Management-Control-Plane hinzu."
+			},
+			"multiTenancy": {
+				"title": "Multi-Tenancy",
+				"description": "Meilisearchs Multi-Tenancy nutzt Tenant-Tokens. AACsearchs Scoped Tokens tragen AND-kombinierte Pflichtfilter für stärkere Isolation."
+			},
+			"analytics": {
+				"title": "Analytics",
+				"description": "Meilisearch hat grundlegende Such-Analytics. AACsearch verfolgt jedes Such-Event mit vollständigen Metadaten: Query, Filter, Latenz, CTR."
+			},
+			"connectors": {
+				"title": "CMS-Connectors",
+				"description": "Meilisearch verfolgt einen JavaScript-SDK-First-Ansatz. AACsearch hat native PHP-Module für PrestaShop und 1C-Bitrix."
+			},
+			"verdict": {
+				"title": "Wann Sie AACsearch wählen sollten",
+				"description": "Wenn Sie Multi-Tenant-Isolation, eine Management-API, CMS-Connectors oder Analytics über grundlegende Query-Zählungen hinaus benötigen."
+			}
+		}
+	},
+	"compareOpenSearchPage": {
+		"title": "AACsearch vs. OpenSearch",
+		"description": "AACsearch ist eine fokussierte, schnelle Such-API. OpenSearch ist eine vollständige Analyseplattform. Hier steht, wann welches sinnvoll ist."
+	},
+	"compareOpenSearch": {
+		"title": "Fokussierte Suche vs. Analyseplattform",
+		"subtitle": "OpenSearch ist leistungsstark, aber komplex. AACsearch ist speziell für Anwendungssuche gebaut – einfacheres Schema, schnelleres Setup, geringere Latenz.",
+		"items": {
+			"complexity": {
+				"title": "Tage statt Wochen",
+				"description": "AACsearch indiziert deine erste Kollektion an einem Nachmittag. Das Setup eines OpenSearch-Clusters dauert Wochen."
+			},
+			"performance": {
+				"title": "Unter 50 ms vs. 100–500 ms",
+				"description": "AACsearch P99-Latenz liegt unter 50 ms. OpenSearch-Abfragelatenz beträgt typischerweise 100–500 ms auf vergleichbarer Hardware."
+			},
+			"schema": {
+				"title": "Schema-Einfachheit",
+				"description": "AACsearch-Kollektionen haben ein flaches, typisiertes Schema. Das OpenSearch-Mapping-Design ist ein Spezialgebiet."
+			},
+			"multiTenancy": {
+				"title": "Native Multi-Tenancy",
+				"description": "AACsearch org-scoped Keys und Scoped Tokens sind erstklassige Features. OpenSearch benötigt Plugins für Multi-Tenancy."
+			},
+			"analytics": {
+				"title": "Suchspezifische Analytik",
+				"description": "AACsearch liefert Query-Logs, Zero-Result-Raten und CTR – für Produktteams. OpenSearch-Analytik zielt auf Infrastruktur-Monitoring."
+			},
+			"pricing": {
+				"title": "Vorhersehbare Kosten",
+				"description": "AACsearch berechnet pro Sucheinheit. OpenSearch-Kosten hängen von Instanztyp, Speicher-I/O und Datentransfer ab."
+			},
+			"cost": {
+				"title": "Kostenvergleich",
+				"description": "OpenSearch Self-Hosted erfordert dedizierte Infrastruktur, Entwicklungszeit und laufende Wartung. AACsearch ist vollständig verwaltet mit vorhersagbaren Preisen pro Einheit."
+			},
+			"relevance": {
+				"title": "Suchrelevanz",
+				"description": "AACsearch verwendet BM25-Scoring mit konfigurierbaren Feldgewichten, Boost-Regeln und Tippfehlertoleranz. OpenSearch erfordert manuelle Anpassung der Ähnlichkeitskonfigurationen."
+			},
+			"setup": {
+				"title": "Einrichtungszeit",
+				"description": "AACsearch ist in Minuten API-bereit. OpenSearch Self-Hosted benötigt Tage für Bereitstellung, Konfiguration und Sicherung vor der Indexierung."
+			},
+			"speed": {
+				"title": "Abfragegeschwindigkeit",
+				"description": "AACsearch liefert sub-50ms P99-Abfragelatenz. OpenSearch-Latenz variiert stark mit Indexgröße, Shard-Anzahl und Clusterlast."
+			}
+		}
+	},
+	"comparePineconePage": {
+		"title": "AACsearch vs. Pinecone",
+		"description": "Pinecone ist eine reine Vektordatenbank. AACsearch kombiniert Keyword- und Vektorsuche für Anwendungen, bei denen beide Relevanzmodi wichtig sind."
+	},
+	"comparePinecone": {
+		"title": "Reiner Vektor vs. vollständige Suchplattform",
+		"subtitle": "Pinecone glänzt bei reinem Vektor-Recall. AACsearch ergänzt die Keyword-Suche, Facetten und die Produkt-UX-Schicht, die die meisten Anwendungen brauchen.",
+		"items": {
+			"keywordSearch": {
+				"title": "Keyword + Semantik",
+				"description": "AACsearch verarbeitet typolerante Keyword-Suche und semantische Vektorsuche. Pinecone ist rein vektor-basiert."
+			},
+			"facets": {
+				"title": "Facettierte Navigation",
+				"description": "AACsearch berechnet Facettenzählungen mit jeder Anfrage. Pinecone hat Metadaten-Filterung, aber keine Facettenzählung."
+			},
+			"hybridSearch": {
+				"title": "Konfigurierbare Hybrid-Gewichte",
+				"description": "AACsearch lässt dich die Balance zwischen BM25 und Vektorähnlichkeit pro Anfrage einstellen."
+			},
+			"pricing": {
+				"title": "Einfachere Preisgestaltung",
+				"description": "AACsearch berechnet pro Sucheinheit. Pinecones Preismodell ist komplex."
+			},
+			"performance": {
+				"title": "Such-API, nicht nur ein Vektorspeicher",
+				"description": "AACsearch liefert gereigte, gefilterte, hervorgehobene Ergebnisse in unter 50 ms."
+			},
+			"widget": {
+				"title": "Vollständige Such-UX inklusive",
+				"description": "AACsearch enthält ein gehostetes Widget, ein Analyse-Dashboard und ein SDK. Pinecone ist eine API."
+			},
+			"ecommerce": {
+				"title": "E-Commerce-Suche",
+				"description": "AACsearch kombiniert Schlüsselwort- und Vektorsuche für E-Commerce. Pinecone ist rein vektorbasiert und hat keine BM25-, Tippfehler-, Facetten- oder Filterfunktionen."
+			},
+			"hybrid": {
+				"title": "Hybride Suche",
+				"description": "AACsearch unterstützt hybride Schlüsselwort + Vektorsuche direkt. Pinecone benötigt einen separaten Schlüsselwortsuchdienst."
+			},
+			"latency": {
+				"title": "Suchlatenz",
+				"description": "AACsearch hält sub-50ms Latenz bei gemischten Keyword-Vektor-Abfragen. Pinecone reine Vektorabfragen sind schnell, aber die Kombination mit Schlüsselwortsuche erhöht die Latenz."
+			}
+		}
+	},
+	"compareSolrPage": {
+		"title": "AACsearch vs. Apache Solr",
+		"description": "Solr ist bewährt, erfordert aber Spezialisten. AACsearch bietet dieselbe Zuverlässigkeit mit einer modernen API und null Betriebsaufwand."
+	},
+	"compareSolr": {
+		"title": "Moderne API vs. Legacy-Komplexität",
+		"subtitle": "Solr unterstützt Enterprise-Suche seit 20 Jahren. AACsearch gibt einem Junior-Entwickler dieselben Fähigkeiten mit einem halbtägigen Setup.",
+		"items": {
+			"modernApi": {
+				"title": "REST-API vs. Solr-Query-DSL",
+				"description": "AACsearch verwendet eine saubere JSON-REST-API. Solr-Abfragen nutzen eine eigene DSL mit steiler Lernkurve."
+			},
+			"setup": {
+				"title": "Minuten statt Tage",
+				"description": "AACsearch-Setup: Index erstellen, Dokumente einlesen, API aufrufen. Solr erfordert Java, ZooKeeper, Schema-Design und Core-Management."
+			},
+			"performance": {
+				"title": "Schneller out of the box",
+				"description": "AACsearch liefert Ergebnisse in unter 50 ms ohne Tuning. Solr-Performance erfordert Experten-Konfiguration."
+			},
+			"multiTenancy": {
+				"title": "Eingebaute Multi-Tenancy",
+				"description": "AACsearch isoliert Mandanten auf API-Key-Ebene. Solr-Multi-Tenancy erfordert separate Cores."
+			},
+			"analyticsBuiltin": {
+				"title": "Eingebaute Analytik",
+				"description": "AACsearch zeichnet jede Anfrage auf und bietet ein Dashboard. Solr hat keine eingebaute Query-Analytik."
+			},
+			"pricing": {
+				"title": "Keine Infrastrukturkosten",
+				"description": "AACsearch ist vollständig managed. Solr bedeutet eigenes Cluster-Betreiben und -Skalieren."
+			},
+			"devex": {
+				"title": "Entwicklererfahrung",
+				"description": "AACsearch bietet eine moderne REST-API mit typisierten SDKs, OpenAPI-Spezifikation und Dashboard. Solrs XML-Konfiguration und Java-zentrierte Tools haben eine steile Lernkurve."
+			},
+			"migration": {
+				"title": "Migrationspfad",
+				"description": "Migration von Solr zu AACsearch über die REST-API. Dokumente neu indexieren, Schema über das Dashboard konfigurieren und die Anwendung auf AACsearch umstellen."
+			},
+			"ops": {
+				"title": "Betrieb",
+				"description": "AACsearch verwaltet Infrastruktur, Skalierung, Upgrades und Überwachung. Solr Self-Hosted erfordert dedizierte Ops-Teams für ZooKeeper und Shard-Management."
+			},
+			"search": {
+				"title": "Suchqualität",
+				"description": "AACsearch bietet Tippfehlertoleranz, Synonyme, Facettensuche, Relevanzeinstellung und Analysen. Solr erfordert Plugin-Konfiguration und benutzerdefinierte Entwicklung."
+			}
+		}
+	},
+	"compareTypesensePage": {
+		"title": "AACsearch vs. Typesense",
+		"description": "AACsearch basiert auf Typesense. Der Unterschied: Wir fügen Multi-Tenancy, Analytik, eine gehostete Steuerungsebene und verwalteten Betrieb hinzu."
+	},
+	"compareTypesense": {
+		"title": "Engine vs. Managed-Cloud-Plattform",
+		"subtitle": "Typesense ist der Motor, den wir betreiben. AACsearch umhüllt ihn mit der SaaS-Ebene, die Ihr Team braucht – Multi-Tenancy, Analyse, Widget, Connectors und Support.",
+		"codeTitle": "Gleicher Motor, reichhaltigere Plattform",
+		"codeSubtitle": "AACsearch fügt Multi-Tenancy, Analyse und verwaltete Infrastruktur auf der Typesense-Basis hinzu. Ihre Daten. Unser Betrieb.",
+		"items": {
+			"hosting": {
+				"title": "Kein Betriebsaufwand",
+				"description": "AACsearch verwaltet Typesense-Upgrades, Cluster-Größenanpassung, Backups und Monitoring. Sie erhalten eine fertige Such-API, keinen zu wartenden Cluster."
+			},
+			"multiTenancy": {
+				"title": "Multi-Tenancy integriert",
+				"description": "Org-bezogene API-Schlüssel, bereichsgebundene Tokens und Origin-Allow-Listen pro Schlüssel sind AACsearch-Funktionen ab Tag null. Bei Typesense Cloud müssen Sie dies selbst entwickeln."
+			},
+			"analytics": {
+				"title": "Suchanalyse",
+				"description": "AACsearch bietet eine vollständige Analyse-Pipeline: Abfrageprotokolle, Null-Ergebnis-Verfolgung, Top-Abfragen, Click-Through-Raten und Widget-Ereignisse. Keine zusätzliche Instrumentierung."
+			},
+			"connectors": {
+				"title": "CMS-Connectoren",
+				"description": "PrestaShop-, Bitrix-, WordPress- und Shopify-Connectoren sind AACsearch-Erweiterungen. Typesense Cloud hat keine vorgefertigten Connectoren."
+			},
+			"pricing": {
+				"title": "Vorhersagbare Preise",
+				"description": "AACsearch wird pro Sucheinheit abgerechnet – Sie kennen Ihre Rechnung vor Monatsende. Keine stündlichen Knotengebühren, keine Speicherkosten, keine Überraschungen."
+			},
+			"support": {
+				"title": "Dedizierter Support",
+				"description": "AACsearch-Tarife beinhalten E-Mail-Support und eine SLA. Der Typesense-Community-Support erfolgt über Discord."
+			}
+		},
+		"table": {
+			"title": "Funktionsvergleich",
+			"subtitle": "Ein direkter Vergleich, was jede Plattform bietet",
+			"aacsearch": "AACsearch",
+			"typesenseCloud": "Typesense Cloud",
+			"features": {
+				"searchEngine": {
+					"title": "Suchmaschinenkern",
+					"aacsearch": "Typesense (gleicher Motor)",
+					"typesenseCloud": "Typesense (gleicher Motor)"
+				},
+				"managedHosting": {
+					"title": "Managed Hosting",
+					"aacsearch": "Inbegriffen",
+					"typesenseCloud": "Inbegriffen"
+				},
+				"analytics": {
+					"title": "Analyse-Dashboard",
+					"aacsearch": "Integriert (alle Tarife)",
+					"typesenseCloud": "Nicht verfügbar"
+				},
+				"widget": {
+					"title": "Such-Widget (einbettbar)",
+					"aacsearch": "Inbegriffen (Vanilla JS, React, Vue)",
+					"typesenseCloud": "Nicht verfügbar"
+				},
+				"connectors": {
+					"title": "CMS-Connectoren",
+					"aacsearch": "PrestaShop, Bitrix – native Synchronisation",
+					"typesenseCloud": "Nicht verfügbar"
+				},
+				"multiTenancy": {
+					"title": "Multi-Tenant (Organisationen)",
+					"aacsearch": "Nativ, API-Schlüssel pro Organisation",
+					"typesenseCloud": "Muss selbst entwickelt werden"
+				},
+				"scopedTokens": {
+					"title": "Bereichsgebundene API-Tokens",
+					"aacsearch": "Integrierte HMAC-Tokens",
+					"typesenseCloud": "Muss selbst entwickelt werden"
+				},
+				"rateLimiting": {
+					"title": "Ratenbegrenzung",
+					"aacsearch": "Pro Schlüssel, konfigurierbar",
+					"typesenseCloud": "Muss selbst entwickelt werden"
+				},
+				"apiKeyManagement": {
+					"title": "API-Schlüsselverwaltung",
+					"aacsearch": "Dashboard-UI",
+					"typesenseCloud": "Nur Cloud-Konsole"
+				},
+				"publicApi": {
+					"title": "Öffentliche API (Suche)",
+					"aacsearch": "REST + gRPC",
+					"typesenseCloud": "REST"
+				},
+				"userManagement": {
+					"title": "Benutzerverwaltung",
+					"aacsearch": "Integrierte Authentifizierung",
+					"typesenseCloud": "Muss selbst entwickelt werden"
+				},
+				"pricing": {
+					"title": "Preismodell",
+					"aacsearch": "Pro Index, unbegrenzte Operationen",
+					"typesenseCloud": "Pro Knoten/Stunde + pro GB Speicher"
+				},
+				"entryPrice": {
+					"title": "Einstiegspreis",
+					"aacsearch": "Kostenlos (1 Index, 10k Dokumente)",
+					"typesenseCloud": "~49 $/Monat (1 Knoten, 4 GB)"
+				},
+				"midMarket": {
+					"title": "100k Dokumente, 500k Suchanfragen/Monat",
+					"aacsearch": "99 $/Monat",
+					"typesenseCloud": "~99 $/Monat (2-Knoten-Cluster) + Middleware"
+				},
+				"sla": {
+					"title": "SLA",
+					"aacsearch": "99,9 % Verfügbarkeit",
+					"typesenseCloud": "99,9 % Verfügbarkeit"
+				},
+				"selfHost": {
+					"title": "Self-Host-Fallback",
+					"aacsearch": "Vollständiger Typesense-Export",
+					"typesenseCloud": "Gleicher Motor – portabel"
+				}
+			}
+		},
+		"scenarios": {
+			"title": "Preisvergleichsszenarien",
+			"scenario1": {
+				"heading": "Starten (10k Dokumente, einfache Suche)",
+				"typesenseCloud": "Typesense Cloud: 49 $/Monat (1 Knoten, keine Analyse, kein Multi-Tenant)",
+				"aacsearch": "AACsearch: Kostenlose Stufe (1 Index, 10k Dokumente) – alle Funktionen inbegriffen",
+				"saving": "Ersparnis: 49 $/Monat zzgl. Middleware-Entwicklungskosten"
+			},
+			"scenario2": {
+				"heading": "Wachstum (100k Dokumente, Multi-Tenant)",
+				"typesenseCloud": "Typesense Cloud: 99 $/Monat (2 Knoten) + 5.000–20.000 $ einmalige Entwicklung",
+				"aacsearch": "AACsearch: Scale-Tarif 99 $/Monat – alles integriert, keine Entwicklung nötig",
+				"saving": "Ersparnis: ~5.000–20.000 $ einmalig zzgl. laufender Wartung"
+			},
+			"scenario3": {
+				"heading": "Skalieren (1M Dokumente, Analyse + Connectoren)",
+				"typesenseCloud": "Typesense Cloud: ~299 $/Monat (4 Knoten) + laufende Entwicklung",
+				"aacsearch": "AACsearch: Pro-Tarif 499 $/Monat – alles integriert, kein Entwicklungsaufwand",
+				"saving": "Ersparnis: Erhebliche Einsparung bei Entwicklungskosten"
+			}
+		},
+		"whyMigrate": {
+			"title": "Warum Teams AACsearch gegenüber Typesense Cloud wählen",
+			"items": [
+				"Vollständiges Produkt, nicht nur Infrastruktur – AACsearch ist Search-as-a-Service mit API, Dashboard, Widget und Connectoren. Typesense Cloud gibt Ihnen einen Cluster, den Rest müssen Sie bauen.",
+				"Multi-Tenancy ohne Boilerplate – Jede Organisation erhält isolierte Suchkonfigurationen und API-Schlüssel. Kein Code für die Mandantentrennung erforderlich.",
+				"Keine Middleware zu bauen – Ratenbegrenzung, Benutzerverwaltung, Webhook-Benachrichtigungen und Analysen sind in AACsearch integriert. Typesense Cloud erfordert, dass Sie diese selbst erstellen."
+			]
+		},
+		"testimonial": {
+			"quote": "Wir haben mit Typesense Cloud angefangen, aber schnell gemerkt, dass wir mehr Zeit mit dem Bau von Infrastruktur um den Cluster herum verbrachten als mit der Suchoptimierung. AACsearch hat all das eliminiert.",
+			"author": "Engineering Lead, B2B-SaaS-Plattform"
+		},
+		"decisionMatrix": {
+			"title": "Wann Sie welche Plattform wählen sollten",
+			"whenAACsearch": {
+				"heading": "Wählen Sie AACsearch, wenn Sie:",
+				"items": [
+					"Search-as-a-Service möchten – nicht nur einen Datenbank-Cluster",
+					"Multi-Tenant-Suche für Ihr SaaS-Produkt benötigen",
+					"Analyse, Widget und Connectoren ohne Eigenentwicklung nutzen möchten",
+					"Vorhersagbare Preise ohne Überraschungen brauchen",
+					"Einen dedizierten Support mit SLA wünschen"
+				]
+			},
+			"whenTypesenseCloud": {
+				"heading": "Wählen Sie Typesense Cloud, wenn Sie:",
+				"items": [
+					"Raw Typesense API benötigen und planen, Ihre eigene Infrastruktur zu bauen",
+					"Bereits eine eigene Multi-Tenancy-Lösung haben",
+					"Keine Analyse, Widgets oder CMS-Connectoren benötigen",
+					"Direkten Serverzugriff für benutzerdefinierte Konfiguration brauchen",
+					"Das Budget haben, Ihre eigene Suchplattform zu warten"
+				]
+			}
+		},
+		"analogy": {
+			"heading": "Der einfache Unterschied",
+			"line1": "Typesense Cloud ist wie das Mieten eines Servers bei AWS.",
+			"line2": "AACsearch ist wie Heroku für die Suche – Sie erhalten die Plattform, die Werkzeuge und das Dashboard. Kein Server-Management, kein Middleware-Bau."
+		},
+		"cta": {
+			"heading": "Bereit zum Wechsel?",
+			"description": "Starten Sie eine kostenlose Testversion – keine Kreditkarte erforderlich. Angetrieben von Typesense, kein Vendor-Lock-in, vollständiger Export jederzeit möglich.",
+			"button": "Kostenlose Testversion starten →"
+		}
+	},
+	"compareWeaviatePage": {
+		"title": "AACsearch vs. Weaviate",
+		"description": "Weaviate ist eine Vektordatenbank. AACsearch ist eine hybride Volltext-plus-Vektor-Such-API."
+	},
+	"compareWeaviate": {
+		"title": "Vektordatenbank vs. hybride Such-API",
+		"subtitle": "Beide unterstützen Vektoren, aber AACsearch ergänzt Keyword-Suche, Facetten, Typo-Toleranz und eine Multi-Tenant-Hosting-Schicht.",
+		"items": {
+			"hybridSearch": {
+				"title": "Keyword + Vektor in einem Aufruf",
+				"description": "AACsearch-Hybridsuche kombiniert BM25-Keyword-Relevanz mit Vektorähnlichkeit in einer Anfrage."
+			},
+			"facets": {
+				"title": "Facettierte Navigation",
+				"description": "AACsearch berechnet Facettenzählungen bei jeder Anfrage – unverzichtbar für E-Commerce und Dokumentationssuche."
+			},
+			"typoTolerance": {
+				"title": "Typo-Toleranz",
+				"description": "AACsearch hat eingebautes Fuzzy-Matching für Endbenutzeranfragen. Vektorsuche hilft nicht bei Rechtschreibfehlern."
+			},
+			"multiTenancy": {
+				"title": "Native Multi-Tenancy",
+				"description": "AACsearch org-scoped Keys und Per-Tenant-Analytik sind erstklassige Features."
+			},
+			"pricing": {
+				"title": "Transparente Preise",
+				"description": "AACsearch berechnet pro Sucheinheit mit einer vorhersehbaren Monatsrechnung."
+			},
+			"widget": {
+				"title": "Drop-in-Such-Widget",
+				"description": "AACsearch liefert ein 14-KB-Browser-Widget mit sofortiger Suche, Facetten und Analytik."
+			},
+			"features": {
+				"title": "Funktionstiefe",
+				"description": "AACsearch bietet Volltextsuche, Vektorsuche, hybride Suche, Tippfehlertoleranz, Synonyme, Facettennavigation und Analysen. Weaviate konzentriert sich hauptsächlich auf Vektorsuche."
+			},
+			"schema": {
+				"title": "Schema-Verwaltung",
+				"description": "AACsearch Schema-Verwaltung ist einfach über Dashboard oder API. Weaviate folgt einem Klassen-Eigenschaften-Schema-Modell."
+			},
+			"support": {
+				"title": "Support und SLAs",
+				"description": "AACsearch bietet E-Mail-Support in bezahlten Tarifen und SLAs auf Enterprise-Ebene. Weaviate bietet Community-Support für Open-Source."
+			},
+			"usecase": {
+				"title": "Anwendungsfall",
+				"description": "AACsearch eignet sich hervorragend für Produktsuche, Websuche und Wissensdatenbanksuche. Weaviate ist am stärksten für KI-native Anwendungen und semantische Suche."
+			}
+		}
+	},
+	"vsAlgoliaPage": {
+		"title": "AACsearch vs Algolia — 5x günstigere Alternative",
+		"description": "Detailvergleich von AACsearch vs Algolia: Preise, Multi-Tenancy, Leistung, Open-Source-Typesense-Engine und Migrationsleitfaden. Erfahren Sie, warum Teams mit 200+$/Monat auf Algolia zu AACsearch für 5x Ersparnis wechseln."
+	},
+	"vsAlgolia": {
+		"title": "AACsearch vs Algolia — Direkter Vergleich",
+		"subtitle": "Algolia ist der Marktführer mit ausgezeichneter DX. AACsearch ist 5x günstiger, basiert auf Open-Source-Typesense und bietet native Multi-Tenancy mit Scoped Tokens.",
+		"items": {
+			"pricing": {
+				"title": "Preise (5x günstiger)",
+				"description": "Algolia berechnet pro Such-Operation und pro gespeichertem Datensatz mit gestaffelten Mindestbeträgen, die Teams im Skalierungsprozess überraschen. AACsearch berechnet pro Search-Unit ohne Minimum über dem kostenlosen Tarif — typischerweise 5x günstiger bei 100K+ monatlichen Suchanfragen."
+			},
+			"performance": {
+				"title": "Leistung",
+				"description": "Beide liefern Suchresultate unter 50ms. AACsearch nutzt eine Open-Source-Typesense-Engine mit konsistenter p99-Latenz. Algolias gemeinsam genutzte Infrastruktur kann zu Latenzspitzen bei Spitzenlast führen."
+			},
+			"multiTenancy": {
+				"title": "Multi-Tenancy",
+				"description": "Algolia nutzt Index-spezifische API-Keys mit optionalen User-Tokens. AACsearch verwendet HMAC-Scoped-Tokens mit obligatorischen AND-kombinierten Filtern — Tenant-Isolation wird architektonisch erzwungen, nicht nur als Richtlinie."
+			},
+			"security": {
+				"title": "Sicherheit",
+				"description": "AACsearch fügt pro-Key Origin-Allow-Listen, Ratenbegrenzung, Kontingentdurchsetzung und Tenant-Isolation auf jeder Abfrageebene hinzu. Algolia bietet API-Key-Verwaltung mit IP-Bereichen und grundlegender Ratenbegrenzung. AACsearch deckt ab, wofür Algolia extra berechnet."
+			},
+			"migration": {
+				"title": "Migration",
+				"description": "Beide APIs sind strukturell ähnlich. AACsearch bietet vollständigen Typesense-Datenexport und eine Typesense-kompatible API. Die meisten Teams schließen die Migration in Stunden mit einem Re-Index-Skript ab. Algolias proprietäres Format bedeutet Vendor-Lock-in."
+			},
+			"openSource": {
+				"title": "Open-Source-Engine",
+				"description": "AACsearch läuft auf Typesense, einer vollständig Open-Source-Suchmaschine (GPLv3). Sie können Ihre Daten jederzeit exportieren und selbst betreiben. Algolia verwendet eine proprietäre Engine — keine Datenportabilität bei einem Wechsel."
+			},
+			"ecosystem": {
+				"title": "Ökosystem & Integrationen",
+				"description": "Algolia hat ein ausgereiftes Ökosystem — InstantSearch-Widgets, Konnektoren und umfangreiche Dokumentation. AACsearch bietet ein UI-Widget (React, Vue, vanilla JS), Echtzeit-Webhook-Konnektoren (PrestaShop, Bitrix, Shopify) und eine REST-API mit Browser-SDK."
+			},
+			"verdict": {
+				"title": "Wann Sie AACsearch wählen sollten",
+				"description": "Wenn Sie 200+$/Monat für Algolia ausgeben, native Multi-Tenancy mit Scoped Tokens benötigen, Open-Source-Portabilität wünschen oder planbare Preise bevorzugen — ist AACsearch die klare Wahl."
+			}
+		},
+		"codeTitle": "Client tauschen, Abfrage behalten",
+		"codeSubtitle": "Migration dauert Stunden, nicht Wochen. AACsearchs Typesense-kompatible API spiegelt Algolias Abfragemuster wider.",
+		"decision": {
+			"title": "Entscheidungsmatrix",
+			"subtitle": "Nutzen Sie diese Kurzreferenz, um zu entscheiden, welche Plattform am besten zu Ihrem Anwendungsfall passt.",
+			"criterion": "Kriterium",
+			"price": "Monatliche Kosten bei 100K Suchanfragen",
+			"timeToShip": "Zeit bis zum ersten Suchergebnis",
+			"multiTenant": "Multi-Tenant-Isolation",
+			"lockIn": "Vendor-Lock-in-Risiko",
+			"vendorFit": "Am besten geeignet für",
+			"aacsearch": {
+				"price": "29 $ pauschal",
+				"timeToShip": "1 Nachmittag",
+				"multiTenant": "Integriert (Scoped Tokens)",
+				"lockIn": "Keines (Open-Source-Engine)",
+				"vendorFit": "Teams, die Suche skalieren, SaaS-Produkte, Multi-Tenant-Apps"
+			},
+			"algolia": {
+				"price": "150 $+ gemessen",
+				"timeToShip": "1 Nachmittag",
+				"multiTenant": "Erfordert benutzerdefinierte Infrastruktur",
+				"lockIn": "Hoch (proprietär)",
+				"vendorFit": "Teams, die in das Algolia-Ökosystem investiert haben"
+			},
+			"footnote": "Die Kosten sind Näherungswerte und basieren auf 100K monatlichen Suchoperationen und 10K Datensätzen. Die tatsächlichen Preise variieren je nach Nutzungsmuster."
+		}
+	}
 }

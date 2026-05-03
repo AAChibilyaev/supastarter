@@ -1,0 +1,4 @@
+{
+	"title": "Guides de migration",
+	"pages": ["algolia", "elasticsearch"]
+}

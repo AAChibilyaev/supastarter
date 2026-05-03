@@ -1,11 +1,13 @@
 import { config } from "@config";
-import { PostHogProvider } from "@repo/analytics";
 import { cn, Toaster } from "@repo/ui";
 import { ApiClientProvider } from "@shared/components/ApiClientProvider";
 import { ClientProviders } from "@shared/components/ClientProviders";
+import { ConsentBanner } from "@shared/components/ConsentBanner";
+import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { ThemeProvider } from "@teispace/next-themes";
 import { getTheme } from "@teispace/next-themes/server";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Figtree } from "next/font/google";
@@ -34,6 +36,11 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 	const messages = await getMessages();
 	const initialTheme = await getTheme();
 
+	// Read consent cookie for GDPR cookie consent gating
+	const cookieStore = await cookies();
+	const consentCookie = cookieStore.get("consent");
+	const initialConsent = consentCookie?.value === "true";
+
 	return (
 		<html lang={locale} suppressHydrationWarning className={sansFont.variable}>
 			<body className={cn("min-h-screen bg-background text-foreground antialiased")}>
@@ -47,15 +54,17 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 							initialTheme={initialTheme ?? undefined}
 							themes={Array.from(config.enabledThemes)}
 						>
-							<ApiClientProvider>
-								<ClientProviders>
-									<PostHogProvider>
+							<ConsentProvider initialConsent={initialConsent}>
+								<ApiClientProvider>
+									<ClientProviders>
 										{children}
 
 										<Toaster position="top-right" />
-									</PostHogProvider>
-								</ClientProviders>
-							</ApiClientProvider>
+									</ClientProviders>
+								</ApiClientProvider>
+
+								<ConsentBanner />
+							</ConsentProvider>
 						</ThemeProvider>
 					</NextIntlClientProvider>
 				</NuqsAdapter>

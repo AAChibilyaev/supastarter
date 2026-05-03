@@ -1,6 +1,6 @@
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
-import { resolveOrgPlan } from "@repo/payments";
+import { resolveOrgPlan } from "@repo/payments/lib/entitlements";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";

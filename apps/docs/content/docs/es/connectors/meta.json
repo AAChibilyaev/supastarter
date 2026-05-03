@@ -5,6 +5,8 @@
 		"connector-api-lifecycle",
 		"prestashop",
 		"bitrix",
+		"postgres-sync",
+		"supabase-sync",
 		"widget-overview",
 		"widget-analytics-events"
 	]

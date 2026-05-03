@@ -303,9 +303,14 @@ export const connectorApp = new Hono()
 				type: "sync_job",
 				count: docs.length,
 				metadata: { jobId: job.id, type: "full", itemsCount: docs.length },
-			}).catch((err) => logger.warn("sync_job usage record failed", { err }));
+			}).catch((err: Error) =>
+				logger.warn("sync_job usage record failed", { err: String(err) }),
+			);
 		} catch (error) {
-			logger.error("Full sync enqueue failed", { error, projectId: verified.organizationId });
+			logger.error("Full sync enqueue failed", {
+				error: String(error),
+				projectId: verified.organizationId,
+			});
 			await failSyncJob(job.id, error instanceof Error ? error.message : "sync_failed");
 			return c.json({ error: "sync_failed" }, 502);
 		}
@@ -594,7 +599,9 @@ export const connectorApp = new Hono()
 						signatureVerified: webhookSecret?.enabled ? true : false,
 						userAgent: c.req.header("user-agent") ?? null,
 					},
-				}).catch((err: Error) => logger.warn("webhook delivery log failed", { err }));
+				}).catch((err: Error) =>
+					logger.warn("webhook delivery log failed", { err: String(err) }),
+				);
 
 				return c.json({
 					status: "accepted",
@@ -603,14 +610,14 @@ export const connectorApp = new Hono()
 				});
 			} catch (error) {
 				logger.error("Webhook sync enqueue failed", {
-					error,
+					error: String(error),
 					indexSlug: verified.indexSlug,
 					action,
 				});
 				return c.json({ error: "sync_failed" }, 502);
 			}
 		} catch (error) {
-			logger.error("Webhook handler error", { error });
+			logger.error("Webhook handler error", { error: String(error) });
 			return c.json({ error: "internal_error" }, 500);
 		}
 	});

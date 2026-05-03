@@ -1,0 +1,4 @@
+{
+	"title": "Руководства по миграции",
+	"pages": ["algolia", "elasticsearch"]
+}

@@ -1,6 +1,7 @@
 import { ORPCError } from "@orpc/client";
 import {
 	getOrganizationMembership,
+	getOrganizationPreferredCurrency,
 	getPurchasesByOrganizationId,
 	getPurchasesByUserId,
 } from "@repo/database";
@@ -43,7 +44,7 @@ export const listInvoices = protectedProcedure
 		tags: ["Payments"],
 		summary: "List invoices",
 		description:
-			"List Stripe invoices for the current user or organization, with optional multi-currency conversion via FxRate",
+			"List Stripe invoices for the current user or organization, with optional multi-currency conversion via FxRate. Falls back to organization's preferred currency when not specified.",
 	})
 	.input(
 		z.object({
@@ -89,14 +90,23 @@ export const listInvoices = protectedProcedure
 					startingAfter,
 				});
 
-				// Apply multi-currency conversion if preferredCurrency is specified
-				if (preferredCurrency && result.invoices.length > 0) {
+				// Auto-apply organization's preferred currency if not explicitly provided
+				let targetCurrency = preferredCurrency;
+				if (!targetCurrency && organizationId) {
+					const orgPreferred = await getOrganizationPreferredCurrency(organizationId);
+					if (orgPreferred) {
+						targetCurrency = orgPreferred;
+					}
+				}
+
+				// Apply multi-currency conversion if a preferred currency is specified
+				if (targetCurrency && result.invoices.length > 0) {
 					const convertedInvoices = await Promise.all(
 						result.invoices.map(async (invoice) => {
 							const converted = await convertInvoiceAmount(
 								invoice.amountPaid,
 								invoice.currency,
-								preferredCurrency,
+								targetCurrency,
 							);
 
 							if (converted === null) {
@@ -107,7 +117,7 @@ export const listInvoices = protectedProcedure
 								...invoice,
 								convertedAmount: {
 									amount: Math.round(converted),
-									currency: preferredCurrency.toUpperCase(),
+									currency: targetCurrency.toUpperCase(),
 									rate:
 										invoice.amountPaid > 0
 											? Math.round(

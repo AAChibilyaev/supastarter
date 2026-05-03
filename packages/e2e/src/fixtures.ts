@@ -105,7 +105,7 @@ export const test = base.extend<TestFixtures>({
 		await context.close();
 	},
 
-	apiClient: async (_unused: unknown, use) => {
+	apiClient: async ({}, use) => {
 		const client = createApiClient(getSaaSUrl());
 		await use(client);
 	},

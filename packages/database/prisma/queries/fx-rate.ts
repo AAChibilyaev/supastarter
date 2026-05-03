@@ -6,6 +6,7 @@ export interface FxRateRecord {
 	ratePer1UnitMicros: bigint;
 	source: string;
 	effectiveAt: Date;
+	createdAt: Date;
 }
 
 /**

@@ -1,4 +1,6 @@
 {
-	"title": "indexes/indexid/documents:batchdelete",
-	"pages": ["post"]
+  "title": "indexes/indexid/documents:batchdelete",
+  "pages": [
+    "post"
+  ]
 }

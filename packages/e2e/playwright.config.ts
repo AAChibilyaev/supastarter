@@ -107,6 +107,38 @@ export default defineConfig({
 			testMatch: "tests/index/**/*.spec.ts",
 			use: { ...devices["Desktop Chrome"] },
 		},
+		{
+			name: "free-trial",
+			dependencies: ["setup"],
+			testMatch: "tests/free-trial/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
+		{
+			name: "federated-search",
+			dependencies: ["setup"],
+			testMatch: "tests/federated-search/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
+		{
+			name: "onboarding",
+			dependencies: ["setup"],
+			testMatch: "tests/onboarding/**/*.spec.ts",
+			use: { ...devices["Desktop Chrome"] },
+		},
+		// ── Regression Suite (Critical User Journeys) ──────────────
+		{
+			name: "regression",
+			dependencies: ["setup"],
+			testMatch: "tests/regression/**/*.spec.ts",
+			use: {
+				...devices["Desktop Chrome"],
+				actionTimeout: 15_000,
+				navigationTimeout: 30_000,
+			},
+			fullyParallel: false,
+			retries: process.env.CI ? 1 : 0,
+			timeout: 60_000,
+		},
 	],
 
 	webServer: [

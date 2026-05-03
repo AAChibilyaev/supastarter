@@ -1,0 +1,123 @@
+# AACsearch Firestore Sync — Firebase Extension
+#
+# Deploy this extension to sync Firestore document changes to AACsearch Engine
+# in real-time. Install via Firebase Console or firebase CLI:
+#
+#   firebase ext:install . --project=<project-id>
+
+name: aacsearch-firestore-sync
+version: 0.1.0
+specVersion: v1beta
+
+displayName: AACsearch Firestore Sync
+description: >-
+  Automatically sync Firestore document changes to AACsearch Engine.
+  When documents are created, updated, or deleted in Firestore, this extension
+  sends the changes to AACsearch for real-time indexing.
+
+license: MIT
+
+author:
+  authorName: AACsearch
+  url: https://aacsearch.com
+
+sourceUrl: https://github.com/nousresearch/aacsearch
+
+# Firebase resources created by this extension
+resources:
+  - name: syncFirestoreToAACsearch
+    type: firebaseextensions.v1beta.function
+    description: >-
+      Cloud Function that triggers on Firestore document writes and syncs
+      changes to AACsearch Engine.
+    properties:
+      location: ${param:LOCATION}
+      eventTrigger:
+        eventType: providers/cloud.firestore/eventTypes/document.write
+        resource: projects/${param:PROJECT_ID}/databases/(default)/documents/${param:COLLECTION_PATH}/{docId}
+
+params:
+  - param: COLLECTION_PATH
+    label: Firestore collection path
+    description: >-
+      The path to the Firestore collection to watch (e.g., "products" or
+      "users/{userId}/orders"). Use {wildcard} for subcollections.
+    type: string
+    example: products
+    validationRegex: "^[a-zA-Z0-9_/-]+$"
+    defaultValue: products
+    required: true
+
+  - param: AACSEARCH_URL
+    label: AACsearch API URL
+    description: Your AACsearch instance URL (e.g., https://api.aacsearch.com)
+    type: string
+    example: https://api.aacsearch.com
+    required: true
+
+  - param: AACSEARCH_TOKEN
+    label: AACsearch Connector Token
+    description: >-
+      Your AACsearch connector token with the ss_connector_ prefix.
+      Generate one from the AACsearch dashboard.
+    type: secret
+    example: ss_connector_abc123...
+    required: true
+
+  - param: AACSEARCH_PROJECT_ID
+    label: AACsearch Project ID
+    description: Your AACsearch organization/project ID.
+    type: string
+    example: org_abc123
+    required: true
+
+  - param: INDEX_SLUG
+    label: AACsearch Index Slug
+    description: The index slug in AACsearch to sync documents to.
+    type: string
+    example: products
+    required: true
+
+  - param: FIELD_MAPPING
+    label: Field Mapping (JSON)
+    description: >-
+      Optional JSON mapping of Firestore field names to AACsearch field names.
+      Example: {"name":"title","description":"body"}
+    type: string
+    example: '{"name":"title","description":"body"}'
+    defaultValue: "{}"
+    required: false
+
+  - param: LOCATION
+    label: Cloud Functions location
+    description: >-
+      The Google Cloud region to deploy the Cloud Function in.
+    type: select
+    options:
+      - label: us-central1
+        value: us-central1
+      - label: us-east1
+        value: us-east1
+      - label: us-west1
+        value: us-west1
+      - label: europe-west1
+        value: europe-west1
+      - label: europe-west3
+        value: europe-west3
+      - label: asia-east1
+        value: asia-east1
+      - label: asia-northeast1
+        value: asia-northeast1
+    defaultValue: us-central1
+    required: true
+
+events:
+  - type: aacsearch.firestore-sync.v1.synced
+    description: Firestore document synced to AACsearch
+  - type: aacsearch.firestore-sync.v1.error
+    description: Error syncing Firestore document to AACsearch
+
+lifecycleEvents:
+  - task: configureAACsearchConnection
+    description: Validate AACsearch connection on extension install
+    function: syncFirestoreToAACsearch

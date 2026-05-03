@@ -243,11 +243,22 @@ class AdminAacSearchController extends ModuleAdminController
                         'desc' => $this->l('Inject the AACsearch widget on the front-end.'),
                     ],
                     [
-                        'type' => 'text',
+                        'type' => 'select',
                         'label' => $this->l('Locale'),
                         'name' => 'AACSEARCH_LOCALE',
                         'required' => true,
-                        'desc' => $this->l('Default locale for product export (e.g., en, fr, de).'),
+                        'options' => [
+                            'query' => [
+                                ['id' => 'en', 'name' => 'English'],
+                                ['id' => 'de', 'name' => 'Deutsch'],
+                                ['id' => 'es', 'name' => 'Español'],
+                                ['id' => 'fr', 'name' => 'Français'],
+                                ['id' => 'ru', 'name' => 'Русский'],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                        ],
+                        'desc' => $this->l('Default locale for product export and widget.'),
                     ],
                     [
                         'type' => 'text',

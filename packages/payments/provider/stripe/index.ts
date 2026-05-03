@@ -238,7 +238,7 @@ export const getProrationPreview: GetProrationPreview = async ({ subscriptionId,
 	}
 
 	// Create a proration preview by creating an upcoming invoice
-	const upcoming = await stripe.invoices.retrieveUpcoming({
+	const upcoming = (await (stripe.invoices as any).retrieveUpcoming({
 		subscription: subscriptionId,
 		subscription_items: [
 			{
@@ -248,7 +248,7 @@ export const getProrationPreview: GetProrationPreview = async ({ subscriptionId,
 			},
 		],
 		subscription_proration_date: Math.floor(Date.now() / 1000),
-	});
+	})) as any;
 
 	const lines = upcoming.lines.data || [];
 	let immediateAmount = 0;
@@ -329,7 +329,7 @@ export const createUpgradeSession: CreateUpgradeSession = async ({
 	}
 
 	// Preview the upcoming invoice to see if there's an immediate charge
-	const upcoming = await stripe.invoices.retrieveUpcoming({
+	const upcoming = (await (stripe.invoices as any).retrieveUpcoming({
 		customer: customerId,
 		subscription: subscriptionId,
 		subscription_items: [
@@ -340,7 +340,7 @@ export const createUpgradeSession: CreateUpgradeSession = async ({
 			},
 		],
 		subscription_proration_date: Math.floor(Date.now() / 1000),
-	});
+	})) as any;
 
 	const lines = upcoming.lines.data || [];
 	let immediateAmount = 0;
@@ -390,7 +390,11 @@ export const createUpgradeSession: CreateUpgradeSession = async ({
 			},
 		},
 		...(subscription
-			? { subscription_data: { items: [{ id: subscriptionItemId, price: newPriceId }] } }
+			? {
+					subscription_data: {
+						items: [{ id: subscriptionItemId, price: newPriceId }],
+					} as any,
+				}
 			: {}),
 	});
 

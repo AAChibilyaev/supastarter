@@ -1,0 +1,168 @@
+---
+title: SOC2 Type II Preparation Checklist
+description: Comprehensive readiness checklist for SOC2 Type II audit compliance for AACsearch.
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+# SOC2 Type II Preparation Checklist
+
+This checklist covers all five SOC2 trust service criteria for AACsearch's search-as-a-service platform. Use it to track readiness before engaging with an external auditor for Type II certification.
+
+<Callout type="info">
+  **Target audit period:** 6–12 months of evidence collection. Each item must be verifiable through system-generated logs, configuration snapshots, or policy documents.
+</Callout>
+
+## Security
+
+The security principle protects against unauthorized access (both physical and logical).
+
+### Access Control
+
+- [ ] **RBAC implemented across all systems** — PostgreSQL, Typesense, Coolify, and S3 each enforce role-based access. Verify every human and service account has the minimum permissions needed.
+- [ ] **MFA enforced for all admin accounts** — Coolify admin, cloud provider (AWS/Vercel), and GitHub organization require hardware TOTP or WebAuthn.
+- [ ] **API key rotation policy documented** — AACsearch API keys follow a 90-day rotation schedule. Keys are scoped per-project with read/write/delete granularity.
+- [ ] **Just-in-time (JIT) access for production** — No standing admin access to production databases or search clusters. Access is requested via PagerDuty or Coolify with auto-expiry after 4 hours.
+- [ ] **Quarterly access review** — All SSH keys, API tokens, and IAM roles reviewed every quarter. Revoked keys logged in the audit trail.
+
+### Encryption
+
+- [ ] **TLS 1.3 enforced for all API endpoints** — All AACsearch public API endpoints (search, indexing, management) terminate TLS 1.3. Certificate auto-renewal via Let's Encrypt or ACME is verified.
+- [ ] **Encryption at rest on all storage volumes** — RDS (PostgreSQL) uses AES-256; S3 buckets have SSE-S3 enabled; Typesense data directory resides on an encrypted EBS volume.
+- [ ] **Customer index data encrypted per-tenant** — Confirm that index-level encryption keys, if implemented, are isolated between projects.
+- [ ] **Key management documented** — Master keys stored in AWS KMS (or equivalent). Key rotation policy, access logging, and backup of key material are verified.
+
+### Vulnerability Management
+
+- [ ] **Automated dependency scanning** — Dependabot or Renovate configured on all repositories (supastarter, aacflow, infrastructure-as-code). Critical CVEs patched within 72 hours.
+- [ ] **Container image scanning** — Docker images for Typesense and any custom services scanned via Trivy or AWS ECR scanning before deployment.
+- [ ] **Annual penetration test** — Third-party pentest targeting AACsearch API, Typesense query injection, and authentication bypass. Remediation plan documented for each finding.
+- [ ] **Patch management policy** — OS-level patches applied to compute instances within 30 days of release. Emergency patches (CVSS >= 9.0) applied within 48 hours.
+
+### Intrusion Detection
+
+- [ ] **WAF rules active** — Web application firewall (Cloudflare or AWS WAF) blocking SQL injection, XSS, and path traversal. Rate limiting configured per API key and per IP.
+- [ ] **Log aggregation and alerting** — All application, database, and infrastructure logs shipped to a SIEM (e.g., Grafana Loki, Datadog, or AWS CloudWatch). Alerts configured for: repeated failed logins, unusual API call volume, and known-bad IP patterns.
+- [ ] **File integrity monitoring** — Critical binary and configuration directories (Typesense data dir, application secrets, nginx config) monitored for unauthorized changes.
+- [ ] **Cloud trail enabled** — AWS CloudTrail or equivalent enabled on all accounts with read/write event logging. Logs immutable for at least 12 months.
+
+## Availability
+
+The availability principle ensures the system is operational and accessible as committed in SLAs.
+
+### Uptime Monitoring
+
+- [ ] **Synthetic monitoring in place** — External probes (Checkly, Better Uptime, or equivalent) hit search and indexing endpoints every 60 seconds from multiple geographic regions.
+- [ ] **Status page configured** — Public status page (e.g., status.aacsearch.com) reflects real-time component health with incident timeline.
+- [ ] **SLA commitments documented** — Published uptime SLA (99.9% or higher) with defined measurement window, exclusion windows, and credit terms.
+- [ ] **Multi-region failover tested** — If multi-region deployment exists, failover between regions is tested quarterly. RTO for regional failover documented (< 15 min target).
+
+### Disaster Recovery Plan
+
+- [ ] **DR plan documented and tested** — Written DR plan covering full recovery of PostgreSQL (PITR via WAL-G), Typesense snapshots, and application state. Tabletop exercise conducted every 6 months.
+- [ ] **RTO and RPO defined** — Recovery Time Objective: 1 hour. Recovery Point Objective: 15 minutes. Both values are verifiable through restore drills.
+- [ ] **Cross-region recovery tested** — At least one full restore drill executed annually in a secondary region using stored backups.
+- [ ] **Communications plan documented** — Stakeholder notification list, escalation tree, and post-incident review template included in the DR plan.
+
+### Backup Verification
+
+- [ ] **Automated backups active** — PostgreSQL: WAL-G continuous archiving to S3. Typesense: snapshot API every 6 hours to S3. Application: Git-based (GitHub) + Coolify.
+- [ ] **Backup integrity verified monthly** — Automated restore test of the most recent Typesense snapshot and PostgreSQL backup into a staging environment. Results logged and reviewed.
+- [ ] **Backup retention policy documented** — Hourly snapshots retained for 7 days, daily for 30 days, weekly for 12 months. Cross-region copy of weekly backups.
+- [ ] **Encryption of backups verified** — All backup data at rest in S3 is encrypted (SSE-S3 or SSE-KMS). Restore process validates decryption succeeds without manual key intervention.
+
+### Incident Response
+
+- [ ] **Incident response plan documented** — Written IR plan with severity levels (SEV-1 through SEV-4), response times, and escalation paths. Reviewed annually.
+- [ ] **On-call rotation established** — PagerDuty or Opsgenie rotation covers 24/7. Escalation after 15 minutes of no acknowledgment.
+- [ ] **Post-incident reviews conducted** — Every SEV-1 and SEV-2 incident has a written postmortem with root cause, action items, and SLA impact assessment.
+- [ ] **Runbooks automated** — Common incident types (DB failure, search cluster degradation, API slowdown) have automated runbooks triggering corrective actions.
+
+## Processing Integrity
+
+Processing integrity ensures system processing is complete, valid, accurate, timely, and authorized.
+
+### Input Validation
+
+- [ ] **API request validation** — All search queries, indexing payloads, and management API requests validated against JSON schema. Invalid requests rejected with descriptive error codes before reaching Typesense.
+- [ ] **Index size limits enforced** — Per-project document count and size limits enforced at the API gateway. Excessive payloads rejected with 413 status.
+- [ ] **Sanitization of search queries** — Typesense queries sanitized to prevent injection. Special characters in text fields are escaped or stripped according to documented rules.
+- [ ] **Rate limiting per endpoint** — Distinct rate limits applied to search (higher) vs. indexing (lower) endpoints. Limits documented in public API reference and enforced via middleware.
+
+### Data Processing Pipelines
+
+- [ ] **Document indexing pipeline monitored** — End-to-end latency of document indexing (API receive → index confirmation) tracked. Alerts configured if P99 exceeds 5 seconds.
+- [ ] **Idempotency keys supported** — Indexing API supports idempotency keys so that retries do not create duplicate documents. Implementation verified through integration tests.
+- [ ] **Batch processing integrity** — Batch document operations (create, update, delete) are atomic per batch. Partial failures roll back the entire batch. Confirmed via audit logs.
+- [ ] **Data transformation logs** — Any enrichment or transformation applied to documents before indexing is logged. Transformation rules version-controlled in Git.
+
+### Error Handling
+
+- [ ] **Graceful degradation** — Search API returns stale or degraded results (with `degraded: true` flag) rather than 500 errors when downstream dependencies (e.g., cache, secondary index) are unavailable.
+- [ ] **Structured error responses** — All API errors follow a consistent JSON structure: `{ error: { code, message, requestId } }`. Internal stack traces never exposed to clients.
+- [ ] **Dead-letter queue configured** — Failed indexing jobs, webhook deliveries, and async processing tasks routed to a DLQ. DLQ monitored and alerted on.
+- [ ] **Error budget defined** — Error budget (e.g., 0.1% of requests may error) defined per SLA. Alerts fire when error budget is 50% consumed and again at 90%.
+
+## Confidentiality
+
+Confidentiality protects sensitive information as committed in agreements.
+
+### Data Classification
+
+- [ ] **Data classification policy documented** — Categories defined: Public, Internal, Confidential, Restricted. Customer search indexes classified as Confidential by default.
+- [ ] **Data labeling enforced** — S3 bucket tags, database column comments, and API response headers include classification labels where applicable.
+- [ ] **Data handling procedures** — Written procedures for each classification level covering storage, transmission, retention, and destruction. Reviewed annually.
+
+### Access Logging
+
+- [ ] **All access to customer data logged** — Every API call that reads or writes search index data is logged with: timestamp, actor (API key or user ID), action, resource, source IP, and response status.
+- [ ] **Log retention meets audit requirements** — Access logs retained for at least 12 months (or per contractual obligation). Logs are append-only and immutable.
+- [ ] **Anomaly detection on access patterns** — Automated alerts for unusual access patterns: single credential accessing many indexes, off-hours bulk exports, or repeated 403 responses.
+- [ ] **Privileged access monitoring** — All administrative access to production infrastructure (SSH, database console, Coolify admin) logged separately with session recording where feasible.
+
+### NDAs for Contractors
+
+- [ ] **NDAs executed for all contractors** — Signed NDAs on file for every contractor, vendor, and subcontractor with access to AACsearch systems or customer data.
+- [ ] **Vendor risk assessments completed** — Critical vendors (cloud provider, CDN, monitoring tools) have completed security questionnaires. Results reviewed and accepted by the security team.
+- [ ] **Contractual data protection clauses** — All vendor contracts include data processing terms, breach notification SLA, and right-to-audit clauses.
+
+## Privacy
+
+Privacy addresses the collection, use, retention, and disclosure of personal information.
+
+### Privacy Notice
+
+- [ ] **Public privacy notice published** — Privacy policy at aacsearch.com/privacy covers: what PII is collected, how it is used, data sharing, cookies, user rights (access, deletion, portability), and contact information.
+- [ ] **Notice aligns with applicable regulations** — Privacy notice complies with GDPR, CCPA, and any jurisdiction-specific requirements for AACsearch's customer base.
+- [ ] **Notice versioning maintained** — Privacy notice changes are versioned. Material changes communicated to customers via email or in-app notification within 30 days.
+
+### Consent Management
+
+- [ ] **Consent collected at signup** — User registration flow includes explicit consent checkboxes for: privacy policy acceptance, marketing communications (opt-in), and data processing for service delivery.
+- [ ] **Consent records stored** — Consent timestamps, IP addresses, and versions are stored and queryable. Users can withdraw consent and see their current consent status in account settings.
+- [ ] **Cookie consent banner active** — Cookie consent banner on all public-facing pages (docs, marketing site) with granular controls for analytics vs. essential cookies.
+
+### Data Retention
+
+- [ ] **Data retention schedule documented** — Clear schedule for each data category: search analytics (13 months), API logs (12 months), user accounts (until deletion request), billing records (7 years).
+- [ ] **Automated data purging** — Scheduled jobs (cron or lambda) enforce retention limits. Purging is logged and verifiable.
+- [ ] **Data deletion process documented** — Upon customer request: search indexes deleted within 30 days, account data within 60 days. Process includes verification step and confirmation to the customer.
+
+### PII Handling
+
+- [ ] **PII inventory maintained** — Register of all PII data fields across the platform: user emails, IP addresses in logs, billing details, and any customer-provided PII in search indexes.
+- [ ] **PII minimization enforced** — API design limits PII collection to what is strictly necessary. Customers are advised against indexing PII in search documents (documented in best-practices guide).
+- [ ] **Breach notification plan** — Written plan covering: detection triggers, internal escalation, legal review, customer notification (within 72 hours for GDPR), and regulatory filing.
+- [ ] **Data protection impact assessment (DPIA)** — DPIA completed for high-risk processing activities. Reviewed annually or whenever processing changes significantly.
+
+## Auditor Evidence Checklist
+
+Prepare these artifacts before the Type II audit:
+
+- [ ] System description (narrative of AACsearch architecture, boundaries, and controls)
+- [ ] Control matrix mapping each control to a trust service criterion
+- [ ] Evidence packages: 6–12 months of logs, configuration snapshots, policy documents
+- [ ] Organizational chart showing security roles and responsibilities
+- [ ] Third-party pentest report (no more than 12 months old)
+- [ ] Vendor risk assessment reports for critical subservice organizations
+- [ ] Completed SOC2 Type II readiness assessment (self-assessment or consultant-led)

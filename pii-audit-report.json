@@ -1,0 +1,312 @@
+{
+	"audit_metadata": {
+		"project": "AACsearch (supastarter)",
+		"project_root": "/Users/aac/Projects/ts/supastarter",
+		"audit_date": "2026-05-03",
+		"scope": "production code: packages/api/, apps/saas/app/api/, packages/search/, packages/widget/, packages/postgres-sync/, packages/shopify-connector/, packages/billing-wallet/, packages/observability/",
+		"excluded": "node_modules, .next, .git, test files, stub code"
+	},
+	"findings": [
+		{
+			"id": "FINDING-1",
+			"title": "scrub-secrets utility exists but is never imported or used anywhere",
+			"severity": "HIGH",
+			"file": "/Users/aac/Projects/ts/supastarter/packages/api/lib/scrub-secrets.ts",
+			"line": 1,
+			"pattern": "scrubValue() / scrubString() declared but never imported",
+			"description": "A comprehensive secret-scrubbing utility (scrub-secrets.ts) exists with functions to redact sensitive keys (authorization, cookie, apiKey, hashedKey, password, rawKey, secret, token, etc.) and token shapes (ss_search_*, ss_connector_*, sk_*, Bearer). However, a search across the entire packages/ directory shows zero imports of this module. All 64+ logger.error/info/warn calls in packages/api/ pass raw data without redaction. This means if any logged object contains sensitive fields (bearer tokens, API keys, user data), they will appear in plaintext in log output.",
+			"risk": "If an error object contains a bearer token, API key, or user email field, it will be logged in plaintext. The scrubber was clearly intended to be applied as middleware or at the logger boundary but was never wired up.",
+			"action": "Apply scrubValue() as a logger middleware or at the logger boundary function. Either integrate it into the @repo/logs package or wrap all logger calls in the API entry point.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-2",
+			"title": "User search query text stored in usage metadata (potential PII exfiltration)",
+			"severity": "MEDIUM",
+			"file": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/public-handler.ts",
+			"line": 217,
+			"pattern": "usageMeta stores q, filterBy, queryBy, sortBy → written to Prisma searchUsage table",
+			"description": "At line 217-228, the entire search query (q), queryBy, filterBy, sortBy parameters are captured into usageMeta and persisted via recordSearchUsage() into the Prisma database. If an end-user searches for an email address, phone number, or other PII (e.g., q='john.doe@example.com'), that search term is stored permanently in the search usage events table. Additionally, zero_results events (line 252) also store the raw query q.",
+			"risk": "Search terms that contain PII (emails, phone numbers, personal identifiers) become stored in the search_usage database table, accessible to anyone with database access or admin API permissions.",
+			"action": "Consider hashing or truncating the search query (q) before storing in usage metadata. Alternatively, implement a data retention policy for usage events that purges old records.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-3",
+			"title": "User-agent and referrer headers stored in usage events across multiple endpoints",
+			"severity": "MEDIUM",
+			"files": [
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/public-handler.ts",
+					"line": 226
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/events-public.ts",
+					"line": 100
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/connector-public.ts",
+					"line": 595
+				}
+			],
+			"pattern": "c.req.header('user-agent') and c.req.header('referer') stored in usage metadata",
+			"description": "Three different endpoints store the 'user-agent' and 'referer' HTTP headers in Prisma searchUsage metadata records. The referrer header often contains the full URL including query parameters — which can include session tokens, utm parameters with user identifiers, or the search query itself. The user-agent string can be used for browser fingerprinting. While not directly PII under GDPR Article 4, these are potential indirect identifiers.",
+			"risk": "Referrer URLs may contain PII (email addresses in query params, session identifiers). User-agent strings contribute to browser fingerprinting. Combined with timestamps and index IDs, they enable user tracking.",
+			"action": "Strip query parameters from referrer URLs before storage. Consider truncating or anonymizing user-agent strings (e.g., only store browser family).",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-4",
+			"title": "Logger.error calls pass raw error objects without scrubbing",
+			"severity": "MEDIUM",
+			"files": [
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/public-handler.ts",
+					"line": 367
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/connector-public.ts",
+					"line": 308
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/connector-public.ts",
+					"line": 613
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/share-public.ts",
+					"line": 189
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/lib/quota-notifications.ts",
+					"line": 309
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/lib/quota-notifications.ts",
+					"line": 326
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/events-public.ts",
+					"line": 164
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/apps/saas/app/api/cron/index-health-check/route.ts",
+					"line": 139
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/apps/saas/app/api/receipts/[id]/route.ts",
+					"line": 69
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/shopify-connector/src/router.ts",
+					"line": 452
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/shopify-connector/src/router.ts",
+					"line": 471
+				}
+			],
+			"pattern": "logger.error('message', { error }) or logger.error('message', e)",
+			"description": "Multiple error handlers pass the caught error object (which may contain status codes, error messages, or stack traces that include user data) directly to the logger without sanitization. Error.message can contain database error details, validation outputs, or user-submitted values that got rejected. Without scrub-secrets being applied, any sensitive data in the error chain is logged in plaintext.",
+			"risk": "If a validation error message includes the user's input (e.g., rejected email address, API key, SQL injection attempt), that PII is written to logs. Stack traces can include URLs with query parameters or function arguments containing user data.",
+			"action": "Apply scrubValue() to error objects before logging. Use a structured error logging approach that strips PII from error messages.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-5",
+			"title": "API key creation endpoint returns rawKey in response body",
+			"severity": "LOW",
+			"file": "/Users/aac/Projects/ts/supastarter/packages/api/v1/keys.ts",
+			"line": 103,
+			"pattern": "return c.json({ ..., rawKey: generated.rawKey }, 201)",
+			"description": "The API key creation endpoint at POST /projects/:projectId/keys returns the raw API key (rawKey) in the response body. This is an intentional security pattern (display once on creation) and is standard practice for API key management systems. The OpenAPI spec (openapi.ts line 1173) documents this behavior. The key is only returned at creation time — listing keys (line 110-148) does NOT include rawKey, only the prefix.",
+			"risk": "LOW — by design. The rawKey is in the response body and could appear in web server access logs if the server logs response bodies. Standard best practice.",
+			"action": "Ensure web server access logs do not capture response bodies. The pattern itself is acceptable.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-6",
+			"title": "Shopify uninstall webhook logs shop domain",
+			"severity": "LOW",
+			"file": "/Users/aac/Projects/ts/supastarter/packages/shopify-connector/src/router.ts",
+			"line": 467,
+			"pattern": "logger.info('Shopify app uninstalled', { shop })",
+			"description": "The Shopify app uninstall webhook handler logs the shop domain (e.g., mystore.myshopify.com). While a myshopify.com domain is a business identifier, it can also identify natural persons operating as sole traders under GDPR.",
+			"risk": "Low — typically a business identifier. Could identify a sole trader under some GDPR interpretations.",
+			"action": "Consider logging only a hashed shop identifier instead of the domain.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-7",
+			"title": "SCIM endpoints expose email in API responses (by design)",
+			"severity": "LOW",
+			"file": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/scim-public.ts",
+			"line": 139,
+			"pattern": "userName: user.email, emails: [{ value: user.email, ... }]",
+			"description": "The SCIM 2.0 endpoints (RFC 7643/7644) expose user email addresses in API responses. This is by design — SCIM is an identity provisioning protocol that requires user data exchange. The endpoint is authenticated with admin-scoped API keys only.",
+			"risk": "LOW — SCIM protocol requires this. Protected by admin authentication.",
+			"action": "None — this is standard SCIM behavior. Ensure SCIM admin keys are properly secured.",
+			"false_positive": true,
+			"explanation": "SCIM protocol by design exposes email. Protected by admin authentication."
+		},
+		{
+			"id": "FINDING-8",
+			"title": "console.log in postgres-sync library (debug-only, no PII data)",
+			"severity": "LOW",
+			"files": [
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/postgres-sync/src/sequin-cdc.ts",
+					"line": 37
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/postgres-sync/src/pg-notify.ts",
+					"line": 55
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/postgres-sync/src/poller.ts",
+					"line": 109
+				}
+			],
+			"pattern": "console.log('[postgres-sync:...]', ...args) — only active when config.debug = true",
+			"description": "Three postgres-sync source files use console.log inside debug-only logging wrappers. These are gated behind `config.debug` flag and are not enabled in production. The actual data passed to these calls is row/document data from database sync operations, not user PII.",
+			"risk": "LOW — debug-only, no PII data passed.",
+			"action": "Consider using the structured logger instead of console.log even for debug mode.",
+			"false_positive": true,
+			"explanation": "Debug-only code path, no PII arguments in the call sites."
+		},
+		{
+			"id": "FINDING-9",
+			"title": "Error responses use generic messages — no PII leaked to clients",
+			"severity": "INFO",
+			"files": [],
+			"pattern": "Error responses return generic strings like 'search_failed', 'sync_failed', 'internal_error', 'quota_exceeded'",
+			"description": "The API consistently returns generic error messages to clients and logs the detailed error server-side. No instances were found where error.message, error.stack, or exception details are included in client-facing responses.",
+			"risk": "None — this is good practice. The error boundary prevents PII leakage to clients.",
+			"action": "Maintain this pattern.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-10",
+			"title": "No email parameters found in URL query strings or search query builders",
+			"severity": "INFO",
+			"files": [],
+			"pattern": "Search for '?email=', '&email=', 'email*' in query params or search/filter builders",
+			"description": "No instances were found where email addresses are passed as URL query parameters or used in Typesense search/filter query builders. The search input schemas accept free-text `q` (query) and `filterBy` fields, but there are no special email-specific query parameters that would appear in server access logs.",
+			"risk": "None — no email-in-URL pattern detected.",
+			"action": "None.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-11",
+			"title": "Send-drip-emails cron processes user emails without logging them",
+			"severity": "INFO",
+			"file": "/Users/aac/Projects/ts/supastarter/apps/saas/app/api/cron/send-drip-emails/route.ts",
+			"line": 67,
+			"pattern": "sendEmail({ to: user.email, ... }) — email only in sendEmail() call, not logged",
+			"description": "The drip email cron job reads user.email from the database and passes it to sendEmail(). The email address is not logged — logger calls only track counts and template IDs. This is good practice.",
+			"risk": "None — email is handled correctly.",
+			"action": "None.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-12",
+			"title": "Quota notification email errors log userId but not email",
+			"severity": "LOW",
+			"file": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/lib/quota-notifications.ts",
+			"line": 309,
+			"pattern": "logger.error('...failed to send...email', { error, orgId, userId: member.userId })",
+			"description": "When quota notification emails fail to send, the error handler logs orgId and userId but NOT the email address itself. The email is only used in the sendEmail() call parameter (member.user.email at line 296) and is never logged.",
+			"risk": "LOW — userId is an internal UUID, not PII.",
+			"action": "None — this is acceptable.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-13",
+			"title": "No password/secret fields returned in API responses",
+			"severity": "INFO",
+			"files": [],
+			"pattern": "Search for password, passwordHash, secret in API response objects",
+			"description": "Password and passwordHash fields are listed in the scrub-secrets.ts allowlist but were never found in any API response object. Prisma selects do not include password fields. The passwordHash mention in scrub-secrets.ts is precautionary.",
+			"risk": "None — no password leakage detected.",
+			"action": "None.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-14",
+			"title": "Authorization header value read but never logged",
+			"severity": "INFO",
+			"files": [
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/v1/auth.ts",
+					"line": 33
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/lib/public-auth.ts",
+					"line": 32
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/analytics-handler.ts",
+					"line": 56
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/connector-public.ts",
+					"line": 34
+				},
+				{
+					"path": "/Users/aac/Projects/ts/supastarter/packages/api/modules/search/scim-public.ts",
+					"line": 79
+				}
+			],
+			"pattern": "c.req.header('Authorization') parsed but never passed to logger",
+			"description": "Multiple auth handlers read the Authorization header and parse Bearer tokens. In all cases, the token is verified against the database or compared to a secret. In no case is the raw token or Bearer header value passed to any logger call. Error responses for auth failures return generic messages ('Missing Bearer token', 'invalid_or_revoked_key') without including the token value.",
+			"risk": "None — good practice. Auth tokens are verified but never logged.",
+			"action": "Maintain this pattern.",
+			"false_positive": false
+		},
+		{
+			"id": "FINDING-15",
+			"title": "OpenAPI doc generation script uses console.log — build-time only",
+			"severity": "LOW",
+			"file": "/Users/aac/Projects/ts/supastarter/packages/api/scripts/generate-openapi.ts",
+			"line": 27,
+			"pattern": "console.log('openapi.yaml written to ...')",
+			"description": "The OpenAPI spec generation script uses console.log to report build output paths. This is a build-time script, not production runtime. No user data passes through this script.",
+			"risk": "None — build-time utility script.",
+			"action": "None.",
+			"false_positive": true,
+			"explanation": "Build-time script, no user data involved."
+		}
+	],
+	"summary": {
+		"total_findings": 15,
+		"by_severity": {
+			"HIGH": 1,
+			"MEDIUM": 3,
+			"LOW": 5,
+			"INFO": 6
+		},
+		"false_positives": 4,
+		"real_issues": 11,
+		"top_risks": [
+			{
+				"finding_id": "FINDING-1",
+				"risk": "scrub-secrets.ts exists but is never wired into the logging pipeline. All 64+ logger calls in packages/api/ log raw objects without redaction. If any error path includes a bearer token, API key, or PII field in the logged object, it appears in plaintext in logs.",
+				"severity": "HIGH"
+			},
+			{
+				"finding_id": "FINDING-2",
+				"risk": "User search queries (including potential PII searches) are permanently stored in Prisma search_usage events. No hashing/truncation of search terms before storage.",
+				"severity": "MEDIUM"
+			},
+			{
+				"finding_id": "FINDING-3",
+				"risk": "User-agent and referrer headers stored in usage events — referrer URLs can contain PII in query parameters.",
+				"severity": "MEDIUM"
+			},
+			{
+				"finding_id": "FINDING-4",
+				"risk": "Error objects passed directly to logger without scrubbing — error messages could contain rejected user input (emails, API keys, etc.).",
+				"severity": "MEDIUM"
+			}
+		]
+	}
+}

@@ -1,5 +1,11 @@
 import { getConfig } from "./procedures/config";
 import { findOrganization } from "./procedures/find-organization";
+import {
+	getFxRateProcedure,
+	listFxRates,
+	syncFxRates,
+	upsertFxRateProcedure,
+} from "./procedures/fx-rates";
 import { integrationChecks } from "./procedures/integration-checks";
 import { listJobs } from "./procedures/list-jobs";
 import { listOrganizations } from "./procedures/list-organizations";
@@ -23,6 +29,12 @@ export const adminRouter = {
 	config: getConfig,
 	integrations: integrationChecks,
 	jobs: listJobs,
+	fxRates: {
+		list: listFxRates,
+		get: getFxRateProcedure,
+		upsert: upsertFxRateProcedure,
+		sync: syncFxRates,
+	},
 	roadmap: {
 		list: listRoadmapItemsProcedure,
 		create: createRoadmapItemProcedure,

@@ -94,6 +94,7 @@ export * from "./components/stats/LandingStatItem";
 export * from "./components/stats/LandingStatsSection";
 export * from "./components/rating/LandingRating";
 export * from "./components/testimonial/LandingTestimonialGrid";
+export * from "./components/testimonial/LandingTestimonial";
 export * from "./components/bento-grid/LandingBentoGridSection";
 export * from "./components/bento-grid/LandingBentoGridItem";
 export * from "./components/bento-grid/LandingBentoGridIconItem";

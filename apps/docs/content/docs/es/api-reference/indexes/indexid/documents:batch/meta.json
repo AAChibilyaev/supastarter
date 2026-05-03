@@ -1,4 +1,6 @@
 {
-	"title": "indexes/indexid/documents:batch",
-	"pages": ["post"]
+  "title": "indexes/indexid/documents:batch",
+  "pages": [
+    "post"
+  ]
 }

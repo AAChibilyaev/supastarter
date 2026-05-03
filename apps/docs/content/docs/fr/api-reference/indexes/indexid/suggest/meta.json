@@ -1,4 +1,6 @@
 {
-	"title": "indexes/indexid/suggest",
-	"pages": ["post"]
+  "title": "indexes/indexid/suggest",
+  "pages": [
+    "post"
+  ]
 }

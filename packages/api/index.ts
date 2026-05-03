@@ -1,7 +1,6 @@
 import { auth } from "@repo/auth";
 import { applySubscriptionToWallet } from "@repo/billing-wallet";
 import { db } from "@repo/database";
-import { logger } from "@repo/logs";
 import { sendEmail } from "@repo/mail";
 import {
 	getMetrics,
@@ -28,6 +27,9 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger as honoLogger } from "hono/logger";
 
+// Import scrubbed logger to wrap all log output with PII redaction
+// This automatically applies scrubValue() to all log payloads
+import { logger } from "./lib/scrubbed-logger";
 import { tochkaWebhookApp } from "./modules/billing-wallet/webhooks/tochka";
 import { analyticsApp } from "./modules/search/analytics-handler";
 import { connectorApp } from "./modules/search/connector-public";

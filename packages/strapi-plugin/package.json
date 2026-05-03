@@ -1,0 +1,71 @@
+{
+	"name": "@aacsearch/strapi-plugin",
+	"version": "0.1.0",
+	"description": "Strapi v5 plugin for AACsearch — sync your Strapi content to AACsearch Engine in real-time",
+	"keywords": [
+		"aacsearch",
+		"strapi",
+		"plugin",
+		"search",
+		"sync",
+		"cms"
+	],
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nousresearch/aacsearch.git"
+	},
+	"strapi": {
+		"name": "aacsearch",
+		"displayName": "AACsearch Sync",
+		"description": "Sync Strapi content to AACsearch Engine in real-time",
+		"kind": "plugin"
+	},
+	"files": [
+		"dist",
+		"strapi-admin.js",
+		"strapi-server.js",
+		"README.md"
+	],
+	"main": "./dist/server/index.js",
+	"types": "./dist/server/index.d.ts",
+	"exports": {
+		"./package.json": "./package.json",
+		"./strapi-admin": {
+			"types": "./dist/admin/index.d.ts",
+			"source": "./src/admin/index.ts",
+			"import": "./dist/admin/index.js",
+			"require": "./dist/admin/index.js",
+			"default": "./dist/admin/index.js"
+		},
+		"./strapi-server": {
+			"types": "./dist/server/index.d.ts",
+			"source": "./src/server/index.ts",
+			"import": "./dist/server/index.js",
+			"require": "./dist/server/index.js",
+			"default": "./dist/server/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"type-check": "tsc --noEmit",
+		"prepublish": "pnpm build"
+	},
+	"dependencies": {
+		"@strapi/strapi": "^5.0.0"
+	},
+	"devDependencies": {
+		"@strapi/types": "^5.0.0",
+		"@types/node": "^22.0.0",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-router-dom": "^7.0.0",
+		"typescript": "^6.0.0"
+	},
+	"peerDependencies": {
+		"@strapi/strapi": "^5.0.0",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-router-dom": "^7.0.0"
+	}
+}

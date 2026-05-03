@@ -9,3 +9,4 @@ export * from "./wallet-types";
 export { walletProvider } from "./wallet-provider";
 export { walletWebhookHandler } from "./wallet-webhook";
 export { processAutoRechargePayments } from "./lib/auto-recharge";
+export { syncExchangeRates } from "./lib/exchange-rate-service";

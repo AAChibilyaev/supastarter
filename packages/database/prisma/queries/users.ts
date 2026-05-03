@@ -140,3 +140,120 @@ export async function updateUser(user: Partial<z.infer<typeof UserSchema>> & { i
 		data: user,
 	});
 }
+
+/**
+ * GDPR Article 20 — Data Portability Export
+ * Fetches all user data from existing models for JSON export.
+ * Includes: profile, memberships, organizations, API keys, purchases, usage events.
+ * No new schema changes (Invariant 9) — uses all 33 existing models.
+ */
+export async function exportUserData(userId: string) {
+	const user = await db.user.findUnique({
+		where: { id: userId },
+		select: {
+			id: true,
+			email: true,
+			name: true,
+			image: true,
+			role: true,
+			emailVerified: true,
+			locale: true,
+			onboardingComplete: true,
+			createdAt: true,
+			updatedAt: true,
+		},
+	});
+	if (!user) return null;
+
+	const memberships = await db.member.findMany({
+		where: { userId },
+		select: {
+			id: true,
+			role: true,
+			createdAt: true,
+			organization: {
+				select: {
+					id: true,
+					name: true,
+					slug: true,
+					createdAt: true,
+				},
+			},
+		},
+	});
+
+	const organizationIds = memberships.map((m) => m.organization.id);
+
+	const apiKeys = await db.searchApiKey.findMany({
+		where: { organizationId: { in: organizationIds } },
+		select: {
+			id: true,
+			prefix: true,
+			scopes: true,
+			indexSlug: true,
+			expiresAt: true,
+			createdAt: true,
+		},
+	});
+
+	const purchases = await db.purchase.findMany({
+		where: { userId },
+		select: {
+			id: true,
+			type: true,
+			status: true,
+			planId: true,
+			priceId: true,
+			createdAt: true,
+		},
+		orderBy: { createdAt: "desc" },
+		take: 100,
+	});
+
+	const usageEvents = await db.searchUsageEvent.findMany({
+		where: { organizationId: { in: organizationIds } },
+		select: {
+			id: true,
+			type: true,
+			count: true,
+			createdAt: true,
+		},
+		orderBy: { createdAt: "desc" },
+		take: 500,
+	});
+
+	return {
+		exportedAt: new Date().toISOString(),
+		user,
+		memberships: memberships.map((m) => ({
+			organizationId: m.organization.id,
+			organizationName: m.organization.name,
+			organizationSlug: m.organization.slug,
+			role: m.role,
+			joinedAt: m.createdAt,
+		})),
+		apiKeys: apiKeys.map((k) => ({
+			prefix: k.prefix,
+			scopes: k.scopes,
+			indexSlug: k.indexSlug,
+			expiresAt: k.expiresAt,
+			createdAt: k.createdAt,
+		})),
+		purchases: purchases.map((p) => ({
+			type: p.type,
+			status: p.status,
+			planId: p.planId,
+			date: p.createdAt,
+		})),
+		usageSummary: {
+			totalEvents: usageEvents.length,
+			eventsByType: usageEvents.reduce<Record<string, number>>(
+				(acc, e) => {
+					acc[e.type] = (acc[e.type] ?? 0) + (e.count ?? 1);
+					return acc;
+				},
+				{},
+			),
+		},
+	};
+}

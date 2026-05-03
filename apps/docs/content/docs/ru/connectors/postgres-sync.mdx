@@ -1,0 +1,139 @@
+---
+title: "Синхронизация PostgreSQL"
+description: "Синхронизируйте таблицы PostgreSQL с поисковым движком AACsearch в реальном времени с помощью pg_notify, опроса или логической репликации."
+---
+
+# Коннектор синхронизации PostgreSQL
+
+Коннектор синхронизации PostgreSQL поддерживает актуальность индексов AACsearch
+в соответствии с таблицами вашей базы данных PostgreSQL. Он поддерживает три стратегии развертывания.
+
+## Стратегия 1: pg_notify (рекомендуется)
+
+Синхронизация с низкой задержкой на основе триггеров с использованием встроенных `LISTEN`/`NOTIFY` PostgreSQL.
+
+### Настройка
+
+Сначала создайте функцию-триггер и прикрепите её к вашей таблице:
+
+```sql
+CREATE OR REPLACE FUNCTION notify_aacsearch()
+RETURNS trigger AS $$ BEGIN
+  PERFORM pg_notify('aacsearch_sync', row_to_json(NEW)::text);
+  RETURN NEW;
+END; $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER products_aacsearch_trigger
+AFTER INSERT OR UPDATE ON products
+FOR EACH ROW EXECUTE FUNCTION notify_aacsearch();
+```
+
+### Подключение
+
+```typescript
+import { startPgNotifyListener } from "@aacsearch/postgres-sync";
+
+const pg = await startPgNotifyListener({
+	aacsearch: {
+		baseUrl: process.env.AACSEARCH_URL!,
+		token: process.env.AACSEARCH_TOKEN!,
+		projectId: process.env.AACSEARCH_PROJECT_ID!,
+	},
+	connectionString: process.env.DATABASE_URL!,
+	table: "products",
+	idColumn: "id",
+	initialFullSync: true,
+	debug: true,
+});
+
+process.on("SIGTERM", () => pg.end());
+```
+
+Слушатель будет:
+
+1. Выполнять начальную полную синхронизацию всех существующих строк
+2. Подписываться на события `pg_notify` для обновлений в реальном времени
+3. Отправлять каждое изменение в AACsearch по мере поступления
+
+## Стратегия 2: Курсор опроса
+
+Опрос полезен, когда вы не можете добавить триггеры в таблицы базы данных.
+
+```typescript
+import { startPollingSync } from "@aacsearch/postgres-sync";
+
+const poller = startPollingSync({
+	aacsearch: { baseUrl: process.env.AACSEARCH_URL!, token, projectId },
+	connectionString: process.env.DATABASE_URL!,
+	table: "orders",
+	cursorColumn: "updated_at",
+	pollIntervalMs: 5000,
+});
+
+// Остановить позже:
+// poller.stop();
+```
+
+Опросчик выполняет `SELECT * FROM table WHERE cursorColumn > $1 ORDER BY cursorColumn`
+с заданным интервалом и отправляет новые/изменённые строки в AACsearch.
+
+## Стратегия 3: Sequin CDC
+
+Для производственной логической репликации без триггеров используйте
+[Sequin](https://sequin.io) для потоковой передачи событий CDC:
+
+```typescript
+import { startSequinCdcSync } from "@aacsearch/postgres-sync";
+
+const sequin = startSequinCdcSync({
+	aacsearch: { baseUrl: process.env.AACSEARCH_URL!, token, projectId },
+	streamUrl: "https://api.sequin.io/streams/YOUR_STREAM_ID",
+	accessToken: "seq_xxx",
+	table: "products",
+});
+```
+
+## Пользовательское отображение документов
+
+Все стратегии принимают пользовательскую функцию `mapper`:
+
+```typescript
+startPgNotifyListener(config, (row) => ({
+	external_id: String(row.id),
+	title: row.title,
+	content: row.body || row.description,
+	price: row.price,
+	category: row.category_name,
+	tags: row.tags ? JSON.parse(row.tags) : [],
+}));
+```
+
+## Обратные вызовы
+
+Отслеживайте активность синхронизации с помощью обратных вызовов:
+
+```typescript
+startPgNotifyListener(config, undefined, {
+	onSync: (event) => {
+		console.log(`Синхронизировано ${event.action} на ${event.table}`);
+	},
+	onError: (error, context) => {
+		console.error(`Ошибка на ${context?.table}:`, error);
+	},
+	onConnected: () => console.log("Подключено к PostgreSQL"),
+	onDisconnected: () => console.log("Отключено от PostgreSQL"),
+});
+```
+
+## Сравнение стратегий
+
+| Стратегия       | Задержка | Требует триггер | Накладные расходы                | Лучше всего для                        |
+| --------------- | -------- | --------------- | -------------------------------- | -------------------------------------- |
+| pg_notify       | ~100мс   | Да              | Минимальные (NOTIFY асинхронен)  | Производственные таблицы под вашим контролем |
+| Курсор опроса   | ~5-60с   | Нет             | SELECT за интервал               | Таблицы без прав на запись             |
+| Sequin CDC      | ~1-5с    | Нет             | Слот логической репликации       | Высокая доступность, нулевая конфигурация |
+
+## Связанные материалы
+
+- [Справочник API коннектора](./connector-api-lifecycle)
+- [Синхронизация Supabase](./supabase-sync)

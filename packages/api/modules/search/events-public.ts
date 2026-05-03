@@ -16,6 +16,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
 
+import { sanitizeReferrer } from "../../lib/referrer-sanitizer";
 import { gatePublicSearchRequest } from "./lib/public-auth";
 import { resolveOrgPlanQuota } from "./lib/quota";
 import { triggerQuotaNotificationsAsync } from "./lib/quota-notifications";
@@ -110,7 +111,7 @@ export const eventsApp = new Hono()
 					filters: ev.filters ?? null,
 					sort: ev.sort ?? null,
 					locale: ev.locale ?? null,
-					referrer: ev.referrer ?? null,
+					referrer: sanitizeReferrer(ev.referrer ?? null),
 					ua,
 					extra: ev.metadata ?? null,
 				};
@@ -162,7 +163,7 @@ export const eventsApp = new Hono()
 			})
 			.catch((err: unknown) =>
 				logger.error("quota-notifications: resolve/poll failed", {
-					error: err,
+					error: String(err),
 					orgId: verified.organizationId,
 				}),
 			);

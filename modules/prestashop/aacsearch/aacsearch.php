@@ -39,7 +39,7 @@ class Aacsearch extends Module
     {
         $this->name = 'aacsearch';
         $this->tab = 'advertising_marketing';
-        $this->version = '1.0.0';
+        $this->version = '1.1.0';
         $this->author = 'AACsearch';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
@@ -388,11 +388,22 @@ class Aacsearch extends Module
                         'desc' => $this->l('Inject the AACsearch widget on the front-end.'),
                     ],
                     [
-                        'type' => 'text',
+                        'type' => 'select',
                         'label' => $this->l('Locale'),
                         'name' => self::CFG_LOCALE,
                         'required' => true,
-                        'desc' => $this->l('Default locale for product export (e.g., en, fr, de).'),
+                        'options' => [
+                            'query' => [
+                                ['id' => 'en', 'name' => 'English'],
+                                ['id' => 'de', 'name' => 'Deutsch'],
+                                ['id' => 'es', 'name' => 'Español'],
+                                ['id' => 'fr', 'name' => 'Français'],
+                                ['id' => 'ru', 'name' => 'Русский'],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                        ],
+                        'desc' => $this->l('Default locale for product export and widget.'),
                     ],
                     [
                         'type' => 'text',

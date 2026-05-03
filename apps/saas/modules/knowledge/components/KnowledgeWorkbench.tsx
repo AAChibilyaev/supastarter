@@ -18,10 +18,12 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
+import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { orpc } from "@shared/lib/orpc-query-utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { FileTable } from "./FileTable";
@@ -123,6 +125,9 @@ export function KnowledgeWorkbench({
 		answer: string;
 		citations: Array<{ sourceIndex: number; documentTitle: string; snippet: string }>;
 	} | null>(null);
+	const [streamingAnswer, setStreamingAnswer] = useState("");
+	const [isStreaming, setIsStreaming] = useState(false);
+	const abortControllerRef = useRef<AbortController | null>(null);
 	const [graphResult, setGraphResult] = useState<{
 		seedNodes: Array<{ canonicalName: string; nodeType: string }>;
 		edges: Array<{ relationType: string; fromNodeId: string; toNodeId: string }>;
@@ -238,6 +243,38 @@ export function KnowledgeWorkbench({
 		onError: () => toast.error(t("search.knowledge.ingestError")),
 	});
 
+	const { confirm } = useConfirmationAlert();
+
+	const deleteSourceMutation = useMutation({
+		...orpc.knowledge.deleteSource.mutationOptions(),
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({
+				queryKey: orpc.knowledge.listSources.queryKey({
+					input: { ownerType, ownerId, spaceSlug: selectedSpaceSlug },
+				}),
+			});
+			toast.success(t("search.knowledge.sourceDeleted"));
+		},
+		onError: () => toast.error(t("search.knowledge.sourceDeleteError")),
+	});
+
+	const deleteSpaceMutation = useMutation({
+		...orpc.knowledge.deleteSpace.mutationOptions(),
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({
+				queryKey: orpc.knowledge.listSpaces.queryKey({
+					input: { ownerType, ownerId },
+				}),
+			});
+			if (selectedSpaceSlug) {
+				const remaining = spacesQuery.data?.filter((s) => s.slug !== selectedSpaceSlug);
+				setSelectedSpaceSlug(remaining?.[0]?.slug ?? "");
+			}
+			toast.success(t("search.knowledge.spaceDeleted"));
+		},
+		onError: () => toast.error(t("search.knowledge.spaceDeleteError")),
+	});
+
 	const askMutation = useMutation({
 		...orpc.knowledge.ask.mutationOptions(),
 		onSuccess: (result) => {
@@ -303,6 +340,47 @@ export function KnowledgeWorkbench({
 		});
 	};
 
+	const handleDeleteSource = (sourceId: string) => {
+		if (!canManage) {
+			toast.error(t("search.knowledge.permissionDenied"));
+			return;
+		}
+		confirm({
+			title: t("search.knowledge.deleteSourceConfirm"),
+			message: t("search.knowledge.deleteSourceMessage"),
+			confirmLabel: t("search.knowledge.delete"),
+			destructive: true,
+			onConfirm: () => {
+				deleteSourceMutation.mutate({
+					ownerType,
+					ownerId,
+					spaceSlug: selectedSpaceSlug,
+					sourceId,
+				});
+			},
+		});
+	};
+
+	const handleDeleteSpace = (slug: string) => {
+		if (!canManage) {
+			toast.error(t("search.knowledge.permissionDenied"));
+			return;
+		}
+		confirm({
+			title: t("search.knowledge.deleteSpaceConfirm"),
+			message: t("search.knowledge.deleteSpaceMessage"),
+			confirmLabel: t("search.knowledge.delete"),
+			destructive: true,
+			onConfirm: () => {
+				deleteSpaceMutation.mutate({
+					ownerType,
+					ownerId,
+					slug,
+				});
+			},
+		});
+	};
+
 	const handleIngest = async () => {
 		if (!canManage) {
 			toast.error(t("search.knowledge.noPermissionIngest"));
@@ -349,6 +427,75 @@ export function KnowledgeWorkbench({
 			spaceSlug: selectedSpaceSlug,
 			query: question.trim(),
 		});
+	};
+
+	const handleStreamAsk = async () => {
+		if (!selectedSpaceSlug || !question.trim()) {
+			toast.error(t("search.knowledge.noSpaceSelected"));
+			return;
+		}
+
+		// Cancel any existing stream
+		if (abortControllerRef.current) {
+			abortControllerRef.current.abort();
+		}
+		const abortController = new AbortController();
+		abortControllerRef.current = abortController;
+
+		setIsStreaming(true);
+		setStreamingAnswer("");
+		setAnswerResult(null);
+
+		try {
+			const response = await fetch("/api/rpc/knowledge.askStream", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					ownerType,
+					ownerId,
+					spaceSlug: selectedSpaceSlug,
+					query: question.trim(),
+				}),
+				signal: abortController.signal,
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP ${response.status}`);
+			}
+
+			const reader = response.body?.getReader();
+			if (!reader) throw new Error("No response body");
+
+			const decoder = new TextDecoder();
+			let accumulated = "";
+
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+
+				const chunk = decoder.decode(value, { stream: true });
+				// Parse SSE format: "data: {...}\n\n"
+				for (const line of chunk.split("\n")) {
+					if (line.startsWith("data: ")) {
+						try {
+							const parsed = JSON.parse(line.slice(6));
+							accumulated += parsed.text ?? "";
+							setStreamingAnswer(accumulated);
+						} catch {
+							// Skip malformed events
+						}
+					}
+				}
+			}
+
+			toast.success(t("search.knowledge.answerGenerated"));
+		} catch (error: unknown) {
+			if (error instanceof Error && error.name === "AbortError") return;
+			toast.error(t("search.knowledge.answerError"));
+		} finally {
+			setIsStreaming(false);
+			abortControllerRef.current = null;
+		}
 	};
 
 	const handleGraphExplain = () => {
@@ -489,9 +636,27 @@ export function KnowledgeWorkbench({
 						</Button>
 						<div className="space-y-2">
 							{sourcesQuery.data?.map((source) => (
-								<div key={source.id} className="p-2 text-sm rounded-md border">
-									<div className="font-medium">{source.name}</div>
-									<div className="text-muted-foreground">{source.sourceType}</div>
+								<div
+									key={source.id}
+									className="gap-2 p-2 text-sm flex items-start rounded-md border"
+								>
+									<div className="min-w-0 flex-1">
+										<div className="font-medium truncate">{source.name}</div>
+										<div className="text-muted-foreground">
+											{source.sourceType}
+										</div>
+									</div>
+									{canManage && (
+										<Button
+											variant="ghost"
+											size="sm"
+											onClick={() => handleDeleteSource(source.id)}
+											disabled={deleteSourceMutation.isPending}
+											className="shrink-0 text-destructive hover:text-destructive"
+										>
+											<Trash2 className="size-3.5" />
+										</Button>
+									)}
 								</div>
 							))}
 						</div>
@@ -608,39 +773,65 @@ export function KnowledgeWorkbench({
 								placeholder={t("search.knowledge.questionPlaceholder")}
 							/>
 						</div>
-						<Button
-							type="button"
-							onClick={handleAsk}
-							disabled={askMutation.isPending || !selectedSpaceSlug}
-						>
-							{t("search.knowledge.askButton")}
-						</Button>
-						{answerResult ? (
+						<div className="gap-2 flex items-center">
+							<Button
+								type="button"
+								onClick={handleAsk}
+								disabled={askMutation.isPending || !selectedSpaceSlug}
+							>
+								{t("search.knowledge.askButton")}
+							</Button>
+							<Button
+								type="button"
+								variant="outline"
+								onClick={handleStreamAsk}
+								disabled={isStreaming || !selectedSpaceSlug}
+							>
+								{isStreaming
+									? t("search.knowledge.streaming")
+									: t("search.knowledge.askStreamButton")}
+							</Button>
+							{isStreaming && (
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									onClick={() => abortControllerRef.current?.abort()}
+								>
+									{t("search.knowledge.stop")}
+								</Button>
+							)}
+						</div>
+						{answerResult || streamingAnswer ? (
 							<div className="space-y-2">
 								<Card>
 									<CardContent className="p-3 text-sm whitespace-pre-wrap">
-										{answerResult.answer}
+										{streamingAnswer || answerResult?.answer}
+										{isStreaming && (
+											<span className="ml-0.5 w-2 h-4 animate-pulse inline-block bg-foreground" />
+										)}
 									</CardContent>
 								</Card>
-								{answerResult.citations.map((citation) => (
-									<div
-										key={`${citation.sourceIndex}-${citation.documentTitle}`}
-										className="rounded p-2 text-xs border"
-									>
-										<div className="gap-1.5 font-medium flex items-baseline">
-											<span className="shrink-0 text-muted-foreground">
-												[{citation.sourceIndex}]
-											</span>
-											<span>{t("search.knowledge.citedFrom")}:</span>
-											<span className="font-bold">
-												{citation.documentTitle}
-											</span>
+								{answerResult &&
+									answerResult.citations.map((citation) => (
+										<div
+											key={`${citation.sourceIndex}-${citation.documentTitle}`}
+											className="rounded p-2 text-xs border"
+										>
+											<div className="gap-1.5 font-medium flex items-baseline">
+												<span className="shrink-0 text-muted-foreground">
+													[{citation.sourceIndex}]
+												</span>
+												<span>{t("search.knowledge.citedFrom")}:</span>
+												<span className="font-bold">
+													{citation.documentTitle}
+												</span>
+											</div>
+											<div className="mt-1 text-muted-foreground">
+												{citation.snippet}
+											</div>
 										</div>
-										<div className="mt-1 text-muted-foreground">
-											{citation.snippet}
-										</div>
-									</div>
-								))}
+									))}
 							</div>
 						) : null}
 					</CardContent>

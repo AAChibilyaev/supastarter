@@ -1,0 +1,227 @@
+---
+title: Node.js SDK
+description: Установка и использование @aacsearch/client — Node.js SDK для поиска, управления индексами, синонимами, курациями и аналитикой.
+---
+
+import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
+import { Steps, Step } from "fumadocs-ui/components/steps";
+
+# Node.js SDK (`@aacsearch/client`)
+
+Пакет `@aacsearch/client` npm предоставляет два клиента:
+
+| Клиент          | Область      | Префикс ключа | Безопасен для браузера | Назначение                        |
+| --------------- | ------------ | ------------- | ---------------------- | --------------------------------- |
+| `SearchClient`  | только поиск | `ss_search_*` | Да                     | Виджеты в браузере, фронтенд      |
+| `AdminClient`   | полный CRUD  | `aa_admin_*`  | Нет                    | Серверные скрипты, CLI, CI/CD     |
+
+> **Правило безопасности**: никогда не встраивайте административные ключи в код браузера. Используйте `SearchClient` для фронтенда и проксируйте административные запросы через свой бэкенд.
+
+## Установка
+
+<Steps>
+<Step>
+Установите пакет:
+
+```bash
+npm install @aacsearch/client
+# или
+pnpm add @aacsearch/client
+```
+
+</Step>
+</Steps>
+
+## SearchClient (безопасный для браузера)
+
+### Инициализация
+
+```ts
+import { SearchClient } from "@aacsearch/client";
+
+const client = new SearchClient({
+	baseUrl: "https://app.aacsearch.com",
+	apiKey: "ss_search_...",
+	indexSlug: "products",
+});
+```
+
+### Базовый поиск
+
+```ts
+const result = await client.search({
+	q: "running shoes",
+	queryBy: "title,description",
+	facetBy: "category,brand",
+});
+
+console.log(result.hits, result.found);
+// { hits: [...], found: 42, page: 1, perPage: 10, facetCounts: [...] }
+```
+
+### Множественный поиск
+
+Выполнение нескольких запросов за один круговой обход:
+
+```ts
+const { results } = await client.multiSearch([
+	{ q: "nike", queryBy: "title" },
+	{ q: "adidas", queryBy: "title", filterBy: "in_stock:=true" },
+]);
+```
+
+## AdminClient (серверная сторона)
+
+### Инициализация
+
+```ts
+import { AdminClient } from "@aacsearch/client";
+
+const admin = new AdminClient({
+	baseUrl: "https://app.aacsearch.com",
+	apiKey: "aa_admin_...",
+	projectId: "org_xxx", // идентификатор вашей организации
+});
+```
+
+### Управление индексами
+
+```ts
+// Создание индекса
+await admin.createIndex({
+	slug: "products",
+	displayName: "Products",
+	fields: [
+		{ name: "title", type: "string" },
+		{ name: "price", type: "float", facet: true },
+		{ name: "category", type: "string", facet: true },
+	],
+	defaultSortingField: "price",
+});
+
+// Список индексов
+const indexes = await admin.listIndexes();
+
+// Статистика
+const stats = await admin.getIndexStats(indexes[0].id);
+```
+
+### CRUD для документов
+
+```ts
+// Одиночная вставка/обновление
+await admin.upsertDocument("index_id", "doc_1", {
+	title: "Running Shoes",
+	price: 89.99,
+	category: "Footwear",
+});
+
+// Пакетная вставка/обновление (до 5000)
+await admin.batchUpsertDocuments("index_id", [
+	{ id: "doc_2", title: "T-Shirt", price: 29.99 },
+	{ id: "doc_3", title: "Cap", price: 14.99 },
+]);
+
+// Пакетное удаление
+await admin.batchDeleteDocuments("index_id", ["doc_2", "doc_3"]);
+```
+
+### Управление API-ключами
+
+```ts
+// Создание ключа
+const { rawKey, id } = await admin.createKey({
+	indexSlug: "products",
+	name: "My App Key",
+	scopes: ["search"],
+	allowedOrigins: ["https://myapp.com"],
+	rateLimitPerMinute: 60,
+});
+console.log("Сохраните этот ключ — показывается один раз:", rawKey);
+
+// Отзыв ключа
+await admin.revokeKey(id);
+```
+
+### Синонимы и курации
+
+```ts
+// Синонимы
+await admin.createSynonym("index_id", {
+	root: "shoe",
+	replacements: ["sneaker", "trainer"],
+});
+
+// Курации
+const curations = await admin.listCurations("index_id");
+```
+
+### Аналитика
+
+```ts
+const analytics = await admin.getAnalytics({ period: "last30" });
+console.log(analytics.totalSearches, analytics.ctr);
+
+const usage = await admin.getUsage(7);
+console.log(usage.rows);
+```
+
+## Обработка ошибок
+
+```ts
+import { SdkError, SearchClient } from "@aacsearch/client";
+
+const client = new SearchClient({ baseUrl, apiKey, indexSlug: "test" });
+
+try {
+	await client.search({ q: "test" });
+} catch (err) {
+	if (err instanceof SdkError) {
+		switch (err.code) {
+			case "rate_limited":
+				// Сделать паузу и повторить
+				break;
+			case "quota_exceeded":
+				// Связаться с отделом биллинга
+				break;
+			case "unauthorized":
+				// Неверный API-ключ
+				break;
+			default:
+				console.error(err.message, err.details);
+		}
+	}
+}
+```
+
+### Коды ошибок
+
+| Код                   | Когда                                 | HTTP статус |
+| --------------------- | ------------------------------------- | ----------- |
+| `missing_bearer_token`| Нет заголовка авторизации             | 401         |
+| `unauthorized`        | Пустой или неверный формат токена     | 401         |
+| `forbidden`           | Неверный/просроченный/отозванный ключ | 403         |
+| `not_found`           | Ресурс не найден                      | 404         |
+| `conflict`            | Slug уже используется                 | 409         |
+| `rate_limited`        | Превышен лимит запросов на ключ       | 429         |
+| `quota_exceeded`      | Превышены лимиты месячного плана      | 402         |
+| `invalid_input`       | Ошибка валидации в теле запроса       | 400         |
+| `search_failed`       | Ошибка вышестоящего Typesense         | 502         |
+| `network_error`       | Сбой запроса или отказ соединения     | 0           |
+
+## Справочник API
+
+Полный охват API Node.js SDK:
+
+| Категория            | Методы                                                                                             |
+| -------------------- | -------------------------------------------------------------------------------------------------- |
+| Проект               | `getProject`, `createProject`, `getProjectById`                                                    |
+| Управление индексами | `listIndexes`, `getIndex`, `createIndex`, `updateIndex`, `deleteIndex`, `getIndexStats`           |
+| Документы            | `listDocuments`, `upsertDocument`, `batchUpsertDocuments`, `deleteDocument`, `batchDeleteDocuments`|
+| Поиск                | `search`, `multiSearch`                                                                            |
+| API-ключи            | `listKeys`, `createKey`, `revokeKey`                                                               |
+| Аналитика            | `getAnalytics`, `getUsage`                                                                         |
+| Синонимы             | `listSynonyms`, `createSynonym`, `upsertSynonyms`, `deleteSynonym`                                 |
+| Курации              | `listCurations`, `createCuration`, `upsertCurations`, `deleteCuration`                             |
+| Поля сортировки      | `listSortingFields`, `createSortingField`, `replaceSortingFields`, `deleteSortingField`            |
+| Фасеты               | `listFacets`                                                                                       |

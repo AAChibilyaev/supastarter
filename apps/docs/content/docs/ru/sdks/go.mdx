@@ -1,0 +1,171 @@
+---
+title: Go SDK
+description: Установка и использование aacsearch-go SDK для поиска, управления индексами, синонимами, курациями и аналитикой.
+---
+
+# Go SDK (`aacsearch-go`)
+
+Модуль `github.com/aacsearch/aacsearch-go` Go предоставляет два клиента:
+
+| Клиент         | Область      | Префикс ключа | Назначение                                |
+| -------------- | ------------ | ------------- | ----------------------------------------- |
+| `SearchClient` | только поиск | `ss_search_*` | Публичный поиск из серверных сервисов     |
+| `AdminClient`  | полный CRUD  | `aa_admin_*`  | Серверное управление, CLI-инструменты     |
+
+## Установка
+
+```bash
+go get github.com/aacsearch/aacsearch-go
+```
+
+Требуется Go 1.21+.
+
+## Быстрый старт
+
+### SearchClient (публичный)
+
+Используйте с API-ключом с областью поиска (`ss_search_*`).
+
+```go
+package main
+
+import (
+    "log"
+    "github.com/aacsearch/aacsearch-go"
+)
+
+func main() {
+    client, err := aacsearch.NewSearchClient(aacsearch.SearchClientOptions{
+        BaseURL:   "https://app.aacsearch.com",
+        APIKey:    "ss_search_...",
+        IndexSlug: "products",
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Базовый поиск
+    result, err := client.Search(aacsearch.SearchParams{Q: "laptop"})
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf("Найдено %d результатов", result.Found)
+
+    // Множественный поиск
+    results, err := client.MultiSearch([]aacsearch.SearchParams{
+        {Q: "nike", QueryBy: "title"},
+        {Q: "adidas", QueryBy: "title", FilterBy: "in_stock:=true"},
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf("Получено %d наборов результатов", len(results.Results))
+}
+```
+
+### AdminClient (серверная сторона)
+
+Используйте с API-ключом с административной областью (`aa_admin_*`). Никогда не встраивайте в код браузера.
+
+```go
+package main
+
+import (
+    "log"
+    "github.com/aacsearch/aacsearch-go"
+)
+
+func boolPtr(b bool) *bool { return &b }
+
+func main() {
+    admin, err := aacsearch.NewAdminClient(aacsearch.AdminClientOptions{
+        BaseURL:   "https://app.aacsearch.com",
+        APIKey:    "aa_admin_...",
+        ProjectID: "org_xxx",
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Создание индекса
+    index, err := admin.CreateIndex(aacsearch.CreateIndexInput{
+        Slug:        "products",
+        DisplayName: "Products",
+        Fields: []aacsearch.FieldDefinition{
+            {Name: "title", Type: "string"},
+            {Name: "price", Type: "float", Facet: boolPtr(true)},
+            {Name: "category", Type: "string", Facet: boolPtr(true)},
+        },
+        DefaultSortingField: "price",
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+    log.Printf("Создан индекс: %s", index.ID)
+
+    // Пакетная вставка документов
+    _, err = admin.BatchUpsertDocuments(index.ID, []map[string]interface{}{
+        {"id": "doc_1", "title": "Running Shoes", "price": 89.99},
+        {"id": "doc_2", "title": "T-Shirt", "price": 29.99},
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Список индексов
+    indexes, err := admin.ListIndexes()
+
+    // Получение аналитики
+    analytics, err := admin.GetAnalytics("7d")
+    log.Printf("Всего поисков: %d, CTR: %.2f", analytics.TotalSearches, analytics.CTR)
+
+    // Создание API-ключа
+    key, err := admin.CreateKey(aacsearch.CreateKeyInput{
+        Name:      "My Search Key",
+        Scopes:    []aacsearch.KeyScope{aacsearch.KeyScopeSearch},
+        IndexSlug: "products",
+    })
+    log.Printf("Создан ключ: %s...", key.Prefix[:8])
+}
+```
+
+## Обработка ошибок
+
+```go
+import (
+    "errors"
+    "github.com/aacsearch/aacsearch-go"
+)
+
+result, err := client.Search(aacsearch.SearchParams{Q: "laptop"})
+if err != nil {
+    var sdkErr *aacsearch.SDKError
+    if errors.As(err, &sdkErr) {
+        switch sdkErr.Code {
+        case "rate_limited":
+            // Сделать паузу и повторить
+        case "unauthorized":
+            // Неверный API-ключ
+        case "not_found":
+            // Индекс не найден
+        default:
+            log.Printf("Ошибка %d: %s", sdkErr.Status, sdkErr.Message)
+        }
+    }
+}
+```
+
+## Справочник API
+
+| Категория            | Методы                                                                                             |
+| -------------------- | -------------------------------------------------------------------------------------------------- |
+| Проект               | `GetProject`, `CreateProject`, `GetProjectByID`                                                    |
+| Управление индексами | `ListIndexes`, `GetIndex`, `CreateIndex`, `UpdateIndex`, `DeleteIndex`, `GetIndexStats`           |
+| Документы            | `ListDocuments`, `UpsertDocument`, `BatchUpsertDocuments`, `DeleteDocument`, `BatchDeleteDocuments`|
+| Поиск                | `Search`, `MultiSearch`                                                                            |
+| API-ключи            | `ListKeys`, `CreateKey`, `RevokeKey`                                                               |
+| Аналитика            | `GetAnalytics`, `GetUsage`                                                                         |
+| Синонимы             | `ListSynonyms`, `CreateSynonym`, `UpsertSynonyms`, `DeleteSynonym`                                 |
+| Курации              | `ListCurations`, `CreateCuration`, `UpsertCurations`, `DeleteCuration`                             |
+| Поля сортировки      | `ListSortingFields`, `CreateSortingField`, `ReplaceSortingFields`, `DeleteSortingField`            |
+| Фасеты               | `ListFacets`                                                                                       |

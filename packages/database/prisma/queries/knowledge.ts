@@ -289,6 +289,16 @@ export async function listKnowledgeDocuments(
 	});
 }
 
+export async function deleteDataSource(id: string) {
+	// Documents and chunks are cascade-deleted via FK constraint
+	return db.dataSource.delete({ where: { id } });
+}
+
+export async function deleteKnowledgeSpace(id: string) {
+	// All related data (sources, documents, chunks, graph) cascade-deleted via FK
+	return db.knowledgeSpace.delete({ where: { id } });
+}
+
 export async function deleteKnowledgeDocument(id: string) {
 	// Chunks are cascade-deleted via FK constraint
 	return db.knowledgeDocument.delete({ where: { id } });

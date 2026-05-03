@@ -59,6 +59,16 @@
 	--color-popover-foreground: var(--popover-foreground);
 	--color-primary: var(--primary);
 	--color-primary-foreground: var(--primary-foreground);
+	--color-primary-50: #fef0f4;
+	--color-primary-100: #fde0e8;
+	--color-primary-200: #fcc0d1;
+	--color-primary-300: #fa9bb5;
+	--color-primary-400: #f86a91;
+	--color-primary-500: #fd366e;
+	--color-primary-600: #e62d5e;
+	--color-primary-700: #c4204c;
+	--color-primary-800: #a0193b;
+	--color-primary-900: #7c132d;
 	--color-secondary: var(--secondary);
 	--color-secondary-foreground: var(--secondary-foreground);
 	--color-muted: var(--muted);

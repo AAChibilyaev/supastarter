@@ -1,5 +1,6 @@
 "use client";
 
+import { useCookieConsent } from "@shared/hooks/cookie-consent";
 import posthog from "posthog-js";
 import { PostHogProvider as PostHogProviderBase, usePostHog } from "posthog-js/react";
 import type { PropsWithChildren } from "react";
@@ -11,9 +12,12 @@ const POSTHOG_HOST =
 
 function PostHogInit() {
 	const ph = usePostHog();
+	const { userHasConsented } = useCookieConsent();
 
 	useEffect(() => {
 		if (!POSTHOG_KEY || !ph) return;
+		// Only initialize PostHog if user has consented to analytics cookies
+		if (!userHasConsented) return;
 
 		ph.init(POSTHOG_KEY, {
 			api_host: POSTHOG_HOST,
@@ -27,7 +31,7 @@ function PostHogInit() {
 			// In development, opt out to avoid noise
 			ph.opt_out_capturing();
 		}
-	}, [ph]);
+	}, [ph, userHasConsented]);
 
 	return null;
 }

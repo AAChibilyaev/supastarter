@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 export function ConsentBanner() {
-	const t = useTranslations("shared");
+	const t = useTranslations();
 	const { userHasConsented, allowCookies, declineCookies } = useCookieConsent();
 	const [mounted, setMounted] = useState(false);
 	useEffect(() => {

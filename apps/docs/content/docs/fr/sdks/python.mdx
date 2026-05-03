@@ -1,0 +1,190 @@
+---
+title: SDK Python
+description: Installez et utilisez le SDK Python aacsearch pour la recherche, la gestion des index, les synonymes, les curations et les analytics.
+---
+
+# SDK Python (`aacsearch`)
+
+Le paquet Python `aacsearch` fournit deux clients :
+
+| Client         | Portée       | Préfixe de clé | Cas d'utilisation                      |
+| -------------- | ------------ | --------------- | -------------------------------------- |
+| `SearchClient` | recherche    | `ss_search_*`   | Recherche publique depuis des scripts backend |
+| `AdminClient`  | CRUD complet | `aa_admin_*`    | Gestion côté serveur, CI/CD            |
+
+## Installation
+
+Nécessite Python 3.9+.
+
+```bash
+pip install aacsearch
+```
+
+## Démarrage rapide
+
+### SearchClient (public)
+
+Utilisez-le avec une clé API de portée recherche (`ss_search_*`) ou un jeton avec portée (`ss_scoped_*`).
+
+```python
+from aacsearch import SearchClient
+
+client = SearchClient(
+    base_url="https://app.aacsearch.com",
+    api_key="ss_search_your_key_here",
+    index_slug="products",
+)
+
+# Recherche de base
+results = client.search(q="laptop")
+print(f"Found {results['found']} results")
+
+# Recherche avec filtres et facettes
+results = client.search(
+    q="phone",
+    filter_by="price:<=500",
+    facet_by="brand,category",
+    sort_by="price:asc",
+    per_page=20,
+)
+
+# Multi-recherche (plusieurs requêtes en une)
+combined = client.multi_search([
+    {"q": "laptop", "perPage": 5},
+    {"q": "phone", "perPage": 5},
+])
+```
+
+### AdminClient (côté serveur)
+
+Utilisez-le avec une clé API de portée admin (`aa_admin_*`). Ne jamais inclure les clés admin dans du code navigateur.
+
+```python
+from aacsearch import AdminClient
+
+admin = AdminClient(
+    base_url="https://app.aacsearch.com",
+    api_key="aa_admin_your_key_here",
+    project_id="org_xxx",
+)
+```
+
+#### Gestion des index
+
+```python
+# Créer un index
+index = admin.create_index(
+    slug="products",
+    display_name="Products",
+    fields=[
+        {"name": "title", "type": "string"},
+        {"name": "description", "type": "string"},
+        {"name": "price", "type": "float", "sort": True},
+        {"name": "brand", "type": "string", "facet": True},
+        {"name": "category", "type": "string[]", "facet": True},
+    ],
+    default_sorting_field="price",
+)
+print(f"Created index: {index['id']}")
+
+# Lister tous les index
+indexes = admin.list_indexes()
+```
+
+#### Opérations sur les documents
+
+```python
+# Upsert d'un document unique
+admin.upsert_document(
+    index_id=index["id"],
+    document_id="doc_001",
+    document={
+        "title": "MacBook Pro 16\"",
+        "description": "Apple M3 Pro chip, 18GB RAM",
+        "price": 2499.00,
+        "brand": "Apple",
+        "category": ["Laptops", "Apple"],
+    },
+)
+
+# Upsert par lot (jusqu'à 5000)
+admin.batch_upsert_documents(
+    index_id=index["id"],
+    documents=[
+        {"id": "doc_002", "title": "iPhone 15 Pro", "price": 1199.00, "brand": "Apple"},
+        {"id": "doc_003", "title": "Galaxy S24", "price": 999.00, "brand": "Samsung"},
+    ],
+)
+```
+
+#### Synonymes
+
+```python
+admin.upsert_synonyms(
+    index_id=index["id"],
+    synonyms=[
+        {"root": "laptop", "synonym": "notebook"},
+        {"root": "laptop", "synonym": "ultrabook"},
+        {"root": "phone", "synonym": "smartphone"},
+    ],
+)
+```
+
+#### Curations
+
+```python
+admin.upsert_curations(
+    index_id=index["id"],
+    curations=[
+        {"query": "macbook", "pinnedIds": ["doc_001"]},
+    ],
+)
+```
+
+#### Analytics et utilisation
+
+```python
+# Analytics sur 7 jours
+analytics = admin.get_analytics(period="7d")
+
+# Données d'utilisation sur 30 jours
+usage = admin.get_usage(window_days=30)
+```
+
+#### Gestion des clés API
+
+```python
+# Créer une clé de recherche
+key = admin.create_key(
+    name="My Search Key",
+    scopes=["search"],
+    index_slug="products",
+)
+print(f"Created key: {key['prefix']}... (plaintext: {key.get('key', 'shown once')})")
+
+# Lister et révoquer des clés
+keys = admin.list_keys()
+admin.revoke_key(key_id=key["id"])
+```
+
+## Gestion des erreurs
+
+```python
+from aacsearch import (
+    AacsearchError,
+    AuthenticationError,
+    NotFoundError,
+    RateLimitError,
+)
+
+try:
+    results = client.search(q="laptop")
+except AuthenticationError:
+    print("Clé API invalide ou expirée")
+except NotFoundError:
+    print("Index introuvable")
+except RateLimitError:
+    print("Limite de débit dépassée, réessayez plus tard")
+except AacsearchError as e:
+    print(f"Erreur API {e.status_code}: {e}")
+```

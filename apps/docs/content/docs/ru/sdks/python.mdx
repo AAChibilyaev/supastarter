@@ -1,0 +1,190 @@
+---
+title: Python SDK
+description: Установка и использование aacsearch Python SDK для поиска, управления индексами, синонимами, курациями и аналитикой.
+---
+
+# Python SDK (`aacsearch`)
+
+Пакет `aacsearch` Python предоставляет два клиента:
+
+| Клиент         | Область      | Префикс ключа | Назначение                               |
+| -------------- | ------------ | ------------- | ---------------------------------------- |
+| `SearchClient` | только поиск | `ss_search_*` | Публичный поиск из серверных скриптов    |
+| `AdminClient`  | полный CRUD  | `aa_admin_*`  | Серверное управление, CI/CD              |
+
+## Установка
+
+Требуется Python 3.9+.
+
+```bash
+pip install aacsearch
+```
+
+## Быстрый старт
+
+### SearchClient (публичный)
+
+Используйте с API-ключом с областью поиска (`ss_search_*`) или с ограниченным токеном (`ss_scoped_*`).
+
+```python
+from aacsearch import SearchClient
+
+client = SearchClient(
+    base_url="https://app.aacsearch.com",
+    api_key="ss_search_your_key_here",
+    index_slug="products",
+)
+
+# Базовый поиск
+results = client.search(q="laptop")
+print(f"Найдено {results['found']} результатов")
+
+# Поиск с фильтрами и фасетами
+results = client.search(
+    q="phone",
+    filter_by="price:<=500",
+    facet_by="brand,category",
+    sort_by="price:asc",
+    per_page=20,
+)
+
+# Множественный поиск (несколько запросов за один запрос)
+combined = client.multi_search([
+    {"q": "laptop", "perPage": 5},
+    {"q": "phone", "perPage": 5},
+])
+```
+
+### AdminClient (серверная сторона)
+
+Используйте с API-ключом с административной областью (`aa_admin_*`). Никогда не встраивайте административные ключи в код браузера.
+
+```python
+from aacsearch import AdminClient
+
+admin = AdminClient(
+    base_url="https://app.aacsearch.com",
+    api_key="aa_admin_your_key_here",
+    project_id="org_xxx",
+)
+```
+
+#### Управление индексами
+
+```python
+# Создание индекса
+index = admin.create_index(
+    slug="products",
+    display_name="Products",
+    fields=[
+        {"name": "title", "type": "string"},
+        {"name": "description", "type": "string"},
+        {"name": "price", "type": "float", "sort": True},
+        {"name": "brand", "type": "string", "facet": True},
+        {"name": "category", "type": "string[]", "facet": True},
+    ],
+    default_sorting_field="price",
+)
+print(f"Создан индекс: {index['id']}")
+
+# Список всех индексов
+indexes = admin.list_indexes()
+```
+
+#### Операции с документами
+
+```python
+# Вставка/обновление одного документа
+admin.upsert_document(
+    index_id=index["id"],
+    document_id="doc_001",
+    document={
+        "title": "MacBook Pro 16\"",
+        "description": "Apple M3 Pro chip, 18GB RAM",
+        "price": 2499.00,
+        "brand": "Apple",
+        "category": ["Laptops", "Apple"],
+    },
+)
+
+# Пакетная вставка/обновление (до 5000)
+admin.batch_upsert_documents(
+    index_id=index["id"],
+    documents=[
+        {"id": "doc_002", "title": "iPhone 15 Pro", "price": 1199.00, "brand": "Apple"},
+        {"id": "doc_003", "title": "Galaxy S24", "price": 999.00, "brand": "Samsung"},
+    ],
+)
+```
+
+#### Синонимы
+
+```python
+admin.upsert_synonyms(
+    index_id=index["id"],
+    synonyms=[
+        {"root": "laptop", "synonym": "notebook"},
+        {"root": "laptop", "synonym": "ultrabook"},
+        {"root": "phone", "synonym": "smartphone"},
+    ],
+)
+```
+
+#### Курации
+
+```python
+admin.upsert_curations(
+    index_id=index["id"],
+    curations=[
+        {"query": "macbook", "pinnedIds": ["doc_001"]},
+    ],
+)
+```
+
+#### Аналитика и использование
+
+```python
+# Аналитика за 7 дней
+analytics = admin.get_analytics(period="7d")
+
+# Данные об использовании за 30 дней
+usage = admin.get_usage(window_days=30)
+```
+
+#### Управление API-ключами
+
+```python
+# Создание поискового ключа
+key = admin.create_key(
+    name="My Search Key",
+    scopes=["search"],
+    index_slug="products",
+)
+print(f"Создан ключ: {key['prefix']}... (открытый текст: {key.get('key', 'показан один раз')})")
+
+# Список и отзыв ключей
+keys = admin.list_keys()
+admin.revoke_key(key_id=key["id"])
+```
+
+## Обработка ошибок
+
+```python
+from aacsearch import (
+    AacsearchError,
+    AuthenticationError,
+    NotFoundError,
+    RateLimitError,
+)
+
+try:
+    results = client.search(q="laptop")
+except AuthenticationError:
+    print("Неверный или просроченный API-ключ")
+except NotFoundError:
+    print("Индекс не найден")
+except RateLimitError:
+    print("Превышен лимит запросов, повторите позже")
+except AacsearchError as e:
+    print(f"Ошибка API {e.status_code}: {e}")
+```

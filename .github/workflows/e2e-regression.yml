@@ -1,0 +1,111 @@
+name: E2E Regression Tests
+
+on:
+    schedule:
+        - cron: "0 5 * * *" # Daily at 05:00 UTC
+    workflow_dispatch:
+        inputs:
+            environment:
+                description: "Target environment"
+                required: true
+                default: staging
+                type: choice
+                options:
+                    - staging
+                    - preview
+    push:
+        branches: [main]
+
+env:
+    E2E_SAAS_URL: ${{ vars.E2E_SAAS_URL || 'http://localhost:3010' }}
+    E2E_ADMIN_API_KEY: ${{ secrets.E2E_ADMIN_API_KEY || 'test-admin-key' }}
+    NEXT_PUBLIC_SAAS_URL: ${{ vars.E2E_SAAS_URL || 'http://localhost:3010' }}
+
+jobs:
+    regression:
+        name: "Regression (${{ github.event.inputs.environment || 'staging' }})"
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        environment: ${{ github.event.inputs.environment || 'staging' }}
+
+        services:
+            postgres:
+                image: postgres:16
+                env:
+                    POSTGRES_DB: aacsearch
+                    POSTGRES_USER: aacsearch
+                    POSTGRES_PASSWORD: aacsearch
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
+            typesense:
+                image: typesense/typesense:30.0.rc8
+                env:
+                    TYPESENSE_API_KEY: test-admin-key
+                    TYPESENSE_DATA_DIR: /data
+                ports:
+                    - 8108:8108
+                options: >-
+                    --health-cmd "curl -f http://localhost:8108/health || exit 1"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: lts/*
+
+            - uses: pnpm/action-setup@v4
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Generate Prisma client
+              run: pnpm --filter @repo/database generate
+              env:
+                  DATABASE_URL: postgres://aacsearch:aacsearch@localhost:5432/aacsearch
+
+            - name: Run database migrations
+              run: pnpm --filter @repo/database db:push
+              env:
+                  DATABASE_URL: postgres://aacsearch:aacsearch@localhost:5432/aacsearch
+
+            - name: Build app
+              run: pnpm --filter saas build
+              env:
+                  NEXT_PUBLIC_SAAS_URL: ${{ env.E2E_SAAS_URL }}
+                  DATABASE_URL: postgres://aacsearch:aacsearch@localhost:5432/aacsearch
+                  BETTER_AUTH_SECRET: better-auth-e2e-secret-1234567890
+
+            - name: Start app server
+              run: |
+                  pnpm --filter saas start -p 3010 &
+                  npx wait-on tcp:3010 --timeout 60000
+
+            - name: Install Playwright
+              working-directory: packages/e2e
+              run: npx playwright install chromium
+
+            - name: Run regression tests
+              working-directory: packages/e2e
+              run: npx playwright test --project=regression --reporter=html,list
+              env:
+                  E2E_TEST_EMAIL: regression@aacsearch.io
+                  E2E_TEST_PASSWORD: RegressionTest123!
+                  E2E_ADMIN_API_KEY: test-admin-key
+
+            - name: Upload Playwright report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-report-regression
+                  path: packages/e2e/playwright-report/
+                  retention-days: 7

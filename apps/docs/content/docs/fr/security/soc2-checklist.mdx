@@ -1,0 +1,168 @@
+---
+title: Liste de Vérification pour la Préparation SOC2 Type II
+description: Liste de vérification complète de préparation à l'audit SOC2 Type II pour AACsearch.
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+# Liste de Vérification pour la Préparation SOC2 Type II
+
+Cette liste couvre les cinq critères de service de confiance SOC2 pour la plateforme search-as-a-service d'AACsearch. Utilisez-la pour suivre l'état de préparation avant d'engager un auditeur externe pour la certification Type II.
+
+<Callout type="info">
+  **Période d'audit cible :** 6–12 mois de collecte de preuves. Chaque élément doit être vérifiable via des journaux générés par le système, des instantanés de configuration ou des documents de politique.
+</Callout>
+
+## Sécurité
+
+Le principe de sécurité protège contre les accès non autorisés (physiques et logiques).
+
+### Contrôle d'Accès
+
+- [ ] **RBAC implémenté sur tous les systèmes** — PostgreSQL, Typesense, Coolify et S3 appliquent un contrôle d'accès basé sur les rôles. Vérifiez que chaque compte humain et de service dispose des autorisations minimales nécessaires.
+- [ ] **MFA obligatoire pour tous les comptes administrateur** — L'administration Coolify, le fournisseur cloud (AWS/Vercel) et l'organisation GitHub exigent TOTP matériel ou WebAuthn.
+- [ ] **Politique de rotation des clés API documentée** — Les clés API AACsearch suivent un calendrier de rotation de 90 jours. Les clés sont limitées par projet avec une granularité lecture/écriture/suppression.
+- [ ] **Accès JIT (Just-in-Time) pour la production** — Pas d'accès administrateur permanent aux bases de production ou aux clusters de recherche. L'accès est demandé via PagerDuty ou Coolify avec expiration automatique après 4 heures.
+- [ ] **Révision trimestrielle des accès** — Toutes les clés SSH, jetons API et rôles IAM sont révisés chaque trimestre. Les clés révoquées sont enregistrées dans la piste d'audit.
+
+### Chiffrement
+
+- [ ] **TLS 1.3 obligatoire pour tous les points d'accès API** — Tous les points d'accès de l'API publique AACsearch (recherche, indexation, gestion) utilisent TLS 1.3. Le renouvellement automatique des certificats via Let's Encrypt ou ACME est vérifié.
+- [ ] **Chiffrement au repos sur tous les volumes de stockage** — RDS (PostgreSQL) utilise AES-256 ; les buckets S3 ont SSE-S3 activé ; le répertoire de données Typesense réside sur un volume EBS chiffré.
+- [ ] **Données d'index client chiffrées par locataire** — Confirmez que les clés de chiffrement au niveau de l'index, si implémentées, sont isolées entre les projets.
+- [ ] **Gestion des clés documentée** — Les clés maîtres sont stockées dans AWS KMS (ou équivalent). La politique de rotation des clés, la journalisation des accès et la sauvegarde du matériel de clé sont vérifiées.
+
+### Gestion des Vulnérabilités
+
+- [ ] **Analyse automatisée des dépendances** — Dependabot ou Renovate configuré sur tous les dépôts (supastarter, aacflow, infrastructure-as-code). Les CVEs critiques corrigées dans les 72 heures.
+- [ ] **Analyse des images conteneur** — Les images Docker pour Typesense et tous les services personnalisés sont analysées via Trivy ou AWS ECR avant le déploiement.
+- [ ] **Test de pénétration annuel** — Pentest tiers ciblant l'API AACsearch, l'injection de requêtes Typesense et le contournement d'authentification. Plan de remédiation documenté pour chaque constatation.
+- [ ] **Politique de gestion des correctifs** — Les correctifs au niveau OS sont appliqués aux instances de calcul dans les 30 jours suivant la publication. Les correctifs d'urgence (CVSS >= 9,0) sont appliqués dans les 48 heures.
+
+### Détection d'Intrusion
+
+- [ ] **Règles WAF actives** — Pare-feu d'application web (Cloudflare ou AWS WAF) bloquant les injections SQL, XSS et le path traversal. Limitation de débit configurée par clé API et par IP.
+- [ ] **Agrégation de journaux et alertes** — Tous les journaux d'application, de base de données et d'infrastructure sont envoyés à un SIEM (ex. Grafana Loki, Datadog ou AWS CloudWatch). Alertes configurées pour : échecs de connexion répétés, volume d'appels API inhabituel et motifs IP malveillants connus.
+- [ ] **Surveillance de l'intégrité des fichiers** — Les répertoires critiques de binaires et de configuration (répertoire de données Typesense, secrets d'application, configuration nginx) sont surveillés pour détecter les modifications non autorisées.
+- [ ] **Cloud Trail activé** — AWS CloudTrail ou équivalent activé sur tous les comptes avec journalisation des événements de lecture/écriture. Journaux immutables pendant au moins 12 mois.
+
+## Disponibilité
+
+Le principe de disponibilité garantit que le système est opérationnel et accessible comme engagé dans les SLA.
+
+### Surveillance de l'Uptime
+
+- [ ] **Surveillance synthétique en place** — Des sondes externes (Checkly, Better Uptime ou équivalent) interrogent les points d'accès de recherche et d'indexation toutes les 60 secondes depuis plusieurs régions géographiques.
+- [ ] **Page de statut configurée** — Page de statut publique (ex. status.aacsearch.com) reflète l'état des composants en temps réel avec chronologie des incidents.
+- [ ] **Engagements SLA documentés** — SLA d'uptime publié (99,9 % ou plus) avec fenêtre de mesure définie, fenêtres d'exclusion et conditions de crédit.
+- [ ] **Basculement multirégion testé** — Si un déploiement multirégion existe, le basculement entre régions est testé trimestriellement. RTO pour le basculement régional documenté (< 15 minutes cible).
+
+### Plan de Reprise après Sinistre
+
+- [ ] **Plan de DR documenté et testé** — Plan de DR écrit couvrant la récupération complète de PostgreSQL (PITR via WAL-G), des instantanés Typesense et de l'état de l'application. Exercice de simulation effectué tous les 6 mois.
+- [ ] **RTO et RPO définis** — Objectif de temps de récupération : 1 heure. Objectif de point de récupération : 15 minutes. Les deux valeurs sont vérifiables via des exercices de restauration.
+- [ ] **Récupération inter-région testée** — Au moins un exercice de restauration complet exécuté annuellement dans une région secondaire utilisant les sauvegardes stockées.
+- [ ] **Plan de communication documenté** — Liste de notification des parties prenantes, arbre d'escalade et modèle de révision post-incident inclus dans le plan de DR.
+
+### Vérification des Sauvegardes
+
+- [ ] **Sauvegardes automatisées actives** — PostgreSQL : archivage continu WAL-G vers S3. Typesense : API d'instantanés toutes les 6 heures vers S3. Application : basée sur Git (GitHub) + Coolify.
+- [ ] **Intégrité des sauvegardes vérifiée mensuellement** — Test de restauration automatisé de l'instantané Typesense le plus récent et de la sauvegarde PostgreSQL dans un environnement de staging. Résultats enregistrés et examinés.
+- [ ] **Politique de conservation des sauvegardes documentée** — Instantanés horaires conservés 7 jours, quotidiens 30 jours, hebdomadaires 12 mois. Copie inter-région des sauvegardes hebdomadaires.
+- [ ] **Chiffrement des sauvegardes vérifié** — Toutes les données de sauvegarde au repos dans S3 sont chiffrées (SSE-S3 ou SSE-KMS). Le processus de restauration valide que le déchiffrement réussit sans intervention manuelle de clé.
+
+### Réponse aux Incidents
+
+- [ ] **Plan de réponse aux incidents documenté** — Plan de RI écrit avec niveaux de gravité (SEV-1 à SEV-4), temps de réponse et chemins d'escalade. Révisé annuellement.
+- [ ] **Rotation d'astreinte établie** — La rotation PagerDuty ou Opsgenie couvre 24/7. Escalade après 15 minutes sans accusé de réception.
+- [ ] **Revues post-incident effectuées** — Chaque incident SEV-1 et SEV-2 a un postmortem écrit avec cause racine, actions correctives et évaluation d'impact SLA.
+- [ ] **Runbooks automatisés** — Les types d'incidents courants (panne BD, dégradation du cluster de recherche, ralentissement API) ont des runbooks automatisés déclenchant des actions correctives.
+
+## Intégrité du Traitement
+
+L'intégrité du traitement garantit que le traitement du système est complet, valide, précis, opportun et autorisé.
+
+### Validation des Entrées
+
+- [ ] **Validation des requêtes API** — Toutes les requêtes de recherche, les charges utiles d'indexation et les requêtes API de gestion sont validées contre le schéma JSON. Les requêtes invalides sont rejetées avec des codes d'erreur descriptifs avant d'atteindre Typesense.
+- [ ] **Limites de taille d'index appliquées** — Les limites de nombre de documents et de taille par projet sont appliquées à la passerelle API. Les charges utiles excessives sont rejetées avec le statut 413.
+- [ ] **Assainissement des requêtes de recherche** — Les requêtes Typesense sont assainies pour prévenir l'injection. Les caractères spéciaux dans les champs de texte sont échappés ou supprimés selon des règles documentées.
+- [ ] **Limitation de débit par point d'accès** — Des limites de débit distinctes appliquées aux points d'accès de recherche (plus élevées) vs. indexation (plus faibles). Limites documentées dans la référence API publique et appliquées via middleware.
+
+### Pipelines de Traitement des Données
+
+- [ ] **Pipeline d'indexation de documents surveillé** — La latence de bout en bout de l'indexation des documents (réception API → confirmation d'index) est suivie. Alertes configurées si P99 dépasse 5 secondes.
+- [ ] **Clés d'idempotence prises en charge** — L'API d'indexation prend en charge les clés d'idempotence afin que les tentatives ne créent pas de documents en double. Implémentation vérifiée via des tests d'intégration.
+- [ ] **Intégrité du traitement par lots** — Les opérations par lots sur les documents (créer, mettre à jour, supprimer) sont atomiques par lot. Les échecs partiels annulent la totalité du lot. Confirmé via les journaux d'audit.
+- [ ] **Journaux de transformation des données** — Tout enrichissement ou transformation appliqué aux documents avant l'indexation est enregistré. Les règles de transformation sont versionnées dans Git.
+
+### Gestion des Erreurs
+
+- [ ] **Dégradation progressive** — L'API de recherche renvoie des résultats obsolètes ou dégradés (avec le drapeau `degraded: true`) plutôt que des erreurs 500 lorsque les dépendances en aval (ex. cache, index secondaire) sont indisponibles.
+- [ ] **Réponses d'erreur structurées** — Toutes les erreurs API suivent une structure JSON cohérente : `{ error: { code, message, requestId } }`. Les traces de pile internes ne sont jamais exposées aux clients.
+- [ ] **File d'attente de lettres mortes configurée** — Les travaux d'indexation échoués, les livraisons de webhook et les tâches de traitement asynchrone sont acheminés vers une DLQ. La DLQ est surveillée et alertée.
+- [ ] **Budget d'erreur défini** — Budget d'erreur (ex. 0,1 % des requêtes peuvent échouer) défini par SLA. Les alertes se déclenchent lorsque le budget d'erreur est consommé à 50 % et à nouveau à 90 %.
+
+## Confidentialité
+
+La confidentialité protège les informations sensibles conformément aux engagements pris.
+
+### Classification des Données
+
+- [ ] **Politique de classification des données documentée** — Catégories définies : Public, Interne, Confidentiel, Restreint. Les index de recherche clients sont classés comme Confidentiels par défaut.
+- [ ] **Étiquetage des données appliqué** — Les tags de buckets S3, les commentaires de colonnes de base de données et les en-têtes de réponse API incluent des étiquettes de classification lorsque cela est applicable.
+- [ ] **Procédures de traitement des données** — Procédures écrites pour chaque niveau de classification couvrant le stockage, la transmission, la conservation et la destruction. Révisées annuellement.
+
+### Journalisation des Accès
+
+- [ ] **Tout accès aux données clients enregistré** — Chaque appel API qui lit ou écrit des données d'index de recherche est enregistré avec : horodatage, acteur (clé API ou ID utilisateur), action, ressource, IP source et statut de réponse.
+- [ ] **Conservation des journaux conforme aux exigences d'audit** — Les journaux d'accès sont conservés pendant au moins 12 mois (ou selon l'obligation contractuelle). Les journaux sont en ajout seul et immutables.
+- [ ] **Détection d'anomalies sur les schémas d'accès** — Alertes automatisées pour les schémas d'accès inhabituels : une seule identité accédant à de nombreux index, exportations en masse en dehors des heures ouvrables ou réponses 403 répétées.
+- [ ] **Surveillance des accès privilégiés** — Tout accès administratif à l'infrastructure de production (SSH, console de base de données, administration Coolify) est journalisé séparément avec enregistrement de session lorsque possible.
+
+### Accords de Confidentialité pour les Prestataires
+
+- [ ] **NDA exécutés pour tous les prestataires** — NDA signés archivés pour chaque prestataire, fournisseur et sous-traitant ayant accès aux systèmes AACsearch ou aux données clients.
+- [ ] **Évaluations des risques fournisseurs complétées** — Les fournisseurs critiques (fournisseur cloud, CDN, outils de surveillance) ont rempli des questionnaires de sécurité. Résultats examinés et acceptés par l'équipe de sécurité.
+- [ ] **Clauses contractuelles de protection des données** — Tous les contrats fournisseurs incluent des conditions de traitement des données, un SLA de notification de violation et des clauses de droit d'audit.
+
+## Vie Privée
+
+La vie privée concerne la collecte, l'utilisation, la conservation et la divulgation des informations personnelles.
+
+### Avis de Confidentialité
+
+- [ ] **Avis de confidentialité public publié** — Politique de confidentialité sur aacsearch.com/privacy couvre : quelles PII sont collectées, comment elles sont utilisées, le partage de données, les cookies, les droits des utilisateurs (accès, suppression, portabilité) et les coordonnées.
+- [ ] **Avis conforme aux réglementations applicables** — L'avis de confidentialité est conforme au RGPD, au CCPA et à toute exigence spécifique à la juridiction pour la clientèle d'AACsearch.
+- [ ] **Versionnage de l'avis maintenu** — Les modifications de l'avis de confidentialité sont versionnées. Les modifications importantes sont communiquées aux clients par e-mail ou notification dans l'application dans les 30 jours.
+
+### Gestion du Consentement
+
+- [ ] **Consentement recueilli à l'inscription** — Le flux d'inscription utilisateur inclut des cases à cocher de consentement explicite pour : l'acceptation de la politique de confidentialité, les communications marketing (opt-in) et le traitement des données pour la prestation de services.
+- [ ] **Registres de consentement stockés** — Les horodatages de consentement, les adresses IP et les versions sont stockés et consultables. Les utilisateurs peuvent retirer leur consentement et voir leur statut de consentement actuel dans les paramètres du compte.
+- [ ] **Bannière de consentement aux cookies active** — Bannière de consentement aux cookies sur toutes les pages publiques (documentation, site marketing) avec des contrôles granulaires pour les cookies analytiques vs. essentiels.
+
+### Conservation des Données
+
+- [ ] **Calendrier de conservation des données documenté** — Calendrier clair pour chaque catégorie de données : analytiques de recherche (13 mois), journaux API (12 mois), comptes utilisateur (jusqu'à demande de suppression), enregistrements de facturation (7 ans).
+- [ ] **Purge automatisée des données** — Des tâches planifiées (cron ou lambda) appliquent les limites de conservation. La purge est enregistrée et vérifiable.
+- [ ] **Processus de suppression des données documenté** — Sur demande du client : index de recherche supprimés dans les 30 jours, données de compte dans les 60 jours. Le processus inclut une étape de vérification et une confirmation au client.
+
+### Gestion des PII
+
+- [ ] **Inventaire des PII maintenu** — Registre de tous les champs de données PII sur la plateforme : e-mails des utilisateurs, adresses IP dans les journaux, détails de facturation et toute PII fournie par le client dans les index de recherche.
+- [ ] **Minimisation des PII appliquée** — La conception de l'API limite la collecte des PII à ce qui est strictement nécessaire. Il est conseillé aux clients de ne pas indexer de PII dans les documents de recherche (documenté dans le guide des bonnes pratiques).
+- [ ] **Plan de notification des violations** — Plan écrit couvrant : déclencheurs de détection, escalade interne, examen juridique, notification au client (dans les 72 heures selon le RGPD) et déclaration réglementaire.
+- [ ] **Évaluation d'impact sur la protection des données (EIPD)** — EIPD réalisée pour les activités de traitement à haut risque. Révisée annuellement ou lors de changements significatifs du traitement.
+
+## Liste de Vérification des Preuves pour l'Auditeur
+
+Préparez ces artefacts avant l'audit Type II :
+
+- [ ] Description du système (récit de l'architecture, des limites et des contrôles d'AACsearch)
+- [ ] Matrice de contrôle associant chaque contrôle à un critère de service de confiance
+- [ ] Packages de preuves : 6–12 mois de journaux, instantanés de configuration, documents de politique
+- [ ] Organigramme montrant les rôles et responsabilités de sécurité
+- [ ] Rapport de pentest tiers (datant de moins de 12 mois)
+- [ ] Rapports d'évaluation des risques fournisseurs pour les organisations de sous-services critiques
+- [ ] Évaluation de préparation SOC2 Type II complétée (auto-évaluation ou accompagnée par un consultant)

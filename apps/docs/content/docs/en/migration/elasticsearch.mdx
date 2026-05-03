@@ -1,0 +1,285 @@
+---
+title: "Migrating from Elasticsearch"
+description: "Step-by-step guide to migrate your search from Elasticsearch to AACsearch Engine — index mapping, reindexing, and query translation."
+---
+
+# Migrating from Elasticsearch
+
+This guide walks you through migrating your search infrastructure from Elasticsearch to AACsearch Engine. AACsearch offers comparable search quality with a significantly simpler operational model — no cluster management, no shard tuning, no JVM heap sizing.
+
+## Migration overview
+
+| Step | What you do | Duration |
+|------|-------------|----------|
+| 1 | Export your Elasticsearch index mapping | ~5 minutes |
+| 2 | Create an AACsearch index with translated schema | ~10 minutes |
+| 3 | Export and reindex documents | ~15 minutes |
+| 4 | Port search queries | ~30 minutes |
+| 5 | Update application code | ~30 minutes |
+| 6 | Switch traffic and verify | ~10 minutes |
+
+## Step 1: Export Elasticsearch mapping
+
+```bash
+# Get index mapping
+curl "http://localhost:9200/YOUR_INDEX_NAME/_mapping" | jq . > es-mapping.json
+
+# Get index settings
+curl "http://localhost:9200/YOUR_INDEX_NAME/_settings" | jq . > es-settings.json
+```
+
+Understand your field types — each Elasticsearch type maps to an AACsearch equivalent.
+
+## Step 2: Create AACsearch index with translated schema
+
+### Mapping translation reference
+
+| Elasticsearch type | AACsearch type | Notes |
+|--------------------|----------------|-------|
+| `text` | `string` | Full-text search |
+| `keyword` | `string` | Use for filtering, faceting |
+| `integer`, `long` | `int32`, `int64` | Numeric range filters |
+| `float`, `double` | `float` | Sortable, range filters |
+| `boolean` | `bool` | Exact match filter |
+| `date` | `int64` | Store as Unix timestamp |
+| `geo_point` | `geopoint` | Geo distance/radius search |
+| `nested` | `object[]` | Array of objects |
+| `object` | `object` | Single object |
+| `completion` | `string` (auto) | Suggest queries use `string` fields |
+
+Create the index:
+
+```bash
+curl -X POST "https://app.aacsearch.com/api/projects/YOUR_PROJECT_ID/indexes" \
+  -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "slug": "your_index",
+    "displayName": "Your Index",
+    "fields": [
+      {"name": "id", "type": "string"},
+      {"name": "title", "type": "string"},
+      {"name": "content", "type": "string"},
+      {"name": "price", "type": "float", "sort": true},
+      {"name": "category", "type": "string", "facet": true},
+      {"name": "published_at", "type": "int64", "sort": true},
+      {"name": "in_stock", "type": "bool"},
+      {"name": "location", "type": "geopoint"}
+    ],
+    "defaultSortingField": "published_at"
+  }'
+```
+
+> **Tip**: Unlike Elasticsearch, AACsearch requires you to define the schema upfront. Use the `_source` export to discover all field names and their types before creating the index.
+
+## Step 3: Export and reindex documents
+
+### Scroll export from Elasticsearch
+
+```bash
+#!/bin/bash
+ES_URL="http://localhost:9200"
+INDEX="your_index"
+
+# Initialize scroll
+SCROLL_ID=$(curl -s "$ES_URL/$INDEX/_search?scroll=1m" \
+  -H "Content-Type: application/json" \
+  -d '{"size": 1000, "_source": true}' | jq -r '._scroll_id')
+
+echo "[]" > export.json
+while true; do
+  RESULT=$(curl -s "$ES_URL/_search/scroll" \
+    -H "Content-Type: application/json" \
+    -d "{\"scroll\": \"1m\", \"scroll_id\": \"$SCROLL_ID\"}")
+
+  HITS=$(echo "$RESULT" | jq '.hits.hits')
+  COUNT=$(echo "$HITS" | jq 'length')
+
+  if [ "$COUNT" -eq "0" ]; then break; fi
+
+  # Transform to AACsearch format
+  echo "$HITS" | jq '[.[] | {id: ._id} + ._source]' > batch.json
+  cat batch.json | python3 -c "
+import json,sys
+docs=json.load(sys.stdin)
+with open('export.json') as f: existing=json.load(f)
+existing.extend(docs)
+with open('export.json','w') as f: json.dump(existing,f)
+"
+
+  SCROLL_ID=$(echo "$RESULT" | jq -r '._scroll_id')
+done
+
+# Clear scroll
+curl -X DELETE "$ES_URL/_search/scroll" \
+  -H "Content-Type: application/json" \
+  -d "{\"scroll_id\": \"$SCROLL_ID\"}"
+```
+
+### Import to AACsearch
+
+```bash
+# Batch import (up to 5000 docs per request)
+split -l 1000 export.json batch-
+for f in batch-*; do
+  curl -X POST "https://app.aacsearch.com/api/indexes/YOUR_INDEX_ID/documents:batch" \
+    -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+    -H "Content-Type: application/json" \
+    -d @$f
+done
+```
+
+## Step 4: Port search queries
+
+### Query translation reference
+
+| Elasticsearch DSL | AACsearch parameter |
+|-------------------|---------------------|
+| `match` / `multi_match` on `q` | `q` |
+| `term` filter | `filterBy: "field:=value"` |
+| `range` filter | `filterBy: "field:>=value && field:<=value"` |
+| `bool` must/should | Combine with `filterBy` AND/OR syntax |
+| `sort` | `sortBy: "field:asc"` |
+| `aggs` (simple terms) | `facetBy: "field"` |
+| `from` / `size` | `page` / `perPage` |
+| `highlight` | `highlightFields: "field1,field2"` |
+| `suggest` | `POST /api/v1/indexes/:id/suggest` |
+| `function_score` | Use `ranking` config or `sortBy: _eval(...)` |
+
+### Example: Porting a complex query
+
+**Elasticsearch:**
+
+```json
+GET /products/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "title": "laptop" }},
+        { "match": { "description": "gaming" }}
+      ],
+      "filter": [
+        { "term": { "category": "electronics" }},
+        { "range": { "price": { "gte": 500, "lte": 3000 }}}
+      ]
+    }
+  },
+  "sort": [{ "price": "asc" }],
+  "from": 0,
+  "size": 20,
+  "aggs": {
+    "by_brand": { "terms": { "field": "brand" }},
+    "price_range": { "stats": { "field": "price" }}
+  }
+}
+```
+
+**AACsearch equivalent:**
+
+```bash
+curl -X POST "https://app.aacsearch.com/api/v1/indexes/products/search" \
+  -H "X-API-Key: ss_search_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "q": "laptop gaming",
+    "queryBy": "title,description",
+    "filterBy": "category:=electronics && price:>=500 && price:<=3000",
+    "sortBy": "price:asc",
+    "page": 1,
+    "perPage": 20,
+    "facetBy": "brand"
+  }'
+```
+
+### Filter syntax comparison
+
+| Operation | Elasticsearch | AACsearch |
+|-----------|---------------|-----------|
+| Equals | `term: {field: val}` | `field:=val` |
+| Not equals | `must_not term` | `field:!=val` |
+| Greater than | `range: {gt: val}` | `field:>val` |
+| Less than or equal | `range: {lte: val}` | `field:<=val` |
+| Range | `range: {gte: a, lte: b}` | `field:>=a && field:<=b` |
+| AND | `bool must` | `&&` between filters |
+| OR | `bool should` | `||` between filters |
+| IN | `terms: {field: [...]}` | `field:=[val1,val2]` |
+| Geo radius | `geo_distance` | `location:(lat, lng, distance)` |
+
+## Step 5: Update application code
+
+### Replace the Elasticsearch client
+
+**Before (Elasticsearch):**
+
+```typescript
+import { Client } from "@elastic/elasticsearch";
+
+const es = new Client({ node: "http://localhost:9200" });
+
+const result = await es.search({
+  index: "products",
+  query: {
+    match: { title: "laptop" },
+  },
+});
+```
+
+**After (AACsearch):**
+
+```typescript
+import { SearchClient } from "@aacsearch/client";
+
+const client = new SearchClient({
+  baseUrl: "https://app.aacsearch.com",
+  apiKey: "ss_search_YOUR_KEY",
+  indexSlug: "products",
+});
+
+const result = await client.search({
+  q: "laptop",
+  queryBy: "title",
+});
+```
+
+## Step 6: Switch traffic
+
+1. Point your application to `https://app.aacsearch.com`
+2. Update API keys from Elasticsearch credentials to AACsearch tokens
+3. Run a side-by-side comparison of search results for key queries
+4. Monitor error rates and search latency
+5. Decommission your Elasticsearch cluster (or keep as warm standby)
+
+## What you gain
+
+| Aspect | Elasticsearch | AACsearch |
+|--------|---------------|-----------|
+| **Operations** | Cluster management, shard tuning, JVM tuning | Fully managed, zero ops |
+| **Scaling** | Manual shard splitting, rebalancing | Automatic |
+| **High availability** | Multi-node cluster, replication | Built-in, multi-region |
+| **Search quality** | BM25 (configurable) | Typo-tolerant, proximity-aware by default |
+| **Analytics** | Requires Kibana + extra setup | Built-in dashboards, query analytics |
+| **Price** | Infrastructure + ops cost | Usage-based, predictable |
+| **Security** | Elasticsearch security features | API key + scoped tokens + IP allowlist |
+
+## API equivalence reference
+
+| Feature | Elasticsearch | AACsearch |
+|---------|---------------|-----------|
+| Full-text search | `match` / `multi_match` | `q` + `queryBy` |
+| Filtered search | `bool` + `filter` | `filterBy` |
+| Faceted search | `aggs` | `facetBy` |
+| Sorting | `sort` | `sortBy` |
+| Pagination | `from` / `size` | `page` / `perPage` |
+| Geo search | `geo_distance` | Geo filter in `filterBy` |
+| Synonyms | Synonym graph token filter | `PUT /api/indexes/:id/synonyms` |
+| Curations | Query rules | `PUT /api/indexes/:id/curations` |
+| Suggest | `_search` with `suggest` | `POST /api/v1/indexes/:id/suggest` |
+| Multi-search | `_msearch` | `POST /api/v1/multi-search` |
+| Analytics | Kibana + Beats | Built-in analytics API |
+
+## Need help?
+
+- [Connector API Reference](../api-reference)
+- [Node.js SDK](../sdks/node)
+- Contact support at support@aacsearch.com

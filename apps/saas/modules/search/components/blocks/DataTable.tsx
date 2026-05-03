@@ -68,14 +68,23 @@ export function DataTable<TData, TValue>({
 													className="-ml-1 gap-1 rounded px-1 py-0.5 text-xs font-medium inline-flex items-center text-left transition-colors hover:bg-muted/50"
 													onClick={header.column.getToggleSortingHandler()}
 												>
-													{flexRender(header.column.columnDef.header, header.getContext())}
+													{flexRender(
+														header.column.columnDef.header,
+														header.getContext(),
+													)}
 													{{
 														asc: <ChevronUpIcon className="size-3" />,
-														desc: <ChevronDownIcon className="size-3" />,
-													}[header.column.getIsSorted() as string] ?? null}
+														desc: (
+															<ChevronDownIcon className="size-3" />
+														),
+													}[header.column.getIsSorted() as string] ??
+														null}
 												</button>
 											) : (
-												flexRender(header.column.columnDef.header, header.getContext())
+												flexRender(
+													header.column.columnDef.header,
+													header.getContext(),
+												)
 											)}
 										</TableHead>
 									))}
@@ -88,7 +97,10 @@ export function DataTable<TData, TValue>({
 									<TableRow key={row.id}>
 										{row.getVisibleCells().map((cell) => (
 											<TableCell key={cell.id}>
-												{flexRender(cell.column.columnDef.cell, cell.getContext())}
+												{flexRender(
+													cell.column.columnDef.cell,
+													cell.getContext(),
+												)}
 											</TableCell>
 										))}
 									</TableRow>

@@ -3,6 +3,8 @@ import { askStream } from "./procedures/ask-stream";
 import { createSource } from "./procedures/create-source";
 import { createSpace } from "./procedures/create-space";
 import { deleteFile } from "./procedures/delete-file";
+import { deleteSource } from "./procedures/delete-source";
+import { deleteSpace } from "./procedures/delete-space";
 import { graphragExplain } from "./procedures/graphrag-explain";
 import { ingestFile } from "./procedures/ingest-file";
 import { listFiles } from "./procedures/list-files";
@@ -18,6 +20,8 @@ export const knowledgeRouter = {
 	listSpaces,
 	createSource,
 	listSources,
+	deleteSource,
+	deleteSpace,
 	ingestFile,
 	listFiles,
 	deleteFile,

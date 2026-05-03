@@ -1,4 +1,8 @@
 {
-	"title": "indexes/indexid/sorting",
-	"pages": ["get", "post", "put"]
+  "title": "indexes/indexid/sorting",
+  "pages": [
+    "get",
+    "post",
+    "put"
+  ]
 }

@@ -167,6 +167,9 @@
 			"prisma",
 			"prisma-zod-generator",
 			"sharp"
+		],
+		"ignoredBuiltDependencies": [
+			"@firebase/util"
 		]
 	}
 }

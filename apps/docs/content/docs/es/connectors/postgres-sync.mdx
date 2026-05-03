@@ -1,0 +1,139 @@
+---
+title: "Sincronización de PostgreSQL"
+description: "Sincronice sus tablas de PostgreSQL con AACsearch Engine en tiempo real usando pg_notify, polling o replicación lógica."
+---
+
+# Conector de Sincronización de PostgreSQL
+
+El conector de sincronización de PostgreSQL mantiene sus índices de AACsearch sincronizados con
+sus tablas de base de datos PostgreSQL. Soporta tres estrategias de implementación.
+
+## Estrategia 1: pg_notify (recomendada)
+
+Sincronización basada en disparadores (triggers) de baja latencia usando `LISTEN`/`NOTIFY` incorporado de PostgreSQL.
+
+### Configuración
+
+Primero, cree una función de disparo y asíguela a su tabla:
+
+```sql
+CREATE OR REPLACE FUNCTION notify_aacsearch()
+RETURNS trigger AS $$ BEGIN
+  PERFORM pg_notify('aacsearch_sync', row_to_json(NEW)::text);
+  RETURN NEW;
+END; $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER products_aacsearch_trigger
+AFTER INSERT OR UPDATE ON products
+FOR EACH ROW EXECUTE FUNCTION notify_aacsearch();
+```
+
+### Conexión
+
+```typescript
+import { startPgNotifyListener } from "@aacsearch/postgres-sync";
+
+const pg = await startPgNotifyListener({
+	aacsearch: {
+		baseUrl: process.env.AACSEARCH_URL!,
+		token: process.env.AACSEARCH_TOKEN!,
+		projectId: process.env.AACSEARCH_PROJECT_ID!,
+	},
+	connectionString: process.env.DATABASE_URL!,
+	table: "products",
+	idColumn: "id",
+	initialFullSync: true,
+	debug: true,
+});
+
+process.on("SIGTERM", () => pg.end());
+```
+
+El listener realizará lo siguiente:
+
+1. Realizar una sincronización completa inicial de todas las filas existentes
+2. Suscribirse a eventos `pg_notify` para actualizaciones en tiempo real
+3. Enviar cada cambio a AACsearch a medida que llega
+
+## Estrategia 2: Cursor de polling
+
+El polling es útil cuando no puede agregar disparadores a sus tablas de base de datos.
+
+```typescript
+import { startPollingSync } from "@aacsearch/postgres-sync";
+
+const poller = startPollingSync({
+	aacsearch: { baseUrl: process.env.AACSEARCH_URL!, token, projectId },
+	connectionString: process.env.DATABASE_URL!,
+	table: "orders",
+	cursorColumn: "updated_at",
+	pollIntervalMs: 5000,
+});
+
+// Detener después:
+// poller.stop();
+```
+
+El poller ejecuta la consulta `SELECT * FROM table WHERE cursorColumn > $1 ORDER BY cursorColumn`
+en el intervalo configurado y envía las filas nuevas/actualizadas a AACsearch.
+
+## Estrategia 3: Sequin CDC
+
+Para replicación lógica de grado productivo sin disparadores, use
+[Sequin](https://sequin.io) para transmitir eventos CDC:
+
+```typescript
+import { startSequinCdcSync } from "@aacsearch/postgres-sync";
+
+const sequin = startSequinCdcSync({
+	aacsearch: { baseUrl: process.env.AACSEARCH_URL!, token, projectId },
+	streamUrl: "https://api.sequin.io/streams/YOUR_STREAM_ID",
+	accessToken: "seq_xxx",
+	table: "products",
+});
+```
+
+## Mapeo de documentos personalizado
+
+Todas las estrategias aceptan una función `mapper` personalizada:
+
+```typescript
+startPgNotifyListener(config, (row) => ({
+	external_id: String(row.id),
+	title: row.title,
+	content: row.body || row.description,
+	price: row.price,
+	category: row.category_name,
+	tags: row.tags ? JSON.parse(row.tags) : [],
+}));
+```
+
+## Callbacks
+
+Monitoree la actividad de sincronización con callbacks:
+
+```typescript
+startPgNotifyListener(config, undefined, {
+	onSync: (event) => {
+		console.log(`Synced ${event.action} on ${event.table}`);
+	},
+	onError: (error, context) => {
+		console.error(`Error on ${context?.table}:`, error);
+	},
+	onConnected: () => console.log("Connected to PostgreSQL"),
+	onDisconnected: () => console.log("Disconnected from PostgreSQL"),
+});
+```
+
+## Comparación de estrategias
+
+| Estrategia       | Latencia | Requiere disparador | Sobrecarga                  | Mejor para                               |
+| ---------------- | -------- | ------------------- | --------------------------- | ---------------------------------------- |
+| pg_notify        | ~100ms   | Sí                  | Mínima (NOTIFY es asíncrono) | Tablas de producción que usted controla  |
+| Cursor de polling| ~5-60s   | No                  | SELECT por intervalo        | Tablas sin acceso de escritura           |
+| Sequin CDC       | ~1-5s    | No                  | Slot de replicación lógica  | Alta disponibilidad, configuración cero  |
+
+## Relacionados
+
+- [Referencia de la API del Conector](./connector-api-lifecycle)
+- [Sincronización de Supabase](./supabase-sync)

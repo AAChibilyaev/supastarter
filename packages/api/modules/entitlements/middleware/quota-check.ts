@@ -7,8 +7,9 @@
 
 import { logger } from "@repo/logs";
 import { checkQuota, checkHardLimit, invalidatePlanCache } from "@repo/payments/lib/entitlements";
-import { checkAndSendQuotaAlerts } from "../services/usage-alerts";
 import type { Context } from "hono";
+
+import { checkAndSendQuotaAlerts } from "../services/usage-alerts";
 
 export interface QuotaContext {
 	planQuota: {
@@ -49,6 +50,21 @@ export async function quotaCheck(
 					percentUsed: 1,
 				},
 			};
+		}
+
+		// Fire-and-forget: check and send quota alerts asynchronously
+		// This runs after every request that has quota usage, but only triggers
+		// email/Slack when a threshold (80%/100%) is freshly crossed.
+		if (hardLimit.percentUsed > 0) {
+			checkAndSendQuotaAlerts({
+				organizationId: orgId,
+				resource,
+				percentUsed: hardLimit.percentUsed,
+				current: quota.current,
+				limit: quota.limit,
+			}).catch((err: unknown) =>
+				logger.error("quotaCheck: alert failed", { error: err, orgId, resource }),
+			);
 		}
 
 		return {

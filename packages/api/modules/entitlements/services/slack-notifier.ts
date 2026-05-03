@@ -28,10 +28,7 @@ interface SlackMessage {
  * Send a Slack message via incoming webhook.
  * Returns true if sent successfully, false otherwise.
  */
-export async function sendSlackAlert(
-	webhookUrl: string,
-	payload: SlackMessage,
-): Promise<boolean> {
+export async function sendSlackAlert(webhookUrl: string, payload: SlackMessage): Promise<boolean> {
 	try {
 		const response = await fetch(webhookUrl, {
 			method: "POST",
@@ -83,7 +80,11 @@ export function buildQuotaAlertMessage(params: {
 				text: `${resourceLabel} have reached ${params.percentUsed.toFixed(0)}% of the monthly limit.`,
 				fields: [
 					{ title: "Resource", value: resourceLabel, short: true },
-					{ title: "Usage", value: `${params.current.toLocaleString()} / ${params.limit === -1 ? "Unlimited" : params.limit.toLocaleString()}`, short: true },
+					{
+						title: "Usage",
+						value: `${params.current.toLocaleString()} / ${params.limit === -1 ? "Unlimited" : params.limit.toLocaleString()}`,
+						short: true,
+					},
 					{ title: "Percent Used", value: `${params.percentUsed.toFixed(1)}%`, short: true },
 					{ title: "Plan", value: params.planName, short: true },
 				],

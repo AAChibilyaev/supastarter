@@ -75,7 +75,10 @@ function updateAlertState(
 	resource: "search" | "ingest",
 	threshold: number,
 ): QuotaAlertState {
-	const current = state ?? { search: { p80: false, p100: false }, ingest: { p80: false, p100: false } };
+	const current = state ?? {
+		search: { p80: false, p100: false },
+		ingest: { p80: false, p100: false },
+	};
 	const key = threshold >= 100 ? "p100" : "p80";
 	return {
 		...current,
@@ -188,7 +191,17 @@ async function sendThresholdAlert(params: {
 	members: Array<{ userId: string; user: { email: string; locale: string | null } }>;
 	slackWebhookUrl?: string;
 }): Promise<void> {
-	const { org, resource, threshold, percentUsed, current, limit, planName, members, slackWebhookUrl } = params;
+	const {
+		org,
+		resource,
+		threshold,
+		percentUsed,
+		current,
+		limit,
+		planName,
+		members,
+		slackWebhookUrl,
+	} = params;
 	const resourceLabel = resource === "search" ? "search queries" : "indexed documents";
 	const thresholdLabel = threshold >= 100 ? "limit reached" : "80% threshold";
 	const usageStr = formatUsage(current, limit);
@@ -210,7 +223,10 @@ async function sendThresholdAlert(params: {
 		members.map((m) =>
 			sendEmail({
 				to: m.user.email,
-				locale: (m.user.locale as Parameters<typeof sendEmail>[0] extends { locale?: infer L } ? L : never) ?? undefined,
+				locale:
+					(m.user.locale as Parameters<typeof sendEmail>[0] extends { locale?: infer L }
+						? L
+						: never) ?? undefined,
 				templateId: "notification",
 				context: {
 					headline,

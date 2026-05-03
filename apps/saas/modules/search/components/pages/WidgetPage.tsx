@@ -8,6 +8,7 @@ import { WidgetConfiguratorPanel } from "@search/components/panels/WidgetConfigu
 import { WidgetFiltersPanel } from "@search/components/panels/WidgetFiltersPanel";
 import { WidgetInstallPanel } from "@search/components/panels/WidgetInstallPanel";
 import { WidgetVoicePanel } from "@search/components/panels/WidgetVoicePanel";
+import { WidgetAiPanel } from "@search/components/panels/WidgetAiPanel";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
@@ -16,13 +17,14 @@ interface WidgetPageProps {
 	organizationId: string;
 }
 
-type TabId = "configurator" | "filters" | "autocomplete" | "voice" | "analytics" | "install";
+type TabId = "configurator" | "filters" | "autocomplete" | "voice" | "ai" | "analytics" | "install";
 
 const TAB_IDS: TabId[] = [
 	"configurator",
 	"filters",
 	"autocomplete",
 	"voice",
+	"ai",
 	"analytics",
 	"install",
 ];
@@ -79,6 +81,10 @@ export function WidgetPage({ organizationId }: WidgetPageProps) {
 
 			<TabsContent value="voice" className="space-y-6 mt-6">
 				<WidgetVoicePanel organizationId={organizationId} />
+			</TabsContent>
+
+			<TabsContent value="ai" className="space-y-6 mt-6">
+				<WidgetAiPanel organizationId={organizationId} />
 			</TabsContent>
 
 			<TabsContent value="analytics" className="space-y-6 mt-6">

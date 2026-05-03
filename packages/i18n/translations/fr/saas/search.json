@@ -58,7 +58,8 @@
       "jobs": "Tâches",
       "indexHealth": "Santé de l'index",
       "relevanceQualityScore": "Qualité de recherche",
-      "assistant": "Assistant"
+      "assistant": "Assistant",
+      "widgetAi": "Fonctionnalités IA"
     },
     "recommendations": {
       "description": "Configurez des recommandations de produits basées sur l'IA, y compris des articles similaires, des suggestions personnalisées et GraphRAG.",
@@ -320,7 +321,20 @@
       "analyticsWidgetDesc": "Métriques de recherche depuis l'installation du widget.",
       "configuratorTitle": "Configurateur de widget",
       "comingSoon": "Bientôt disponible",
-      "comingSoonDescription": "L'assistant de configuration du widget est en cours de développement. Revenez bientôt pour les filtres, l'autocomplétion, la recherche vocale et les options d'intégration."
+      "comingSoonDescription": "L'assistant de configuration du widget est en cours de développement. Revenez bientôt pour les filtres, l'autocomplétion, la recherche vocale et les options d'intégration.",
+      "aiAnswers": "Réponses IA",
+      "imageSearch": "Recherche par image",
+      "aiAnswersTitle": "Réponses IA",
+      "aiAnswersDesc": "Afficher une réponse générée par IA au-dessus des résultats de recherche",
+      "aiAnswersEnable": "Activer les Réponses IA",
+      "aiAnswersHint": "Nécessite une clé API OpenAI configurée sur le serveur",
+      "aiAnswersPreview": "Aperçu",
+      "aiAnswersPreviewText": "D'après votre recherche, voici ce que j'ai trouvé...",
+      "imageSearchTitle": "Recherche par image/visuelle",
+      "imageSearchDesc": "Permettre aux acheteurs de chercher par photo ou caméra",
+      "imageSearchEnable": "Activer la recherche par image",
+      "imageSearchHint": "Utilise GPT-4o-mini pour décrire l'image, puis la recherche vectorielle",
+      "imageSearchPreviewText": "Un bouton caméra apparaîtra dans la barre de recherche."
     },
     "configurator": {
       "pageTitle": "Configuration de recherche",

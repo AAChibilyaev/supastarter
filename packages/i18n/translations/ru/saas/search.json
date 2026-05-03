@@ -290,7 +290,20 @@
       "voiceFallback": "Запасное сообщение, если браузер не поддерживается",
       "voiceDisabled": "Голосовой поиск отключён",
       "analyticsWidgetMetrics": "Производительность виджета",
-      "analyticsWidgetDesc": "Метрики поиска с установленного виджета."
+      "analyticsWidgetDesc": "Метрики поиска с установленного виджета.",
+      "aiAnswers": "Ответы ИИ",
+      "imageSearch": "Поиск по изображению",
+      "aiAnswersTitle": "Ответы ИИ",
+      "aiAnswersDesc": "Показывать ответ ИИ над результатами поиска для запросов на естественном языке",
+      "aiAnswersEnable": "Включить ответы ИИ",
+      "aiAnswersHint": "Требуется настроенный ключ OpenAI API на сервере",
+      "aiAnswersPreview": "Предпросмотр",
+      "aiAnswersPreviewText": "На основе вашего запроса вот что я нашёл...",
+      "imageSearchTitle": "Поиск по изображению",
+      "imageSearchDesc": "Позволяет покупателям искать по фото или снимку с камеры",
+      "imageSearchEnable": "Включить поиск по изображению",
+      "imageSearchHint": "Использует GPT-4o-mini для описания изображения, затем векторный поиск",
+      "imageSearchPreviewText": "В строке поиска появится кнопка камеры для загрузки фото товара."
     },
     "configurator": {
       "pageTitle": "Конфигуратор поиска",
@@ -579,7 +592,8 @@
       "collectionsDocuments": "Документы",
       "jobs": "Задачи",
       "relevanceQualityScore": "Качество поиска",
-      "assistant": "Ассистент"
+      "assistant": "Ассистент",
+      "widgetAi": "AI-функции"
     },
     "recommendations": {
       "description": "Настройте рекомендации товаров на основе ИИ, включая похожие товары, персонализированные предложения и GraphRAG.",

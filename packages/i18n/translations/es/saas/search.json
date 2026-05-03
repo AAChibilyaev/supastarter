@@ -291,7 +291,20 @@
       "voiceFallback": "Mensaje de respaldo si el navegador no es compatible",
       "voiceDisabled": "La búsqueda por voz está desactivada",
       "analyticsWidgetMetrics": "Rendimiento del widget",
-      "analyticsWidgetDesc": "Métricas de búsqueda de la instalación del widget."
+      "analyticsWidgetDesc": "Métricas de búsqueda de la instalación del widget.",
+      "aiAnswers": "Respuestas IA",
+      "imageSearch": "Búsqueda por imagen",
+      "aiAnswersTitle": "Respuestas IA",
+      "aiAnswersDesc": "Mostrar una respuesta generada por IA sobre los resultados de búsqueda",
+      "aiAnswersEnable": "Activar Respuestas IA",
+      "aiAnswersHint": "Requiere clave de API de OpenAI configurada en el servidor",
+      "aiAnswersPreview": "Vista previa",
+      "aiAnswersPreviewText": "Basado en tu búsqueda, esto es lo que encontré...",
+      "imageSearchTitle": "Búsqueda por imagen/visual",
+      "imageSearchDesc": "Permite a los compradores buscar con una foto o cámara",
+      "imageSearchEnable": "Activar búsqueda por imagen",
+      "imageSearchHint": "Usa GPT-4o-mini para describir la imagen, luego búsqueda vectorial",
+      "imageSearchPreviewText": "Aparecerá un botón de cámara en la barra de búsqueda."
     },
     "configurator": {
       "pageTitle": "Configurador de búsqueda",
@@ -879,7 +892,8 @@
       "jobs": "Trabajos",
       "indexHealth": "Salud del índice",
       "relevanceQualityScore": "Calidad de búsqueda",
-      "assistant": "Asistente"
+      "assistant": "Asistente",
+      "widgetAi": "Funciones IA"
     },
     "recommendations": {
       "description": "Configure recomendaciones de productos impulsadas por IA, incluyendo artículos similares, sugerencias personalizadas y GraphRAG.",

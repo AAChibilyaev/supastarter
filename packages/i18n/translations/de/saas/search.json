@@ -292,7 +292,20 @@
       "voiceFallback": "Fallback-Nachricht, wenn Browser nicht unterstützt wird",
       "voiceDisabled": "Sprachsuche ist deaktiviert",
       "analyticsWidgetMetrics": "Widget-Leistung",
-      "analyticsWidgetDesc": "Suchmetriken von der Widget-Installation."
+      "analyticsWidgetDesc": "Suchmetriken von der Widget-Installation.",
+      "aiAnswers": "KI-Antworten",
+      "imageSearch": "Bildsuche",
+      "aiAnswersTitle": "KI-Antworten",
+      "aiAnswersDesc": "KI-generierte Antwort über den Suchergebnissen anzeigen",
+      "aiAnswersEnable": "KI-Antworten aktivieren",
+      "aiAnswersHint": "Erfordert OpenAI-API-Schlüssel auf dem Server",
+      "aiAnswersPreview": "Vorschau",
+      "aiAnswersPreviewText": "Basierend auf Ihrer Suche habe ich Folgendes gefunden...",
+      "imageSearchTitle": "Bilder-/Visuelle Suche",
+      "imageSearchDesc": "Lass Käufer per Foto oder Kamerabild suchen",
+      "imageSearchEnable": "Bildsuche aktivieren",
+      "imageSearchHint": "Verwendet GPT-4o-mini, um das Bild zu beschreiben, dann Vektorsuche",
+      "imageSearchPreviewText": "Ein Kamera-Button erscheint in der Suchleiste."
     },
     "configurator": {
       "pageTitle": "Suchkonfigurator",
@@ -840,7 +853,8 @@
       "jobs": "Jobs",
       "indexHealth": "Index-Gesundheit",
       "relevanceQualityScore": "Suchqualität",
-      "assistant": "Assistent"
+      "assistant": "Assistent",
+      "widgetAi": "KI-Funktionen"
     },
     "recommendations": {
       "description": "Konfigurieren Sie KI-gestützte Produktempfehlungen, einschließlich ähnlicher Artikel, personalisierter Vorschläge und GraphRAG.",

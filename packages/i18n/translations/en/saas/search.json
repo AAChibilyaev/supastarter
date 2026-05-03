@@ -292,7 +292,20 @@
       "voiceFallback": "Fallback message if browser not supported",
       "voiceDisabled": "Voice search is disabled",
       "analyticsWidgetMetrics": "Widget Performance",
-      "analyticsWidgetDesc": "Search metrics from the widget installation."
+      "analyticsWidgetDesc": "Search metrics from the widget installation.",
+      "aiAnswers": "AI Answers",
+      "imageSearch": "Image Search",
+      "aiAnswersTitle": "AI Answers",
+      "aiAnswersDesc": "Show an AI-generated answer above search results for natural-language queries",
+      "aiAnswersEnable": "Enable AI Answers",
+      "aiAnswersHint": "Requires OpenAI API key configured on the server",
+      "aiAnswersPreview": "Preview",
+      "aiAnswersPreviewText": "Based on your search, here is what I found...",
+      "imageSearchTitle": "Image / Visual Search",
+      "imageSearchDesc": "Let shoppers search by uploading a photo or taking a picture with their camera",
+      "imageSearchEnable": "Enable Image Search",
+      "imageSearchHint": "Uses GPT-4o-mini vision to describe the image, then vector search to find similar products",
+      "imageSearchPreviewText": "A camera button will appear in the search bar. Shoppers can upload a product photo to find visually similar items."
     },
     "configurator": {
       "pageTitle": "Search Configurator",
@@ -595,7 +608,8 @@
       "jobs": "Jobs",
       "indexHealth": "Index Health",
       "relevanceQualityScore": "Search Quality",
-      "assistant": "Assistant"
+      "assistant": "Assistant",
+      "widgetAi": "AI Features"
     },
     "recommendations": {
       "description": "Configure AI-powered product recommendations including similar items, personalized suggestions, and GraphRAG.",

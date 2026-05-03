@@ -33,6 +33,10 @@ export interface WidgetOptions {
 	showImages?: boolean;
 	recommendationsMode?: "sidebar" | "modal" | "inline";
 	recommendationsLimit?: number;
+	/** Show AI-generated answer panel above search results */
+	aiAnswers?: boolean;
+	/** Enable image/photo search via camera button */
+	imageSearch?: boolean;
 }
 
 const DEFAULT_OPTIONS: Partial<WidgetOptions> = {
@@ -43,6 +47,8 @@ const DEFAULT_OPTIONS: Partial<WidgetOptions> = {
 	showImages: true,
 	recommendationsMode: "sidebar",
 	recommendationsLimit: 5,
+	aiAnswers: false,
+	imageSearch: false,
 };
 
 const WIDGET_STYLES = `
@@ -862,6 +868,81 @@ const WIDGET_STYLES = `
   margin-bottom: 4px;
   z-index: 10;
 }
+
+.aac-image-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: var(--aac-text-secondary);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.aac-image-btn:hover {
+  color: var(--aac-primary);
+}
+
+.aac-image-btn.aac-image-loading {
+  color: var(--aac-primary);
+  animation: aac-pulse 1s infinite;
+}
+
+.aac-ai-answer {
+  background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+  border: 1px solid var(--aac-border);
+  border-left: 3px solid var(--aac-primary);
+  border-radius: var(--aac-radius);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--aac-text);
+}
+
+:host([theme="dark"]) .aac-ai-answer {
+  background: linear-gradient(135deg, #1e3a5f 0%, #0f2d1f 100%);
+}
+
+.aac-ai-answer-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--aac-primary);
+  margin-bottom: 8px;
+}
+
+.aac-ai-answer-text {
+  color: var(--aac-text);
+}
+
+.aac-ai-answer-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--aac-text-secondary);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.aac-image-caption {
+  font-size: 12px;
+  color: var(--aac-text-secondary);
+  padding: 6px 12px;
+  background: var(--aac-bg-secondary);
+  border-radius: var(--aac-radius);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 `;
 
 interface SearchState {
@@ -885,6 +966,11 @@ interface SearchState {
 	recommendationsError: string | null;
 	recommendationsProductId: string | null;
 	recommendationsOpen: boolean;
+	aiAnswer: string;
+	aiAnswerLoading: boolean;
+	aiAnswerSources: Array<{ id?: unknown; title?: string; url?: string }>;
+	imageCaption: string;
+	imageSearchLoading: boolean;
 }
 
 function formatPrice(price: number, currency = "USD", locale = "en"): string {
@@ -1097,6 +1183,11 @@ export class AacSearchWidget {
 			recommendationsError: null,
 			recommendationsProductId: null,
 			recommendationsOpen: false,
+			aiAnswer: "",
+			aiAnswerLoading: false,
+			aiAnswerSources: [],
+			imageCaption: "",
+			imageSearchLoading: false,
 		};
 
 		// Render and attach events
@@ -1194,6 +1285,11 @@ export class AacSearchWidget {
 					filters: this.state.filters,
 					sort: this.state.sortBy || undefined,
 				});
+
+				// Fire AI answer in background — does not block render
+				if (this.options.aiAnswers) {
+					void this.doAiAnswer(this.state.query);
+				}
 			}
 		} catch (err) {
 			this.state = {
@@ -1654,6 +1750,182 @@ export class AacSearchWidget {
 		setTimeout(() => tip.remove(), 2000);
 	}
 
+	private async doAiAnswer(query: string): Promise<void> {
+		if (!this.options.aiAnswers || !query.trim()) return;
+
+		this.state = { ...this.state, aiAnswerLoading: true, aiAnswer: "", aiAnswerSources: [] };
+		this.renderAiAnswer();
+
+		try {
+			const baseUrl = this.options.baseUrl.replace(/\/+$/, "");
+			const resp = await fetch(`${baseUrl}/api/search/ai/answer`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${this.options.apiKey}`,
+				},
+				body: JSON.stringify({
+					query,
+					indexSlug: this.options.indexSlug,
+					perPage: 5,
+				}),
+			});
+
+			if (resp.ok) {
+				const data = await resp.json() as {
+					answer?: string;
+					sources?: Array<{ id?: unknown; title?: string; url?: string }>;
+				};
+				this.state = {
+					...this.state,
+					aiAnswer: data.answer ?? "",
+					aiAnswerSources: data.sources ?? [],
+					aiAnswerLoading: false,
+				};
+			} else {
+				this.state = { ...this.state, aiAnswerLoading: false };
+			}
+		} catch {
+			this.state = { ...this.state, aiAnswerLoading: false };
+		}
+
+		this.renderAiAnswer();
+	}
+
+	private renderAiAnswer(): void {
+		const container = this.root.querySelector(".aac-ai-answer-container");
+		if (!container) return;
+
+		if (!this.options.aiAnswers) {
+			container.innerHTML = "";
+			return;
+		}
+
+		if (this.state.aiAnswerLoading) {
+			container.innerHTML = `
+				<div class="aac-ai-answer">
+					<div class="aac-ai-answer-header">
+						<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+						${this.t("aiAnswer")}
+					</div>
+					<div class="aac-ai-answer-loading">${this.t("aiAnswerLoading")}</div>
+				</div>
+			`;
+			return;
+		}
+
+		if (!this.state.aiAnswer) {
+			container.innerHTML = "";
+			return;
+		}
+
+		container.innerHTML = `
+			<div class="aac-ai-answer">
+				<div class="aac-ai-answer-header">
+					<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+					${this.t("aiAnswer")}
+				</div>
+				<div class="aac-ai-answer-text">${escapeHtml(this.state.aiAnswer)}</div>
+			</div>
+		`;
+	}
+
+	private startImageSearch(): void {
+		const input = document.createElement("input");
+		input.type = "file";
+		input.accept = "image/*";
+		input.capture = "environment";
+		input.style.display = "none";
+		document.body.appendChild(input);
+
+		input.addEventListener("change", () => {
+			const file = input.files?.[0];
+			document.body.removeChild(input);
+			if (!file) return;
+			void this.doImageSearch(file);
+		});
+
+		input.click();
+	}
+
+	private async doImageSearch(file: File): Promise<void> {
+		this.state = {
+			...this.state,
+			imageSearchLoading: true,
+			imageCaption: "",
+			query: "",
+			results: [],
+			found: 0,
+			aiAnswer: "",
+			aiAnswerSources: [],
+		};
+		this.render();
+
+		const imgBtn = this.root.querySelector(".aac-image-btn");
+		imgBtn?.classList.add("aac-image-loading");
+
+		try {
+			const buffer = await file.arrayBuffer();
+			const bytes = new Uint8Array(buffer);
+			let binary = "";
+			bytes.forEach((b) => (binary += String.fromCharCode(b)));
+			const imageBase64 = btoa(binary);
+
+			const baseUrl = this.options.baseUrl.replace(/\/+$/, "");
+			const resp = await fetch(`${baseUrl}/api/search/ai/image`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${this.options.apiKey}`,
+				},
+				body: JSON.stringify({
+					imageBase64,
+					indexSlug: this.options.indexSlug,
+					k: 10,
+				}),
+			});
+
+			if (!resp.ok) throw new Error("image_search_failed");
+
+			const data = await resp.json() as {
+				caption?: string;
+				hits?: Array<{
+					id?: unknown;
+					title?: string;
+					imageUrl?: string;
+					price?: unknown;
+					brand?: string;
+					url?: string;
+					vectorDistance?: number;
+				}>;
+				found?: number;
+			};
+
+			// Map image-search hits to the expected results format
+			const mappedHits = (data.hits ?? []).map((h) => ({
+				document: h as unknown as Record<string, unknown>,
+				highlights: undefined,
+			}));
+
+			this.state = {
+				...this.state,
+				imageCaption: data.caption ?? "",
+				results: mappedHits,
+				found: data.found ?? 0,
+				imageSearchLoading: false,
+			};
+		} catch {
+			this.state = {
+				...this.state,
+				imageSearchLoading: false,
+				error: this.t("imageSearchError"),
+			};
+		}
+
+		imgBtn?.classList.remove("aac-image-loading");
+		this.render();
+	}
+
 	private attachEvents(): void {
 		// Search input (debounced)
 		const input = this.root.querySelector(".aac-search-input") as HTMLInputElement | null;
@@ -1700,6 +1972,13 @@ export class AacSearchWidget {
 				if (field && value) {
 					this.toggleFilter(field, value);
 				}
+			});
+		}
+
+		// Image search button (camera)
+		if (this.options.imageSearch) {
+			this.root.querySelector(".aac-image-btn")?.addEventListener("click", () => {
+				this.startImageSearch();
 			});
 		}
 
@@ -2230,6 +2509,13 @@ export class AacSearchWidget {
 		// For inline: recommendations panel renders inside the results area
 		const recsHtml = showRecs && isOverlay ? this.renderRecommendationsPanel() : "";
 
+		const imageCaptionHtml = this.state.imageCaption
+			? `<div class="aac-image-caption">
+					<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+					${escapeHtml(this.t("imageSearchCaption"))} <em>${escapeHtml(this.state.imageCaption)}</em>
+				</div>`
+			: "";
+
 		this.root.innerHTML = `
 			<style>${WIDGET_STYLES}</style>
 			<div class="aac-widget-container">
@@ -2241,6 +2527,16 @@ export class AacSearchWidget {
 					value="${escapeHtml(this.state.query)}"
 					aria-label="${this.t("searchLabel")}"
 				/>
+				${
+					this.options.imageSearch
+						? `<button class="aac-image-btn${this.state.imageSearchLoading ? " aac-image-loading" : ""}" title="${this.t("imageSearch")}" aria-label="${this.t("imageSearch")}">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+						<circle cx="12" cy="13" r="4"/>
+					</svg>
+				</button>`
+						: ""
+				}
 				<button class="aac-mic-btn" title="${this.t("voiceSearch")}" aria-label="${this.t("voiceSearch")}">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
@@ -2250,9 +2546,11 @@ export class AacSearchWidget {
 					</svg>
 				</button>
 				</div>
+				${imageCaptionHtml}
+				<div class="aac-ai-answer-container"></div>
 				${this.renderFilterChips()}
 				${
-					this.state.query || this.state.results.length > 0
+					this.state.query || this.state.results.length > 0 || this.state.imageCaption
 						? `<button class="aac-filter-toggle-btn" id="aac-filter-toggle">Filters</button>
 							<div class="aac-filter-overlay" id="aac-filter-overlay"></div>
 							<div class="aac-layout">
@@ -2359,6 +2657,8 @@ export class AacSearchWidget {
 				recommendationsLimit: dataset.recommendationsLimit
 					? parseInt(dataset.recommendationsLimit, 10)
 					: 5,
+				aiAnswers: dataset.aiAnswers === "true",
+				imageSearch: dataset.imageSearch === "true",
 			});
 		};
 

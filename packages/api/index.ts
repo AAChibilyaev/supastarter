@@ -38,6 +38,7 @@ import { connectorApp } from "./modules/search/connector-public";
 import { demoApp } from "./modules/search/demo-public";
 import { eventsApp } from "./modules/search/events-public";
 import { assistantPublicApp } from "./modules/assistant/assistant-public";
+import { aiSearchPublicApp } from "./modules/search/ai-search-public";
 import { publicSearchApp } from "./modules/search/public-handler";
 import { scimRouter } from "./modules/search/scim-public";
 import { shareApp } from "./modules/search/share-public";
@@ -84,6 +85,8 @@ export const app = new Hono()
 	.route("/", eventsApp)
 	// Public assistant endpoint for anonymous widget users (permissive CORS, Bearer ss_search_*)
 	.route("/", assistantPublicApp)
+	// Public AI Search endpoints: image search + AI answer panel for widget
+	.route("/", aiSearchPublicApp)
 	// Widget JS serving (static file, accessible from any origin for storefronts)
 	.get("/widget/widget.js", async (c) => {
 		try {

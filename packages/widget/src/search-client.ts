@@ -30,6 +30,36 @@ interface SearchResponse {
 	index: string;
 }
 
+export interface AiAnswerResult {
+	answer: string;
+	sources: Array<{
+		id?: unknown;
+		title?: string;
+		url?: string;
+		imageUrl?: string;
+		price?: unknown;
+	}>;
+	found: number;
+	searchTimeMs: number;
+}
+
+export interface ImageSearchHit {
+	id?: unknown;
+	title?: string;
+	imageUrl?: string;
+	price?: unknown;
+	brand?: string;
+	url?: string;
+	vectorDistance?: number;
+}
+
+export interface ImageSearchResult {
+	caption: string;
+	hits: ImageSearchHit[];
+	found: number;
+	searchTimeMs: number;
+}
+
 /**
  * Creates an InstantSearch-compatible search client for the AACsearch public API.
  */
@@ -189,6 +219,92 @@ export function createAacSearchClient(config: WidgetConfig) {
 				}
 				return response.json();
 			});
+		},
+
+		/**
+		 * Zero-click AI Answer — searches the index and generates a concise answer via LLM.
+		 * Gracefully returns empty answer when AI is unavailable.
+		 *
+		 * Calls POST /api/search/ai/answer
+		 */
+		getAiAnswer(
+			query: string,
+			options?: {
+				indexSlug?: string;
+				queryBy?: string;
+				filterBy?: string;
+				perPage?: number;
+			},
+		): Promise<AiAnswerResult> {
+			return fetch(`${baseUrl}/api/search/ai/answer`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${config.apiKey}`,
+				},
+				body: JSON.stringify({
+					query,
+					indexSlug: options?.indexSlug ?? config.indexSlug,
+					queryBy: options?.queryBy,
+					filterBy: options?.filterBy,
+					perPage: options?.perPage,
+				}),
+			})
+				.then(async (response) => {
+					if (!response.ok) return { answer: "", sources: [], found: 0, searchTimeMs: 0 };
+					return response.json() as Promise<AiAnswerResult>;
+				})
+				.catch(() => ({ answer: "", sources: [], found: 0, searchTimeMs: 0 }));
+		},
+
+		/**
+		 * Visual / image search — upload a file and find visually similar products.
+		 *
+		 * Accepts either a File/Blob (converted to base64) or an image URL string.
+		 * Calls POST /api/search/ai/image
+		 */
+		async searchByImage(
+			image: File | Blob | string,
+			options?: {
+				indexSlug?: string;
+				field?: string;
+				k?: number;
+				filterBy?: string;
+			},
+		): Promise<ImageSearchResult> {
+			let imageUrl: string | undefined;
+			let imageBase64: string | undefined;
+
+			if (typeof image === "string") {
+				imageUrl = image;
+			} else {
+				const buffer = await image.arrayBuffer();
+				const bytes = new Uint8Array(buffer);
+				let binary = "";
+				bytes.forEach((b) => (binary += String.fromCharCode(b)));
+				imageBase64 = btoa(binary);
+			}
+
+			return fetch(`${baseUrl}/api/search/ai/image`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${config.apiKey}`,
+				},
+				body: JSON.stringify({
+					imageUrl,
+					imageBase64,
+					indexSlug: options?.indexSlug ?? config.indexSlug,
+					field: options?.field,
+					k: options?.k,
+					filterBy: options?.filterBy,
+				}),
+			})
+				.then(async (response) => {
+					if (!response.ok) return { caption: "", hits: [], found: 0, searchTimeMs: 0 };
+					return response.json() as Promise<ImageSearchResult>;
+				})
+				.catch(() => ({ caption: "", hits: [], found: 0, searchTimeMs: 0 }));
 		},
 	};
 }

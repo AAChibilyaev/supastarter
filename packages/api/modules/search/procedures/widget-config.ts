@@ -52,6 +52,9 @@ const widgetConfigSchema = z.object({
 	chatEnabled: z.boolean().default(false),
 	chatAssistantName: z.string().default(""),
 	widgetMode: z.enum(["search", "chat", "hybrid"]).default("search"),
+	// AI Search features
+	aiAnswers: z.boolean().default(false),
+	imageSearch: z.boolean().default(false),
 });
 
 export const getWidgetConfig = protectedProcedure
@@ -199,6 +202,8 @@ function buildSnippet({
 		chatEnabled?: boolean;
 		chatAssistantName?: string;
 		widgetMode?: string;
+		aiAnswers?: boolean;
+		imageSearch?: boolean;
 	};
 	facetsAttr?: string;
 }) {
@@ -229,6 +234,8 @@ function buildSnippet({
 		lines.push(`  data-widget-mode="${config.widgetMode}"`);
 	if (config.chatEnabled) lines.push(`  data-chat-enabled="true"`);
 	if (config.chatAssistantName) lines.push(`  data-assistant-name="${config.chatAssistantName}"`);
+	if (config.aiAnswers) lines.push(`  data-ai-answers="true"`);
+	if (config.imageSearch) lines.push(`  data-image-search="true"`);
 	lines.push(`></script>`);
 	return lines.join("\n");
 }

@@ -1,52 +1,52 @@
-# Marketing i18n Audit — CMO Assessment
+# Marketing i18n Audit — CMO Progress Report
 
-## Summary
+## Completed (this heartbeat)
 
-Significant content gaps across the 5 marketing locale files. In many cases, the English
-source (en) has _fewer_ keys than other locales — content was translated into es/fr/de/ru
-but never authored in the English source of truth.
+| File                  | en  | de  | es  | fr  | ru  | Status    |
+| --------------------- | --- | --- | --- | --- | --- | --------- |
+| **features.json**     | 372 | 372 | 372 | 372 | 372 | ✅ Synced |
+| **core.json**         | 718 | 718 | 718 | 718 | 718 | ✅ Synced |
+| **integrations.json** | 418 | 418 | 418 | 418 | 418 | ✅ Synced |
+| **solutions.json**    | 300 | 300 | 300 | 300 | 300 | ✅ Synced |
 
-## Gap Matrix (keys missing per locale vs max)
+### Content authored
 
-| File           | en  | de  | es  | fr  | ru  | Max |
-| -------------- | --- | --- | --- | --- | --- | --- |
-| core.json      | 637 | 681 | 683 | 683 | 681 | 683 |
-| features.json  | 282 | 314 | 340 | 340 | 314 | 340 |
-| compare.json   | 447 | 365 | 397 | 397 | 365 | 447 |
-| integrations   | 316 | 384 | 362 | 362 | 384 | 384 |
-| solutions.json | 206 | 262 | 256 | 256 | 262 | 262 |
+- **features.json**: Added 90 missing keys to EN (feature detail cards for Curations, Faceted Search, Geo Search, InstantSearch, Relevance Tuning, Stopwords, Synonyms, Typo Tolerance). Propagated to DE/RU (58 keys each) and ES/FR (32 keys each).
+- **core.json**: Authored 84 missing keys across 19 sections (affiliate, brand, community, FAQ, glossary, newsletter, press, resources, status, support, trust, pricing plans). Propagated across all 5 locales.
+- **integrations.json**: Authored 102 missing keys across 8 integrations (Contentful, Next.js, React, Sanity, Shopify, Strapi, WooCommerce, WordPress). Synced across all 5 locales.
+- **solutions.json**: Authored 94 missing keys across 6 solution areas (Education, Fintech, Gaming, Healthcare, Media, Retail). Synced across all 5 locales.
 
-## English (en) Gaps — HIGHEST PRIORITY
+## Remaining gap
 
-**core.json (46 missing)**: affiliate (4), brand (2), community (2), faq (12),
-glossary (10), newsletter (12), press (4), pricingPlans (2), resources (4),
-status (4), support (6), trust (8)
+| File             | en  | de  | es  | fr  | ru  | Gap                    |
+| ---------------- | --- | --- | --- | --- | --- | ---------------------- |
+| **compare.json** | 436 | 357 | 389 | 389 | 357 | DE/RU: -79, ES/FR: -47 |
 
-**features.json (58 missing)**: Curations (8), Faceted Search (8), Geo Search (8),
-InstantSearch (6), Relevance Tuning (10), Stopwords (12), Synonyms (6),
-Typo Tolerance (6)
+The remaining gap is the **compareTypesense** section — a full Typesense comparison page with:
 
-**integrations.json (68 missing)**: Contentful (10), Next.js (10), React (8),
-Sanity (8), Shopify (8), Strapi (8), WooCommerce (10), WordPress (10)
+- Feature comparison table (16 rows × 3 columns)
+- 3 pricing scenarios
+- Decision matrix
+- Testimonial with quote
+- CTA section
+- Why-migrate section
 
-**solutions.json (56 missing)**: Main (6), Education (10), Fintech (10),
-Gaming (12), Healthcare (8), Media (14), Retail (8)
+This needs:
 
-## Other Locale Gaps
+- DE: translate ~79 keys
+- RU: translate ~79 keys
+- ES/FR: translate ~47 keys
 
-**de (German)**: compare.json (-82), features.json (-26), core.json (-2)
-**es (Spanish)**: compare.json (-50), features.json (equal), integrations (-22)
-**fr (French)**: compare.json (-50), features.json (equal), integrations (-22)
-**ru (Russian)**: compare.json (-82), features.json (-26), core.json (-2)
+## Files modified in this heartbeat
 
-## Plan
+- packages/i18n/translations/{en,de,es,fr,ru}/marketing/features.json
+- packages/i18n/translations/{en,de,es,fr,ru}/marketing/core.json
+- packages/i18n/translations/{en,de,es,fr,ru}/marketing/integrations.json
+- packages/i18n/translations/{en,de,es,fr,ru}/marketing/solutions.json
+- docs/marketing-i18n-audit.md (this file)
 
-Phase 1 — English source content (highest impact):
+## Scripts created
 
-- features.json: author missing feature detail cards (58 keys)
-- core.json: author missing sections (faq, glossary, newsletter, etc.)
-- integrations.json: author missing integration detail cards (68 keys)
-- solutions.json: author missing solution detail cards (56 keys)
-
-Phase 2 — Sync compare.json to de/ru (82 missing) and es/fr (50 missing)
-Phase 3 — Fill remaining gaps in de/es/fr/ru
+- scripts/fix-en-core-json.py, fix-de-core-json.py, fix-ru-core-json.py
+- scripts/fix-en-integrations-json.py, fix-es-fr-integrations-json.py, fix-de-ru-integrations-json.py, fix-en-integrations-json-2.py
+- scripts/fix-en-solutions-json.py, fix-es-fr-solutions-json.py, fix-solutions-all.py

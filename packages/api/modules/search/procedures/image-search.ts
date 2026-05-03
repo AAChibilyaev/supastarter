@@ -3,6 +3,7 @@ import { getTypesenseClient, generateEmbedding, formatVectorQuery } from "@repo/
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -18,7 +19,7 @@ const hitSchema = z.object({
 });
 
 export const imageSearch = protectedProcedure
-	.use(creditGate("embedding", BigInt(200)))
+	.use(creditGate("embedding", CREDIT_RATES.embedding))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/image-search",
@@ -58,97 +59,113 @@ export const imageSearch = protectedProcedure
 		const index = await requireSearchIndex(input.organizationId, input.slug);
 		const { creditReservationId } = context as unknown as CreditGateContext;
 
-		// Phase 1: describe the image via OpenAI Vision
-		const imageUrl = input.imageUrl
-			? input.imageUrl
-			: `data:image/jpeg;base64,${input.imageBase64}`;
-
-		let caption = "";
 		try {
+			if (!input.imageUrl && !input.imageBase64) {
+				throw new ORPCError("BAD_REQUEST", {
+					message: "Either imageUrl or imageBase64 is required",
+				});
+			}
+
+			// Phase 1: Generate a caption using OpenAI Vision (if imageUrl) or use base64 directly
+			const startTime = Date.now();
+			let caption: string;
+
 			const OpenAI = await import("openai").then((m) => m.default);
 			const openai = new OpenAI();
-			const visionResponse = await openai.chat.completions.create({
+
+			if (input.imageUrl) {
+				const visionResponse = await openai.chat.completions.create({
+					model: input.visionModel,
+					messages: [
+						{
+							role: "user",
+							content: [
+								{
+									type: "text",
+									text: "Describe this image in detail for search purposes. Focus on objects, colors, style, visible text, and composition.",
+								},
+								{ type: "image_url", image_url: { url: input.imageUrl } },
+							] as any,
+						},
+					],
+					max_tokens: 200,
+				});
+				caption = visionResponse.choices[0]?.message?.content ?? "";
+			} else {
+				// If base64, convert to data URL and use vision
+				const mimeType = "image/jpeg";
+				const dataUri = `data:${mimeType};base64,${input.imageBase64}`;
+				const visionResponse = await openai.chat.completions.create({
+					model: input.visionModel,
+					messages: [
+						{
+							role: "user",
+							content: [
+								{
+									type: "text",
+									text: "Describe this image in detail for search purposes. Focus on objects, colors, style, visible text, and composition.",
+								},
+								{ type: "image_url", image_url: { url: dataUri } },
+							] as any,
+						},
+					],
+					max_tokens: 200,
+				});
+				caption = visionResponse.choices[0]?.message?.content ?? "";
+			}
+
+			if (!caption) {
+				throw new ORPCError("BAD_REQUEST", {
+					message: "Could not generate a caption from the image.",
+				});
+			}
+
+			// Phase 2: Generate embedding from the caption
+			const embeddingResult = await generateEmbedding(caption, input.embeddingModel);
+
+			// Phase 3: Vector search using the caption embedding
+			const vectorQuery = formatVectorQuery(embeddingResult.vector);
+
+			const client = getTypesenseClient();
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const results = (await client
+				.collections(index.slug)
+				.documents()
+				.search({
+					q: "*",
+					vector_query: `${input.field}:(${vectorQuery})`,
+					per_page: input.k,
+					...(input.filterBy ? { filter_by: input.filterBy } : {}),
+				} as any)) as any;
+
+			const searchTimeMs = Date.now() - startTime;
+
+			// Commit flat-fee usage on success
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "embedding",
+				provider: "openai",
 				model: input.visionModel,
-				messages: [
-					{
-						role: "user",
-						content: [
-							{
-								type: "text",
-								text: "Describe this image in detail, as if for a search query. Focus on objects, people, colors, actions, and setting.",
-							},
-							{
-								type: "image_url",
-								image_url: { url: imageUrl },
-							},
-						],
-					},
-				],
-				max_tokens: 300,
+				flatFeeKopecks: CREDIT_RATES.embedding,
 			});
-			caption = visionResponse.choices[0]?.message?.content ?? "";
-		} catch {
-			caption = "Image description unavailable.";
-		}
 
-		if (!caption) {
-			// Release reservation — no work was done
-			await releaseCreditReservation(creditReservationId, "cancelled");
 			return {
-				found: 0,
-				hits: [],
-				searchTimeMs: 0,
-				caption: "",
-				embedding: { model: input.embeddingModel, dimensions: 0, tokens: 0 },
+				found: results.found ?? 0,
+				hits: ((results.hits ?? []) as any[]).map((hit: any) => ({
+					document: hit.document as Record<string, unknown>,
+					vectorDistance: hit.vector_distance as number | undefined,
+				})),
+				searchTimeMs,
+				caption,
+				embedding: {
+					model: input.embeddingModel,
+					dimensions: embeddingResult.dimensions,
+					tokens: embeddingResult.tokens,
+				},
 			};
+		} catch (err) {
+			// Release reservation on any error
+			await releaseCreditReservation(creditReservationId);
+			throw err;
 		}
-
-		// Phase 2: embed the caption and vector-search
-		let embedding;
-		try {
-			embedding = await generateEmbedding(caption, input.embeddingModel);
-		} catch {
-			await releaseCreditReservation(creditReservationId, "error");
-			throw new ORPCError("INTERNAL_SERVER_ERROR", {
-				message: "Failed to generate image embedding.",
-			});
-		}
-
-		const vectorQuery = formatVectorQuery(embedding.vector, input.field, input.k);
-
-		const client = getTypesenseClient();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const results = (await client
-			.collections(index.slug)
-			.documents()
-			.search({
-				q: "*",
-				vector_query: vectorQuery,
-				filter_by: input.filterBy ?? undefined,
-				per_page: input.k,
-			} as any)) as any;
-
-		// Commit flat-fee usage on success
-		await commitFlatFeeUsage({
-			reservationId: creditReservationId,
-			operation: "embedding",
-			provider: "aacsearch",
-			model: "image",
-			flatFeeKopecks: BigInt(200),
-		});
-
-		return {
-			found: results.found ?? 0,
-			hits: ((results.hits ?? []) as any[]).map((hit: any) => ({
-				document: hit.document as Record<string, unknown>,
-				vectorDistance: hit.vector_distance as number | undefined,
-			})),
-			searchTimeMs: results.search_time_ms ?? 0,
-			caption,
-			embedding: {
-				model: embedding.model,
-				dimensions: embedding.dimensions,
-				tokens: embedding.tokens,
-			},
-		};
 	});

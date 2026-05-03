@@ -10,6 +10,7 @@ import {
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -38,7 +39,7 @@ async function checksum(text: string): Promise<string> {
 }
 
 export const ingestFile = protectedProcedure
-	.use(creditGate("chat", BigInt(500)))
+	.use(creditGate("chat", CREDIT_RATES.chat))
 	.route({
 		method: "POST",
 		path: "/knowledge/ingest/file",
@@ -157,7 +158,7 @@ export const ingestFile = protectedProcedure
 				operation: "chat",
 				provider: "aacsearch",
 				model: "graphrag",
-				flatFeeKopecks: BigInt(500),
+				flatFeeKopecks: CREDIT_RATES.chat,
 			});
 
 			return {

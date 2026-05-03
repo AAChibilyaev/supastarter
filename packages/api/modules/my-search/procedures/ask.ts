@@ -5,6 +5,7 @@ import { aliasName, generateEmbedding, searchDocuments } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -24,7 +25,7 @@ const sourceSchema = z.object({
 });
 
 export const ask = protectedProcedure
-	.use(creditGate("my_search_rag", BigInt(500)))
+	.use(creditGate("my_search_rag", CREDIT_RATES.my_search_rag))
 	.route({
 		method: "POST",
 		path: "/my-search/indexes/{id}/ask",
@@ -135,7 +136,7 @@ export const ask = protectedProcedure
 				operation: "my_search_rag",
 				provider: "aacsearch",
 				model: "rag",
-				flatFeeKopecks: BigInt(500),
+				flatFeeKopecks: CREDIT_RATES.my_search_rag,
 			});
 
 			return {

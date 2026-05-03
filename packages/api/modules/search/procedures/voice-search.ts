@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -10,7 +11,7 @@ import {
 import { requireOrganizationMember } from "../lib/access";
 
 export const voiceSearch = protectedProcedure
-	.use(creditGate("chat", BigInt(500)))
+	.use(creditGate("audio_transcription", CREDIT_RATES.audio_transcription))
 	.route({
 		method: "POST",
 		path: "/search/voice",
@@ -62,10 +63,10 @@ export const voiceSearch = protectedProcedure
 			// Commit flat-fee usage on success
 			await commitFlatFeeUsage({
 				reservationId: creditReservationId,
-				operation: "chat",
+				operation: "audio_transcription",
 				provider: "aacsearch",
 				model: "audio",
-				flatFeeKopecks: BigInt(500),
+				flatFeeKopecks: CREDIT_RATES.audio_transcription,
 			});
 		} catch {
 			// Release reservation on error

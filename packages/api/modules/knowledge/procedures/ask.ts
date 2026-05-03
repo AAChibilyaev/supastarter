@@ -4,6 +4,7 @@ import { getKnowledgeSpaceBySlug } from "@repo/database";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -15,7 +16,7 @@ import { retrieveKnowledge } from "../lib/retrieval";
 import { knowledgeOwnerTypeSchema, knowledgeSpaceSlugSchema } from "../types";
 
 export const ask = protectedProcedure
-	.use(creditGate("rag_answer", BigInt(500)))
+	.use(creditGate("rag_answer", CREDIT_RATES.rag_answer))
 	.route({
 		method: "POST",
 		path: "/knowledge/ask",
@@ -90,7 +91,7 @@ export const ask = protectedProcedure
 				operation: "rag_answer",
 				provider: "aacsearch",
 				model: "rag",
-				flatFeeKopecks: BigInt(500),
+				flatFeeKopecks: CREDIT_RATES.rag_answer,
 			});
 
 			return {

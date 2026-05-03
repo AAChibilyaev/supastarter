@@ -2,15 +2,24 @@
  * Natural Language Search — converts natural language queries into
  * structured Typesense filter expressions using LLM (OpenAI).
  *
+ * This is a paid operation (1 credit per query) — uses credit gate.
+ *
  * Example:
  *   "red shoes under $50 from Nike size 10" →
- *   { query: "shoes", filter_by: "color:=red && price:<50 && brand:=Nike && size:=10" }
+ *   { query: "shoes", filter_by: "color:=red && price:<50 && brand:=nike && size:=10" }
  */
 
 import { getTypesenseClient } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
+import {
+	type CreditGateContext,
+	commitFlatFeeUsage,
+	creditGate,
+	releaseCreditReservation,
+} from "../../entitlements/middleware/credit-gate";
 import { requireSearchIndex, requireOrganizationMember } from "../lib/access";
 import { searchIndexSlugSchema } from "../types";
 
@@ -30,6 +39,7 @@ const hitSchema = z.object({
 });
 
 export const naturalLanguageSearch = protectedProcedure
+	.use(creditGate("natural_language_query", CREDIT_RATES.natural_language_query))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/natural-language-search",
@@ -82,15 +92,17 @@ export const naturalLanguageSearch = protectedProcedure
 	.handler(async ({ input, context }) => {
 		await requireOrganizationMember(input.organizationId, context.user.id);
 		const index = await requireSearchIndex(input.organizationId, input.slug);
+		const { creditReservationId } = context as unknown as CreditGateContext;
 
 		const startTime = Date.now();
 
-		// Phase 1: Extract structured filters from natural language using LLM
-		const schemaContext = input.schema
-			? `\nAvailable search fields: ${JSON.stringify(input.schema)}`
-			: "";
+		try {
+			// Phase 1: Extract structured filters from natural language using LLM
+			const schemaContext = input.schema
+				? `\nAvailable search fields: ${JSON.stringify(input.schema)}`
+				: "";
 
-		const systemPrompt = `You are a search query parser. Convert natural language search queries into structured filters.
+			const systemPrompt = `You are a search query parser. Convert natural language search queries into structured filters.
 
 Rules:
 1. Extract a refined search query (remove filter words like prices, brands, colors)
@@ -111,78 +123,92 @@ Respond ONLY with valid JSON:
   "explanation": "brief explanation of what was understood"
 }`;
 
-		const OpenAI = await getOpenAI().then((m) => m.default);
-		const openai = new OpenAI();
+			const OpenAI = await getOpenAI().then((m) => m.default);
+			const openai = new OpenAI();
 
-		const completion = await openai.chat.completions.create({
-			model: input.model,
-			messages: [
-				{ role: "system", content: systemPrompt },
-				{ role: "user", content: input.query },
-			],
-			response_format: { type: "json_object" },
-			temperature: 0.1,
-			max_tokens: 500,
-		});
+			const completion = await openai.chat.completions.create({
+				model: input.model,
+				messages: [
+					{ role: "system", content: systemPrompt },
+					{ role: "user", content: input.query },
+				],
+				response_format: { type: "json_object" },
+				temperature: 0.1,
+				max_tokens: 500,
+			});
 
-		const llmTimeMs = Date.now() - startTime;
+			const llmTimeMs = Date.now() - startTime;
 
-		const rawContent = completion.choices[0]?.message?.content ?? "{}";
-		let parsed: {
-			query?: string;
-			filters?: Array<{
-				field: string;
-				operator: string;
-				value: string;
-			}>;
-			explanation?: string;
-		} = {};
+			const rawContent = completion.choices[0]?.message?.content ?? "{}";
+			let parsed: {
+				query?: string;
+				filters?: Array<{
+					field: string;
+					operator: string;
+					value: string;
+				}>;
+				explanation?: string;
+			} = {};
 
-		try {
-			parsed = JSON.parse(rawContent);
-		} catch {
-			// If LLM output isn't valid JSON, fall through with defaults
+			try {
+				parsed = JSON.parse(rawContent);
+			} catch {
+				// If LLM output isn't valid JSON, fall through with defaults
+			}
+
+			const extractedQuery = parsed.query?.trim() || input.query;
+			const extractedFilters = parsed.filters ?? [];
+			const explanation = parsed.explanation ?? "";
+
+			// Build Typesense filter_by string
+			const filterBy = extractedFilters
+				.map((f) => `${f.field}${f.operator}${f.value}`)
+				.join(" && ");
+
+			// Phase 2: Execute the search with extracted filters
+			const client = getTypesenseClient();
+			const searchStartTime = Date.now();
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const results = (await client
+				.collections(index.slug)
+				.documents()
+				.search({
+					q: extractedQuery,
+					query_by: input.queryBy,
+					filter_by: filterBy || undefined,
+					per_page: input.perPage,
+					page: input.page,
+				} as any)) as any;
+
+			const searchTimeMs = Date.now() - searchStartTime;
+
+			// Commit flat-fee usage on success
+			await commitFlatFeeUsage({
+				reservationId: creditReservationId,
+				operation: "natural_language_query",
+				provider: "aacsearch",
+				model: input.model,
+				flatFeeKopecks: CREDIT_RATES.natural_language_query,
+			});
+
+			return {
+				originalQuery: input.query,
+				extractedQuery,
+				filterBy: filterBy || undefined,
+				naturalLanguageExplanation: explanation,
+				found: results.found ?? 0,
+				hits: ((results.hits ?? []) as any[]).map((hit: any) => ({
+					document: hit.document as Record<string, unknown>,
+					textMatch: hit.text_match_info?.snippet as string | undefined,
+				})),
+				searchTimeMs,
+				llmTimeMs,
+				extractedFilters,
+			};
+		} catch (err) {
+			// Release reservation on any error
+			await releaseCreditReservation(creditReservationId);
+			throw err;
 		}
-
-		const extractedQuery = parsed.query?.trim() || input.query;
-		const extractedFilters = parsed.filters ?? [];
-		const explanation = parsed.explanation ?? "";
-
-		// Build Typesense filter_by string
-		const filterBy = extractedFilters
-			.map((f) => `${f.field}${f.operator}${f.value}`)
-			.join(" && ");
-
-		// Phase 2: Execute the search with extracted filters
-		const client = getTypesenseClient();
-		const searchStartTime = Date.now();
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const results = (await client
-			.collections(index.slug)
-			.documents()
-			.search({
-				q: extractedQuery,
-				query_by: input.queryBy,
-				filter_by: filterBy || undefined,
-				per_page: input.perPage,
-				page: input.page,
-			} as any)) as any;
-
-		const searchTimeMs = Date.now() - searchStartTime;
-
-		return {
-			originalQuery: input.query,
-			extractedQuery,
-			filterBy: filterBy || undefined,
-			naturalLanguageExplanation: explanation,
-			found: results.found ?? 0,
-			hits: ((results.hits ?? []) as any[]).map((hit: any) => ({
-				document: hit.document as Record<string, unknown>,
-				textMatch: hit.text_match_info?.snippet as string | undefined,
-			})),
-			searchTimeMs,
-			llmTimeMs,
-			extractedFilters,
-		};
 	});

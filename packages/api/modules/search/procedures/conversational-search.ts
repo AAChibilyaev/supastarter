@@ -2,6 +2,7 @@ import { getTypesenseClient } from "@repo/search";
 import { z } from "zod";
 
 import { protectedProcedure } from "../../../orpc/procedures";
+import { CREDIT_RATES } from "../../entitlements/credit-rates";
 import {
 	type CreditGateContext,
 	commitFlatFeeUsage,
@@ -31,7 +32,7 @@ const sourceSchema = z.object({
  * Falls back to the manual OpenAI RAG approach when no conversationModelId is given.
  */
 export const conversationalSearch = protectedProcedure
-	.use(creditGate("rag_answer", BigInt(300)))
+	.use(creditGate("rag_answer", CREDIT_RATES.rag_answer))
 	.route({
 		method: "POST",
 		path: "/search/indexes/{slug}/conversational-search",
@@ -132,7 +133,7 @@ export const conversationalSearch = protectedProcedure
 				operation: "rag_answer",
 				provider: "aacsearch",
 				model: "ai_answer",
-				flatFeeKopecks: BigInt(300),
+				flatFeeKopecks: CREDIT_RATES.rag_answer,
 			});
 
 			return {
@@ -211,7 +212,7 @@ export const conversationalSearch = protectedProcedure
 				operation: "rag_answer",
 				provider: "openai",
 				model: input.model,
-				flatFeeKopecks: BigInt(300),
+				flatFeeKopecks: CREDIT_RATES.rag_answer,
 			});
 		} catch {
 			await releaseCreditReservation(creditReservationId, "error");

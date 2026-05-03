@@ -77,6 +77,25 @@ if (defined('WP_CLI') && WP_CLI) {
     require_once AACSEARCH_SEARCH_DIR . 'includes/class-cli.php';
 }
 
+// ─── WooCommerce Addon (loaded only if WooCommerce is active) ──
+
+add_action('plugins_loaded', 'aacsearch_search_init_woocommerce');
+
+/**
+ * Initialize WooCommerce addon if WooCommerce is active.
+ */
+function aacsearch_search_init_woocommerce()
+{
+    if (!class_exists('WooCommerce')) {
+        return;
+    }
+
+    require_once AACSEARCH_SEARCH_DIR . 'addons/woocommerce/class-wc-indexer.php';
+    require_once AACSEARCH_SEARCH_DIR . 'addons/woocommerce/class-wc-frontend.php';
+
+    AACSearch_WC_Frontend::init();
+}
+
 // ─── Activation / Deactivation ──────────────────────────────────
 
 register_activation_hook(__FILE__, 'aacsearch_search_activate');

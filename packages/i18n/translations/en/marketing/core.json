@@ -28,18 +28,22 @@
   "home": {
     "hero": {
       "badge": "v0 — accepting early access",
-      "title": "Search that converts. Without the infra team.",
-      "subtitle": "Scoped tokens, multi-tenant isolation, and AI relevance — out of the box. Pay 5x less than Algolia. Migrate in 1 hour.",
+      "title": "Multimodal search for products that need more than a search box",
+      "subtitle": "Let users search by text, voice, photo, image, or AI chat — with one API, one index, one analytics layer, and secure scoped access.",
       "getStarted": "Start free",
       "documentation": "Read the docs",
       "codeCaption": "search-client.ts",
       "new": "NEW",
-      "featureBadge": "Search-as-a-Service",
+      "featureBadge": "Multimodal Search Layer",
       "imageAlt": "AACsearch dashboard screenshot",
       "badgeLatency": "50ms p99",
       "badgeSoc2": "SOC 2",
       "badgeFulltext": "Full-text",
       "badgeAnalytics": "Analytics",
+      "searchPlaceholder": "Search anything by text, voice, image or chat...",
+      "voicePlaceholder": "Tap the microphone and speak your query...",
+      "chatPlaceholder": "Ask a question about your data...",
+      "mediaPlaceholder": "Upload a photo or image to search visually...",
       "statDocs": "Documents indexed",
       "statLatency": "Search latency",
       "statUptime": "Uptime SLA"
@@ -219,9 +223,30 @@
     }
   },
   "homeWhatUsersSearch": {
-    "title": "What your users search for",
-    "subtitle": "Answering 'is this for my case' by showing what users actually type into the search box.",
+    "title": "Search by text, voice, photo, image, or AI chat",
+    "subtitle": "AACsearch isn't just a search box. Users can type, speak, snap, upload, or ask — and get the right result.",
+    "multimodalLabel": "Five input modes",
     "items": {
+      "text": {
+        "title": "Text",
+        "description": "Type and find"
+      },
+      "voice": {
+        "title": "Voice",
+        "description": "Speak and search"
+      },
+      "photo": {
+        "title": "Photo",
+        "description": "Snap and find"
+      },
+      "image": {
+        "title": "Image",
+        "description": "Upload and match"
+      },
+      "chat": {
+        "title": "AI Chat",
+        "description": "Ask and discover"
+      },
       "entity": {
         "title": "Exact entities",
         "description": "Order ID, SKU, error code, username or document name. AACsearch finds exact matches faster than Ctrl+F.",

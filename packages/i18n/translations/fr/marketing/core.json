@@ -28,8 +28,8 @@
   "home": {
     "hero": {
       "badge": "v0 — accès anticipé ouvert",
-      "title": "Une recherche que vos utilisateurs sentent vraiment.",
-      "subtitle": "Une API de recherche hébergée avec tokens portés par l'organisation, allow-list d'origine par clé, rate-limit et quota — pour livrer la recherche au lieu de gérer l'infrastructure.",
+      "title": "Recherche qui comprend le texte, la voix et les images",
+      "subtitle": "Laissez vos utilisateurs chercher par texte, voix, photo, image ou dialogue IA — une API, un index, une couche d'analyse et un accès sécurisé par scoped tokens.",
       "getStarted": "Commencer gratuitement",
       "documentation": "Lire la documentation",
       "codeCaption": "search-client.ts",
@@ -42,7 +42,11 @@
       "badgeAnalytics": "Analytique",
       "statDocs": "Documents indexés",
       "statLatency": "Latence de recherche",
-      "statUptime": "SLA de disponibilité"
+      "statUptime": "SLA de disponibilité",
+      "searchPlaceholder": "Cherchez par texte, voix, image ou chat...",
+      "voicePlaceholder": "Appuyez sur le micro et dictez votre recherche...",
+      "chatPlaceholder": "Posez une question sur vos données...",
+      "mediaPlaceholder": "Téléchargez une photo ou une image pour une recherche visuelle..."
     },
     "howItWorks": {
       "title": "Trois appels. Un après-midi.",

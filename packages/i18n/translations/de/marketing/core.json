@@ -28,8 +28,8 @@
   "home": {
     "hero": {
       "badge": "v0 — Early Access verfügbar",
-      "title": "Suche, die Ihre Nutzer wirklich spüren.",
-      "subtitle": "Eine gehostete Such-API mit organisationsbezogenen Tokens, Origin-Allowlists pro Key, Rate-Limit und Quota — damit Sie Suche ausliefern, statt Infrastruktur zu betreiben.",
+      "title": "Suche, die Text, Sprache und Bilder versteht",
+      "subtitle": "Lassen Sie Ihre Nutzer per Text, Sprache, Foto, Bild oder KI-Chat suchen — mit einer API, einem Index, einer Analyse-Ebene und sicherem Scoped-Zugriff.",
       "getStarted": "Kostenlos starten",
       "documentation": "Doku lesen",
       "codeCaption": "search-client.ts",
@@ -42,7 +42,11 @@
       "badgeAnalytics": "Analytik",
       "statDocs": "Indizierte Dokumente",
       "statLatency": "Suchlatenz",
-      "statUptime": "Uptime SLA"
+      "statUptime": "Uptime SLA",
+      "searchPlaceholder": "Suchen Sie per Text, Sprache, Bild oder Chat...",
+      "voicePlaceholder": "Tippen Sie auf das Mikrofon und sprechen Sie...",
+      "chatPlaceholder": "Stellen Sie eine Frage zu Ihren Daten...",
+      "mediaPlaceholder": "Laden Sie ein Foto für die visuelle Suche hoch..."
     },
     "howItWorks": {
       "title": "Drei Aufrufe. Ein Nachmittag.",

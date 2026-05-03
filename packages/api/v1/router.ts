@@ -26,6 +26,7 @@
  *   GET    /v1/projects/:projectId/keys             — list API keys
  *   DELETE /v1/keys/:keyId                          — revoke API key
  *   GET    /v1/projects/:projectId/analytics        — analytics
+ *   GET    /v1/projects/:projectId/failed-queries   — failed queries analytics
  *   GET    /v1/projects/:projectId/usage            — usage data
  *   GET    /v1/indexes/:indexId/synonyms            — list synonyms
  *   POST   /v1/indexes/:indexId/synonyms            — create synonym

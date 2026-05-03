@@ -3,6 +3,7 @@
 ## Purpose
 
 This document captures:
+
 1. a precise component map by folder and responsibility
 2. the best ready-made components and stacks to reuse for future tasks without building from scratch
 
@@ -30,6 +31,7 @@ This repo already has strong reuse layers. Do not start from primitives by defau
 Purpose: common SaaS shell, layout, providers, navigation, shared account/settings UX.
 
 Key components:
+
 - `AppSidebar.tsx` — main left navigation shell
 - `NavBar.tsx` — top navigation/header
 - `AppWrapper.tsx` — shared app layout wrapper
@@ -51,6 +53,7 @@ Key components:
 - `ConfirmationAlertProvider.tsx` — confirm/alert infra
 
 Best use cases:
+
 - new dashboard shells
 - settings/account pages
 - shared KPI/status blocks
@@ -61,6 +64,7 @@ Best use cases:
 Purpose: the main AACsearch product UI. This is the heaviest and most reusable product domain.
 
 #### Page-level orchestrators
+
 - `pages/OverviewPage.tsx` — overview dashboard
 - `pages/GettingStarted.tsx` — onboarding/setup flow
 - `pages/SearchDashboard.tsx` — main search workspace
@@ -73,6 +77,7 @@ Purpose: the main AACsearch product UI. This is the heaviest and most reusable p
 - `pages/SdksPage.tsx` — SDK/developer surface
 
 #### Operational panels
+
 - `SearchApiKeysPanel.tsx` — API key management
 - `ImportJobsPanel.tsx` — import/background job management
 - `PlaygroundPanel.tsx` — live search playground/preview
@@ -89,6 +94,7 @@ Purpose: the main AACsearch product UI. This is the heaviest and most reusable p
 - `EmbeddingModelPanel.tsx` — embeddings/vector model setup
 
 #### Widget subdomain
+
 - `WidgetPanel.tsx` — widget overview panel
 - `WidgetInstallPanel.tsx` — embed/install instructions
 - `WidgetConfiguratorPanel.tsx` — widget configuration UI
@@ -98,16 +104,19 @@ Purpose: the main AACsearch product UI. This is the heaviest and most reusable p
 - `WidgetVoicePanel.tsx` — voice search/widget controls
 
 #### Tables
+
 - `tables/DocumentsTable.tsx` — documents list/CRUD table
 - `tables/SearchIndexesList.tsx` — index listing
 - `tables/SyncJobsTable.tsx` — sync/job history
 
 #### Dialogs and wizards
+
 - `dialogs/CreateSearchIndexDialog.tsx` — create search index flow
 - `dialogs/ConnectorWizard.tsx` — connector setup wizard
 - `wizard/SearchConfigWizard.tsx` — guided config flow
 
 #### Cards / sections / blocks
+
 - `cards/SearchAnalyticsCards.tsx` — analytics summary cards
 - `cards/SearchUsageCards.tsx`, `SearchUsageCard.tsx` — usage and limit visibility
 - `cards/ActivityLog.tsx` — activity feed/log
@@ -122,12 +131,14 @@ Purpose: the main AACsearch product UI. This is the heaviest and most reusable p
 - `GuidedTour.tsx` — guided product onboarding
 
 #### File/document UX
+
 - `files/FileCard.tsx` — file card view
 - `files/FileTable.tsx` — file table view
 - `files/FilePreview.tsx` — preview surface
 - `files/DeleteFileDialog.tsx` — delete confirmation flow
 
 #### Recommendations / personalization
+
 - `RecommendationsDashboardCards.tsx`
 - `RecommendationsSettings.tsx`
 - `RecommendationsTestPanel.tsx`
@@ -138,6 +149,7 @@ Purpose: the main AACsearch product UI. This is the heaviest and most reusable p
 - `TestPersonalizationPanel.tsx`
 
 Best use cases:
+
 - any search-related feature work
 - schema/documents/index management
 - connectors
@@ -151,6 +163,7 @@ Best use cases:
 Purpose: lighter, file-first personal search flow.
 
 Key components:
+
 - `pages/MySearchDashboard.tsx` — dashboard
 - `pages/MySearchIndexPage.tsx` — index detail
 - `pages/MySearchCrossSearch.tsx` — cross-search view
@@ -161,18 +174,21 @@ Key components:
 - `SearchResults.tsx`, `ResultCard.tsx` — search result presentation
 
 Upload stack:
+
 - `upload/DropZone.tsx`
 - `upload/UrlInput.tsx`
 - `upload/FileList.tsx`
 - `upload/UploadProgress.tsx`
 
 Files stack:
+
 - `files/MySearchFileTable.tsx`
 - `files/MySearchFileCard.tsx`
 - `files/MySearchFilePreview.tsx`
 - `files/MySearchDeleteFileDialog.tsx`
 
 Best use cases:
+
 - file upload + search
 - shareable search spaces
 - simplified search experience separate from main search workspace
@@ -182,6 +198,7 @@ Best use cases:
 Purpose: indexing, reindex, delta sync, index health and history.
 
 Key components:
+
 - `pages/IndexManagementPage.tsx` — indexing control page
 - `panels/FullReindexPanel.tsx` — full reindex
 - `panels/DeltaSyncPanel.tsx` — delta sync controls
@@ -195,6 +212,7 @@ Key components:
 - `errors/ErrorList.tsx` — error list surface
 
 Best use cases:
+
 - ops/index management panels
 - ingestion health
 - sync scheduling and job history
@@ -204,6 +222,7 @@ Best use cases:
 Purpose: collections landing and import flow.
 
 Key components:
+
 - `pages/CollectionsPage.tsx` — collections list/landing
 - `cards/CollectionCard.tsx` — collection summary card
 - `import/ImportDialog.tsx` — import entry
@@ -212,6 +231,7 @@ Key components:
 - `import/ImportPreview.tsx` — import preview/review
 
 Best use cases:
+
 - collection onboarding
 - import-first entry flows
 
@@ -220,9 +240,11 @@ Best use cases:
 Purpose: knowledge/RAG workspace.
 
 Key component:
+
 - `KnowledgeWorkbench.tsx` — knowledge workbench UI
 
 Best use cases:
+
 - specialized knowledge workflows
 - RAG/knowledge management UI
 
@@ -231,6 +253,7 @@ Best use cases:
 Purpose: internal admin/backoffice.
 
 Key components:
+
 - `AdminOverview.tsx` — admin dashboard
 - `AdminConfigView.tsx` — config/system view
 - `AdminIntegrationsView.tsx` — integrations admin
@@ -245,6 +268,7 @@ Key components:
 - `organizations/OrganizationList.tsx`, `organizations/OrganizationForm.tsx`
 
 Best use cases:
+
 - platform administration
 - ops dashboards
 - org/user management
@@ -255,6 +279,7 @@ Best use cases:
 Purpose: multi-tenant org lifecycle and member management.
 
 Key components:
+
 - `OrganizationsGrid.tsx` — organization list/grid
 - `OrganizationSelect.tsx` — active org switcher
 - `ActiveOrganizationProvider.tsx` — active org context
@@ -272,6 +297,7 @@ Key components:
 - `OrganizationLogo.tsx`
 
 Best use cases:
+
 - member invites
 - role assignment
 - multi-tenant org settings
@@ -282,28 +308,30 @@ Best use cases:
 Purpose: user profile, security, preferences and billing settings.
 
 Key components:
+
 - profile:
-  - `ChangeNameForm.tsx`
-  - `ChangeEmailForm.tsx`
-  - `UserAvatarForm.tsx`
-  - `UserAvatarUpload.tsx`
-  - `CropImageDialog.tsx`
-  - `UserLanguageForm.tsx`
+    - `ChangeNameForm.tsx`
+    - `ChangeEmailForm.tsx`
+    - `UserAvatarForm.tsx`
+    - `UserAvatarUpload.tsx`
+    - `CropImageDialog.tsx`
+    - `UserLanguageForm.tsx`
 - security:
-  - `ChangePassword.tsx`
-  - `SetPassword.tsx`
-  - `TwoFactorBlock.tsx`
-  - `PasskeysBlock.tsx`
-  - `ActiveSessionsBlock.tsx`
-  - `ConnectedAccountsBlock.tsx`
+    - `ChangePassword.tsx`
+    - `SetPassword.tsx`
+    - `TwoFactorBlock.tsx`
+    - `PasskeysBlock.tsx`
+    - `ActiveSessionsBlock.tsx`
+    - `ConnectedAccountsBlock.tsx`
 - account/billing:
-  - `DeleteAccountForm.tsx`
-  - `SubscriptionStatusBadge.tsx`
-  - `CustomerPortalButton.tsx`
-  - `NotificationPreferencesForm.tsx`
-  - `SettingsMenu.tsx`
+    - `DeleteAccountForm.tsx`
+    - `SubscriptionStatusBadge.tsx`
+    - `CustomerPortalButton.tsx`
+    - `NotificationPreferencesForm.tsx`
+    - `SettingsMenu.tsx`
 
 Best use cases:
+
 - account settings surfaces
 - security center
 - profile management
@@ -314,6 +342,7 @@ Best use cases:
 Purpose: authentication lifecycle.
 
 Key components:
+
 - `LoginForm.tsx`
 - `SignupForm.tsx`
 - `ForgotPasswordForm.tsx`
@@ -324,6 +353,7 @@ Key components:
 - `SessionProvider.tsx`
 
 Best use cases:
+
 - auth forms and flows
 - sign-in/sign-up/password reset surfaces
 
@@ -336,6 +366,7 @@ Best use cases:
 Purpose: shared marketing shell and reusable landing sections.
 
 Key components:
+
 - `NavBar.tsx` — marketing navbar
 - `Footer.tsx` — marketing footer
 - `CodeExampleSection.tsx` — reusable code/demo section
@@ -348,6 +379,7 @@ Key components:
 - `ClientProviders.tsx`
 
 Best use cases:
+
 - public site shell
 - code example sections
 - feature-card-based landing layouts
@@ -355,6 +387,7 @@ Best use cases:
 ### 3.2 Marketing domain patterns
 
 The marketing app is structured as a reusable landing-section library. The biggest reusable families are:
+
 - `home/*` — hero, pricing, testimonials, CTA, logos, contact, feature grid
 - `compare/*` — comparison pages, decision matrices, migration sections, comparison tables
 - `integrations/*` — integration grids, setup steps, FAQs, snippets
@@ -363,6 +396,7 @@ The marketing app is structured as a reusable landing-section library. The bigge
 - `use-cases/*` — scenario-specific landing grids
 
 High-value reusable patterns already present in marketing:
+
 - hero sections
 - pricing sections
 - testimonial carousel
@@ -378,6 +412,7 @@ High-value reusable patterns already present in marketing:
 Purpose: docs search, locale handling and AI-friendly page actions.
 
 Key components:
+
 - `aacsearch-docs-search.tsx` — custom docs search dialog
 - `aacsearch-search-provider.tsx` — search context + hotkeys
 - `search-toggle.tsx` — search trigger button
@@ -385,6 +420,7 @@ Key components:
 - `ai/page-actions.tsx` — AI/LLM page actions (copy markdown behavior)
 
 Best use cases:
+
 - docs search surfaces
 - search hotkeys and command-like UX
 - AI-friendly docs actions
@@ -398,48 +434,52 @@ Best use cases:
 Use these before building new custom UI:
 
 - `apps/saas/modules/search/components/dialogs/CreateSearchIndexDialog.tsx`
-  - best for create-index/create-entity flows
+    - best for create-index/create-entity flows
 - `apps/saas/modules/search/components/dialogs/ConnectorWizard.tsx`
-  - best for guided setup wizards
+    - best for guided setup wizards
 - `apps/saas/modules/search/components/panels/SearchApiKeysPanel.tsx`
-  - best for token/key management surfaces
+    - best for token/key management surfaces
 - `apps/saas/modules/search/components/panels/SchemaEditorPanel.tsx`
-  - best for schema/field editors
+    - best for schema/field editors
 - `apps/saas/modules/search/components/tables/DocumentsTable.tsx`
-  - best for document-heavy CRUD screens
+    - best for document-heavy CRUD screens
 - `apps/saas/modules/search/components/panels/ImportJobsPanel.tsx`
-  - best for job management UIs
+    - best for job management UIs
 - `apps/saas/modules/search/components/tables/SyncJobsTable.tsx`
-  - best for sync/history/status screens
+    - best for sync/history/status screens
 - `apps/saas/modules/search/components/panels/PlaygroundPanel.tsx`
-  - best for preview/test/live-validation UIs
+    - best for preview/test/live-validation UIs
 - widget stack:
-  - `WidgetConfiguratorPanel.tsx`
-  - `WidgetInstallPanel.tsx`
-  - `WidgetAnalyticsPanel.tsx`
+    - `WidgetConfiguratorPanel.tsx`
+    - `WidgetInstallPanel.tsx`
+    - `WidgetAnalyticsPanel.tsx`
 - relevance stack:
-  - `RankingRulesPanel.tsx`
-  - `SynonymsPanel.tsx`
-  - `CurationsPanel.tsx`
-  - `SpellCorrectionPanel.tsx`
-  - `StemmingPanel.tsx`
-  - `StopwordsPanel.tsx`
-  - `FacetsPanel.tsx`
+    - `RankingRulesPanel.tsx`
+    - `SynonymsPanel.tsx`
+    - `CurationsPanel.tsx`
+    - `SpellCorrectionPanel.tsx`
+    - `StemmingPanel.tsx`
+    - `StopwordsPanel.tsx`
+    - `FacetsPanel.tsx`
 - `apps/saas/modules/search/components/GuidedTour.tsx`
-  - best for product onboarding and in-feature guidance
+    - best for product onboarding and in-feature guidance
 
 ### 4.2 Best reusable stacks in `packages/ui/components`
 
 #### Admin stack
+
 Path:
+
 - `packages/ui/components/admin/*`
 
 Best for:
+
 - admin panels
 - CRUD backoffice
 - moderation/internal tools
 
 Most useful pieces:
+
 - list/create/edit/show flows
 - filter forms
 - admin data table
@@ -449,16 +489,20 @@ Most useful pieces:
 - bulk action toolbars
 
 #### Data-table stack
+
 Path:
+
 - `packages/ui/components/data-table/*`
 
 Best for:
+
 - data-heavy tables
 - filters
 - analytics lists
 - jobs/users/orders/logs
 
 Most useful pieces:
+
 - `data-table-provider.tsx`
 - `data-table-toolbar.tsx`
 - `data-table-view-options.tsx`
@@ -468,12 +512,15 @@ Most useful pieces:
 - `date-picker-with-range.tsx`
 
 #### App-shell stack
+
 Best for:
+
 - dashboards
 - settings shells
 - internal tools
 
 Most useful pieces:
+
 - `sidebar.tsx`
 - `navigation-menu.tsx`
 - `breadcrumb.tsx`
@@ -482,13 +529,16 @@ Most useful pieces:
 - `resizable.tsx`
 
 #### Forms stack
+
 Best for:
+
 - onboarding
 - settings
 - profile/security
 - dense business forms
 
 Most useful pieces:
+
 - `form.tsx`
 - `field.tsx`
 - `input.tsx`
@@ -502,7 +552,9 @@ Most useful pieces:
 - `calendar.tsx`
 
 #### Overlay / workflow stack
+
 Best for:
+
 - modal flows
 - mobile drawers/sheets
 - confirm dialogs
@@ -510,6 +562,7 @@ Best for:
 - onboarding
 
 Most useful pieces:
+
 - `dialog.tsx`
 - `drawer.tsx`
 - `sheet.tsx`
@@ -521,12 +574,15 @@ Most useful pieces:
 - `stepper.tsx`
 
 #### Analytics / insight stack
+
 Best for:
+
 - dashboards
 - activity streams
 - status/progress surfaces
 
 Most useful pieces:
+
 - `chart.tsx`
 - `timeline.tsx`
 - `progress.tsx`
@@ -534,25 +590,32 @@ Most useful pieces:
 - `spinner.tsx`
 
 #### Advanced interaction stack
+
 Best for:
+
 - reordering
 - richer interaction-heavy screens
 
 Most useful pieces:
+
 - `sortable.tsx`
 - `carousel.tsx`
 - `resizable.tsx`
 
 #### Chat stack
+
 Path:
+
 - `packages/ui/components/chat/*`
 
 Best for:
+
 - AI assistant
 - support widget
 - embedded messaging
 
 Most useful pieces:
+
 - `expandable-chat.tsx`
 - `chat-message-list.tsx`
 - `chat-bubble.tsx`
@@ -560,13 +623,16 @@ Most useful pieces:
 - `message-loading.tsx`
 
 #### Landing/marketing stack
+
 Best for:
+
 - landing pages
 - pricing sections
 - CTA sections
 - feature sections
 
 Most useful pieces:
+
 - `LandingFeature.tsx`
 - `LandingFeatureList.tsx`
 - `LandingPricingSection.tsx`
@@ -588,25 +654,25 @@ Most useful pieces:
 If the task is about...
 
 - admin/backoffice
-  - first check `packages/ui/components/admin/*`
+    - first check `packages/ui/components/admin/*`
 - tables / filters / listing
-  - first check `packages/ui/components/data-table/*`
+    - first check `packages/ui/components/data-table/*`
 - new dashboard shell
-  - first check `AppSidebar`, `NavBar`, `AppWrapper`, `PageHeader`, `StatsTile`
+    - first check `AppSidebar`, `NavBar`, `AppWrapper`, `PageHeader`, `StatsTile`
 - onboarding / wizard / guided setup
-  - first check `ConnectorWizard`, `SearchConfigWizard`, `tour.tsx`, `stepper.tsx`
+    - first check `ConnectorWizard`, `SearchConfigWizard`, `tour.tsx`, `stepper.tsx`
 - search settings / relevance / quality
-  - first check `apps/saas/modules/search/components/panels/*`
+    - first check `apps/saas/modules/search/components/panels/*`
 - docs search or command-like UX
-  - first check `aacsearch-docs-search.tsx`, `aacsearch-search-provider.tsx`, `command.tsx`
+    - first check `aacsearch-docs-search.tsx`, `aacsearch-search-provider.tsx`, `command.tsx`
 - marketing page blocks
-  - first check `apps/marketing/modules/shared/*` and landing components in `packages/ui/components/*`
+    - first check `apps/marketing/modules/shared/*` and landing components in `packages/ui/components/*`
 - chat or in-app assistant
-  - first check `packages/ui/components/chat/*`
+    - first check `packages/ui/components/chat/*`
 - org/member management
-  - first check `apps/saas/modules/organizations/components/*`
+    - first check `apps/saas/modules/organizations/components/*`
 - account/security settings
-  - first check `apps/saas/modules/settings/components/*`
+    - first check `apps/saas/modules/settings/components/*`
 
 ---
 
@@ -615,21 +681,22 @@ If the task is about...
 The most valuable reuse zones in this repo are:
 
 1. `apps/saas/modules/search/components/*`
-   - richest product-level reusable UI
+    - richest product-level reusable UI
 2. `packages/ui/components/data-table/*`
-   - best foundation for data-heavy screens
+    - best foundation for data-heavy screens
 3. `packages/ui/components/admin/*`
-   - best foundation for internal admin tools
+    - best foundation for internal admin tools
 4. `apps/saas/modules/shared/components/*`
-   - best shared SaaS shell layer
+    - best shared SaaS shell layer
 5. `packages/ui/components/chat/*` and landing components
-   - strong specialized stacks
+    - strong specialized stacks
 
 ---
 
 ## 7. Final rule
 
 Before building new UI in this repo:
+
 - first search feature components
 - then shared app components
 - then reusable UI stacks

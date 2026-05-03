@@ -59,25 +59,17 @@ export function AiWalletCard({ organizationId }: { organizationId?: string }) {
 				)}
 			</CardHeader>
 			<CardContent className="gap-3 flex flex-col">
-				<div className="font-semibold text-3xl">
-					{fmt(wallet.availableBalanceKopecks)}
-				</div>
+				<div className="font-semibold text-3xl">{fmt(wallet.availableBalanceKopecks)}</div>
 
 				<dl className="gap-x-4 gap-y-1 text-sm grid grid-cols-2 text-foreground/70">
 					<dt>{t("settings.billing.aiCredits.balance.includedRemaining")}</dt>
-					<dd className="text-right tabular-nums">
-						{fmt(includedRemaining.toString())}
-					</dd>
+					<dd className="text-right tabular-nums">{fmt(includedRemaining.toString())}</dd>
 
 					<dt>{t("settings.billing.aiCredits.balance.reserved")}</dt>
-					<dd className="text-right tabular-nums">
-						{fmt(reserved.toString())}
-					</dd>
+					<dd className="text-right tabular-nums">{fmt(reserved.toString())}</dd>
 
 					<dt>{t("settings.billing.aiCredits.balance.promo")}</dt>
-					<dd className="text-right tabular-nums">
-						{fmt(wallet.promoBalanceKopecks)}
-					</dd>
+					<dd className="text-right tabular-nums">{fmt(wallet.promoBalanceKopecks)}</dd>
 				</dl>
 			</CardContent>
 		</Card>

@@ -1,12 +1,19 @@
 "use client";
 
-import { Pagination } from "@shared/components/Pagination";
-import { orpc } from "@shared/lib/orpc-query-utils";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@repo/ui/components/table";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@repo/ui/components/table";
+import { Pagination } from "@shared/components/Pagination";
+import { orpc } from "@shared/lib/orpc-query-utils";
 import { useQuery } from "@tanstack/react-query";
 import { DownloadIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
@@ -91,7 +98,7 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 						))}
 					</div>
 				) : invoices.length === 0 ? (
-					<div className="p-6 text-center text-sm text-muted-foreground">
+					<div className="p-6 text-sm text-center text-muted-foreground">
 						{t("settings.billing.invoices.emptyState")}
 					</div>
 				) : (
@@ -114,7 +121,7 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 														year: "numeric",
 														month: "short",
 														day: "numeric",
-												  })
+													})
 												: "—"}
 										</TableCell>
 										<TableCell className="text-sm font-medium">
@@ -130,11 +137,7 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 										</TableCell>
 										<TableCell className="text-right">
 											{invoice.invoicePdf && (
-												<Button
-													variant="ghost"
-													size="sm"
-													asChild
-												>
+												<Button variant="ghost" size="sm" asChild>
 													<a
 														href={invoice.invoicePdf}
 														target="_blank"
@@ -153,7 +156,7 @@ export function InvoiceHistory({ organizationId }: { organizationId?: string }) 
 						</Table>
 
 						{(currentPage > 1 || hasMore) && (
-							<div className="p-4 flex items-center justify-center gap-4">
+							<div className="p-4 gap-4 flex items-center justify-center">
 								<Button
 									variant="ghost"
 									size="sm"

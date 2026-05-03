@@ -182,7 +182,10 @@ export function WebhooksPanel({ organizationId }: WebhooksPanelProps) {
 										<FormItem>
 											<FormLabel>{t("urlLabel")}</FormLabel>
 											<FormControl>
-												<Input {...field} placeholder={t("urlPlaceholder")} />
+												<Input
+													{...field}
+													placeholder={t("urlPlaceholder")}
+												/>
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -196,14 +199,24 @@ export function WebhooksPanel({ organizationId }: WebhooksPanelProps) {
 											<FormLabel>{t("eventsLabel")}</FormLabel>
 											<div className="space-y-2">
 												{WEBHOOK_EVENTS.map((event) => (
-													<div key={event} className="flex items-center gap-2">
+													<div
+														key={event}
+														className="gap-2 flex items-center"
+													>
 														<Checkbox
 															id={event}
-															checked={field.value.includes(event as WebhookEvent)}
+															checked={field.value.includes(
+																event as WebhookEvent,
+															)}
 															onCheckedChange={(checked) => {
 																const next = checked
-																	? [...field.value, event as WebhookEvent]
-																	: field.value.filter((e) => e !== event);
+																	? [
+																			...field.value,
+																			event as WebhookEvent,
+																		]
+																	: field.value.filter(
+																			(e) => e !== event,
+																		);
 																field.onChange(next);
 															}}
 														/>
@@ -263,9 +276,13 @@ export function WebhooksPanel({ organizationId }: WebhooksPanelProps) {
 									{wh.url}
 								</TableCell>
 								<TableCell className="text-xs">
-									<div className="flex flex-wrap gap-1">
+									<div className="gap-1 flex flex-wrap">
 										{wh.events.map((event) => (
-											<Badge key={event} status="info" className="text-xs normal-case">
+											<Badge
+												key={event}
+												status="info"
+												className="text-xs normal-case"
+											>
 												{event}
 											</Badge>
 										))}

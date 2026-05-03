@@ -128,7 +128,11 @@ export async function GET(request: Request) {
 								: []),
 						],
 					}).catch((err) =>
-						logger.error("index-health-check: Slack alert failed", { organizationId, slug, err }),
+						logger.error("index-health-check: Slack alert failed", {
+							organizationId,
+							slug,
+							err,
+						}),
 					);
 				}
 			} catch (error) {

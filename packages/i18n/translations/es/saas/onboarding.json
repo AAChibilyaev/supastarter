@@ -1,75 +1,75 @@
 {
-  "onboarding": {
-    "account": {
-      "avatar": "Avatar",
-      "avatarDescription": "Haz clic en el circulo o arrastra una imagen para subir tu avatar.",
-      "name": "Nombre"
-    },
-    "continue": "Continuar",
-    "message": "Solo unos pasos rapidos para empezar.",
-    "notifications": {
-      "accountSetupFailed": "Lo sentimos, no pudimos configurar tu cuenta. Intentelo de nuevo mas tarde."
-    },
-    "pricing": {
-      "planSelected": "Tu plan ha sido seleccionado correctamente.",
-      "skip": "Saltar por ahora"
-    },
-    "step": "Paso {step} / {total}",
-    "title": "Configura tu cuenta",
-    "createIndex": {
-      "title": "Crea tu primer índice de búsqueda",
-      "description": "Dale un nombre a tu índice. Puedes añadir documentos y configurar el esquema después.",
-      "nameLabel": "Nombre del índice",
-      "slugLabel": "Slug (identificador en URL)",
-      "slugHint": "Solo letras minúsculas, dígitos y guiones",
-      "submit": "Crear índice",
-      "success": "Índice creado correctamente.",
-      "error": "No se pudo crear el índice. Inténtalo de nuevo.",
-      "noOrg": "Por favor, crea una organización antes de configurar un índice de búsqueda."
-    },
-    "addDocuments": {
-      "title": "Importa tus primeros documentos",
-      "description": "Pega un array JSON de objetos para inicializar tu índice. Puedes importar más documentos después.",
-      "pasteLabel": "Documentos (array JSON)",
-      "placeholder": "[{\"id\":\"1\",\"title\":\"Hola Mundo\"}]",
-      "importButton": "Importar documentos",
-      "skip": "Omitir por ahora",
-      "success": "Documentos en cola para indexación.",
-      "parseError": "JSON no válido. Pega un array de objetos válido.",
-      "error": "No se pudieron importar los documentos. Inténtalo de nuevo."
-    },
-    "installWidget": {
-      "title": "Incrusta el widget de búsqueda",
-      "description": "Copia el fragmento de abajo y pégalo en el HTML de tu sitio web para añadir el widget.",
-      "snippetLabel": "Fragmento del widget",
-      "copyButton": "Copiar fragmento",
-      "copied": "¡Fragmento copiado!",
-      "next": "Siguiente",
-      "skip": "Omitir por ahora"
-    },
-    "apiKey": {
-      "title": "Obtén tu clave API",
-      "description": "Crea una clave API de búsqueda para integrar AACsearch en tu aplicación. Cópiala — no se mostrará de nuevo.",
-      "createButton": "Crear clave API",
-      "keyLabel": "Tu clave API (mostrada una vez)",
-      "copyButton": "Copiar clave",
-      "copied": "¡Clave API copiada!",
-      "finish": "Ir al panel",
-      "error": "No se pudo crear la clave API. Inténtalo de nuevo.",
-      "keyName": "Clave de incorporación"
-    }
-  },
-  "choosePlan": {
-    "title": "Elige tu plan",
-    "description": "Para continuar, selecciona un plan."
-  },
-  "checkoutReturn": {
-    "title": "Procesando tu compra",
-    "description": "Por favor espera mientras confirmamos tu pago.",
-    "loading": "Confirmando tu compra, por favor espera..."
-  },
-  "start": {
-    "subtitle": "Ve las ultimas estadisticas de tu increible negocio.",
-    "welcome": "Bienvenido {name}!"
-  }
+	"onboarding": {
+		"account": {
+			"avatar": "Avatar",
+			"avatarDescription": "Haz clic en el circulo o arrastra una imagen para subir tu avatar.",
+			"name": "Nombre"
+		},
+		"continue": "Continuar",
+		"message": "Solo unos pasos rapidos para empezar.",
+		"notifications": {
+			"accountSetupFailed": "Lo sentimos, no pudimos configurar tu cuenta. Intentelo de nuevo mas tarde."
+		},
+		"pricing": {
+			"planSelected": "Tu plan ha sido seleccionado correctamente.",
+			"skip": "Saltar por ahora"
+		},
+		"step": "Paso {step} / {total}",
+		"title": "Configura tu cuenta",
+		"createIndex": {
+			"title": "Crea tu primer índice de búsqueda",
+			"description": "Dale un nombre a tu índice. Puedes añadir documentos y configurar el esquema después.",
+			"nameLabel": "Nombre del índice",
+			"slugLabel": "Slug (identificador en URL)",
+			"slugHint": "Solo letras minúsculas, dígitos y guiones",
+			"submit": "Crear índice",
+			"success": "Índice creado correctamente.",
+			"error": "No se pudo crear el índice. Inténtalo de nuevo.",
+			"noOrg": "Por favor, crea una organización antes de configurar un índice de búsqueda."
+		},
+		"addDocuments": {
+			"title": "Importa tus primeros documentos",
+			"description": "Pega un array JSON de objetos para inicializar tu índice. Puedes importar más documentos después.",
+			"pasteLabel": "Documentos (array JSON)",
+			"placeholder": "[{\"id\":\"1\",\"title\":\"Hola Mundo\"}]",
+			"importButton": "Importar documentos",
+			"skip": "Omitir por ahora",
+			"success": "Documentos en cola para indexación.",
+			"parseError": "JSON no válido. Pega un array de objetos válido.",
+			"error": "No se pudieron importar los documentos. Inténtalo de nuevo."
+		},
+		"installWidget": {
+			"title": "Incrusta el widget de búsqueda",
+			"description": "Copia el fragmento de abajo y pégalo en el HTML de tu sitio web para añadir el widget.",
+			"snippetLabel": "Fragmento del widget",
+			"copyButton": "Copiar fragmento",
+			"copied": "¡Fragmento copiado!",
+			"next": "Siguiente",
+			"skip": "Omitir por ahora"
+		},
+		"apiKey": {
+			"title": "Obtén tu clave API",
+			"description": "Crea una clave API de búsqueda para integrar AACsearch en tu aplicación. Cópiala — no se mostrará de nuevo.",
+			"createButton": "Crear clave API",
+			"keyLabel": "Tu clave API (mostrada una vez)",
+			"copyButton": "Copiar clave",
+			"copied": "¡Clave API copiada!",
+			"finish": "Ir al panel",
+			"error": "No se pudo crear la clave API. Inténtalo de nuevo.",
+			"keyName": "Clave de incorporación"
+		}
+	},
+	"choosePlan": {
+		"title": "Elige tu plan",
+		"description": "Para continuar, selecciona un plan."
+	},
+	"checkoutReturn": {
+		"title": "Procesando tu compra",
+		"description": "Por favor espera mientras confirmamos tu pago.",
+		"loading": "Confirmando tu compra, por favor espera..."
+	},
+	"start": {
+		"subtitle": "Ve las ultimas estadisticas de tu increible negocio.",
+		"welcome": "Bienvenido {name}!"
+	}
 }

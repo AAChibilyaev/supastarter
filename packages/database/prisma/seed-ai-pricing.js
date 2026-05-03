@@ -116,7 +116,9 @@ async function main() {
 					rule.notes,
 				],
 			);
-			console.log(`  ✓ ${rule.provider}/${rule.model}/${rule.operation} = ${rule.flatFeeKopecks} kopecks`);
+			console.log(
+				`  ✓ ${rule.provider}/${rule.model}/${rule.operation} = ${rule.flatFeeKopecks} kopecks`,
+			);
 		}
 		console.log("Seeding complete — 9 AI pricing rules inserted/updated.");
 	} finally {

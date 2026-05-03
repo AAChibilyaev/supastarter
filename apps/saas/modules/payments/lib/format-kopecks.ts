@@ -8,13 +8,7 @@ function resolveLocaleCurrency(locale: string): { intlLocale: string; currency: 
 		return { intlLocale: "ru-RU", currency: "RUB" };
 	}
 	const intlLocale =
-		locale === "de"
-			? "de-DE"
-			: locale === "es"
-				? "es-ES"
-				: locale === "fr"
-					? "fr-FR"
-					: "en-US";
+		locale === "de" ? "de-DE" : locale === "es" ? "es-ES" : locale === "fr" ? "fr-FR" : "en-US";
 	return { intlLocale, currency: "USD" };
 }
 

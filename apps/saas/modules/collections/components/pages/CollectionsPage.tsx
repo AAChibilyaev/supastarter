@@ -18,6 +18,14 @@ import { CollectionCard, type CollectionData } from "../cards/CollectionCard";
 import { ExportDialog } from "../export/ExportDialog";
 import { ImportDialog } from "../import/ImportDialog";
 
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+/** Extract field names from a collection schema (array of { name } objects) */
+function extractSchemaFieldNames(schema: unknown): string[] {
+	if (!Array.isArray(schema)) return [];
+	return schema.map((field: Record<string, unknown>) => field.name as string).filter(Boolean);
+}
+
 // ─── Skeleton grid ──────────────────────────────────────────────────────────
 
 function CollectionGridSkeleton() {
@@ -58,6 +66,23 @@ export function CollectionsPage() {
 			input: { organizationId: orgId ?? "" },
 			enabled: Boolean(orgId),
 		}),
+	);
+
+	// ── Fetch collection schema for import dialog ─────────────────────────
+
+	const { data: importCollection } = useQuery(
+		orpc.collections.get.queryOptions({
+			input: {
+				organizationId: orgId ?? "",
+				slug: importCollectionSlug ?? "",
+			},
+			enabled: Boolean(orgId) && Boolean(importCollectionSlug),
+		}),
+	);
+
+	const importSchemaFields = useMemo(
+		() => extractSchemaFieldNames(importCollection?.schema),
+		[importCollection?.schema],
 	);
 
 	// ── Filter by search ──────────────────────────────────────────────────
@@ -234,7 +259,7 @@ export function CollectionsPage() {
 				}}
 				organizationId={orgId ?? ""}
 				slug={importCollectionSlug ?? ""}
-				schemaFields={[]}
+				schemaFields={importSchemaFields}
 			/>
 			<ExportDialog
 				open={exportCollectionSlug !== null}

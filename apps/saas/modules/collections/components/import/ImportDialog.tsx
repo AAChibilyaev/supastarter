@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
-import { Progress } from "@repo/ui/components/progress";
 import {
 	Dialog,
 	DialogContent,
@@ -9,6 +8,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@repo/ui/components/dialog";
+import { Progress } from "@repo/ui/components/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { orpc } from "@shared/lib/orpc-query-utils";
@@ -294,7 +294,7 @@ export function ImportDialog({
 						{/* Progress bar for chunked import */}
 						{isImporting && (
 							<div className="space-y-2">
-								<div className="gap-2 inline-flex items-center text-xs text-muted-foreground">
+								<div className="gap-2 text-xs inline-flex items-center text-muted-foreground">
 									<span>
 										{t("search.import.importingBatch") ||
 											`Importing batch ${progress.current} of ${progress.total}...`}

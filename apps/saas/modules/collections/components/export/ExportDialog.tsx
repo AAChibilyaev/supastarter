@@ -57,9 +57,7 @@ export function ExportDialog({
 				onOpenChange(false);
 			},
 			onError: (err) => {
-				toastError(
-					t("search.export.error") || `Export failed: ${err.message}`,
-				);
+				toastError(t("search.export.error") || `Export failed: ${err.message}`);
 			},
 		}),
 	);
@@ -103,15 +101,13 @@ export function ExportDialog({
 					{(["csv", "json", "jsonl"] as ExportFormat[]).map((fmt) => (
 						<label
 							key={fmt}
-							className={`gap-3 p-3 flex items-center rounded-lg border has-[:checked]:border-primary has-[:checked]:bg-primary/5 cursor-pointer transition-colors ${isExporting ? "opacity-50 cursor-not-allowed" : ""}`}
+							className={`gap-3 p-3 flex cursor-pointer items-center rounded-lg border transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5 ${isExporting ? "cursor-not-allowed opacity-50" : ""}`}
 						>
 							<RadioGroupItem value={fmt} disabled={isExporting} />
 							<div className="gap-2 flex items-center">
 								{formatIcons[fmt]}
 								<div>
-									<p className="font-medium text-sm">
-										{fmt.toUpperCase()}
-									</p>
+									<p className="font-medium text-sm">{fmt.toUpperCase()}</p>
 									<p className="text-xs text-muted-foreground">
 										{fmt === "csv"
 											? t("search.export.csvDesc") ||
@@ -136,11 +132,7 @@ export function ExportDialog({
 					>
 						{t("common.cancel") || "Cancel"}
 					</Button>
-					<Button
-						variant="primary"
-						onClick={handleExport}
-						disabled={isExporting}
-					>
+					<Button variant="primary" onClick={handleExport} disabled={isExporting}>
 						<DownloadIcon className="size-4" />
 						{isExporting
 							? t("search.export.exporting") || "Exporting..."

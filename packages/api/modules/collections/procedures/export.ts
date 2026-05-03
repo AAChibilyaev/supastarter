@@ -36,8 +36,12 @@ export const exportDocuments = protectedProcedure
 	.handler(async ({ input, context: { user } }) => {
 		await requireOrganizationMember(input.organizationId, user.id);
 
-		const { getCollectionBySlug, exportCollectionDocuments, buildCsvContent, buildJsonContent } =
-			await import("@repo/database");
+		const {
+			getCollectionBySlug,
+			exportCollectionDocuments,
+			buildCsvContent,
+			buildJsonContent,
+		} = await import("@repo/database");
 
 		const collection = await getCollectionBySlug(input.organizationId, input.slug);
 		if (!collection) {
@@ -76,9 +80,7 @@ export const exportDocuments = protectedProcedure
 				break;
 			}
 			case "jsonl": {
-				content = documents
-					.map((doc) => JSON.stringify(doc.data))
-					.join("\n");
+				content = documents.map((doc) => JSON.stringify(doc.data)).join("\n");
 				mimeType = "application/jsonl";
 				extension = "jsonl";
 				break;

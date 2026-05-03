@@ -76,9 +76,7 @@ export function TruncateIndexDialog({
 		<AlertDialog open={open} onOpenChange={handleOpenChange}>
 			<AlertDialogContent>
 				<AlertDialogHeader>
-					<AlertDialogTitle>
-						{t("collection.confirmTruncate")}
-					</AlertDialogTitle>
+					<AlertDialogTitle>{t("collection.confirmTruncate")}</AlertDialogTitle>
 					<AlertDialogDescription>
 						{t("collection.confirmTruncateDesc")}
 					</AlertDialogDescription>
@@ -97,9 +95,7 @@ export function TruncateIndexDialog({
 				</div>
 
 				<AlertDialogFooter>
-					<AlertDialogCancel>
-						{t("collection.cancel")}
-					</AlertDialogCancel>
+					<AlertDialogCancel>{t("collection.cancel")}</AlertDialogCancel>
 					<Button
 						variant="destructive"
 						disabled={!phraseMatches || truncateMutation.isPending}

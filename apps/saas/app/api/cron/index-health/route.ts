@@ -1,7 +1,7 @@
 import { db } from "@repo/database";
 import { logger } from "@repo/logs";
 import {
-	checkIndexHealth,
+	checkOrgIndexHealth as checkIndexHealth,
 	detectAnomalies,
 	shouldSendAlert,
 	markAlertSent,

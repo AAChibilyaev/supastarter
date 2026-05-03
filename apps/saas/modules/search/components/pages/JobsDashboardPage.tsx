@@ -97,13 +97,7 @@ interface AllJobsTableProps {
 
 function AllJobsTable({ jobs, t }: AllJobsTableProps) {
 	if (jobs.length === 0) {
-		return (
-			<EmptyState
-				title={t("jobs.emptyState")}
-				description=""
-				icon={BriefcaseIcon}
-			/>
-		);
+		return <EmptyState title={t("jobs.emptyState")} description="" icon={BriefcaseIcon} />;
 	}
 
 	return (
@@ -124,7 +118,7 @@ function AllJobsTable({ jobs, t }: AllJobsTableProps) {
 						<TableRow key={`${job.jobType}-${job.id}`}>
 							<TableCell>
 								<span
-									className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${jobTypeBadgeClass(job.jobType)}`}
+									className={`px-2 py-0.5 text-xs font-medium inline-flex items-center rounded-full ${jobTypeBadgeClass(job.jobType)}`}
 								>
 									{t(`jobs.${job.jobType}` as never)}
 								</span>
@@ -203,9 +197,10 @@ export function JobsDashboardPage({ organizationId }: JobsDashboardPageProps) {
 			startedAt: job.startedAt,
 			finishedAt: job.finishedAt,
 			itemsCount: job.processedItems,
-			failuresCount: job.totalItems - job.processedItems > 0 && job.status === "failed"
-				? job.totalItems - job.processedItems
-				: 0,
+			failuresCount:
+				job.totalItems - job.processedItems > 0 && job.status === "failed"
+					? job.totalItems - job.processedItems
+					: 0,
 		});
 	}
 
@@ -239,9 +234,7 @@ export function JobsDashboardPage({ organizationId }: JobsDashboardPageProps) {
 	}
 
 	// Sort by startedAt desc
-	unifiedJobs.sort(
-		(a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime(),
-	);
+	unifiedJobs.sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
 
 	return (
 		<div className="space-y-6">
@@ -320,7 +313,13 @@ export function JobsDashboardPage({ organizationId }: JobsDashboardPageProps) {
 														{job.slug}
 													</TableCell>
 													<TableCell>
-														<Badge status={ingestJobStatusBadge["processing"] ?? "info"}>
+														<Badge
+															status={
+																ingestJobStatusBadge[
+																	"processing"
+																] ?? "info"
+															}
+														>
 															running
 														</Badge>
 													</TableCell>

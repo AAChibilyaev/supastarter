@@ -22,9 +22,7 @@ import { createScopedToken } from "./procedures/create-scoped-token";
 import { ctrAnalytics } from "./procedures/ctr-analytics";
 import { getCurations, updateCurations } from "./procedures/curations";
 import { deleteIndex } from "./procedures/delete-index";
-import { truncateIndex } from "./procedures/truncate-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
-import { createWebhook, deleteWebhook, listWebhooks } from "./procedures/webhooks";
 import { federatedSearch } from "./procedures/federated-search";
 import { geoSearch } from "./procedures/geo-search";
 import { getGlobalCurations, updateGlobalCurations } from "./procedures/global-curations";
@@ -75,11 +73,13 @@ import { deleteStopwords, listStopwords, upsertStopwords } from "./procedures/st
 import { getSuggestConfig, updateSuggestConfig } from "./procedures/suggest-config";
 import { getSynonyms, updateSynonyms } from "./procedures/synonyms";
 import { topQueries } from "./procedures/top-queries";
+import { truncateIndex } from "./procedures/truncate-index";
 import { upsertDocument } from "./procedures/upsert-document";
 import { usage } from "./procedures/usage";
 import { usageSummary } from "./procedures/usage-summary";
 import { vectorSearch } from "./procedures/vector-search";
 import { voiceSearch } from "./procedures/voice-search";
+import { createWebhook, deleteWebhook, listWebhooks } from "./procedures/webhooks";
 import { getWidgetConfig, saveWidgetConfig } from "./procedures/widget-config";
 
 export const searchRouter = {

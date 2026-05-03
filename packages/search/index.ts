@@ -38,7 +38,7 @@ export {
 	type SearchDocumentsResult,
 } from "./lib/search";
 export {
-	checkIndexHealth,
+	checkIndexHealth as checkOrgIndexHealth,
 	checkIngestLag,
 	checkErrorRate,
 	detectAnomalies,
@@ -53,7 +53,6 @@ export {
 	type IndexHealthCheck,
 	type AnomalyEvent,
 } from "./lib/index-health";
-export { sendSlackWebhook } from "./lib/slack";
 export { joinRef, joinFilter, joinSort } from "./lib/join-refs";
 export { processQuery, type ProcessedQuery } from "./lib/query-processor";
 export { flushSearchIngestBuffer } from "./lib/buffer";

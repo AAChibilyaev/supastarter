@@ -566,3 +566,20 @@ export function SearchAnalyticsCards({ organizationId, initialTab }: SearchAnaly
 				<Card className="border-l-4 border-l-foreground/20">
 					<CardContent className="gap-3 pt-6 flex items-center">
 						<InfoIcon className="size-5 shrink-0 text-foreground/60" />
+						<p className="text-sm text-muted-foreground">
+							{t("search.analytics.retentionBanner", {
+								days: planRetentionDays,
+								plan: planName,
+							})}
+						</p>
+					</CardContent>
+				</Card>
+			)}
+
+			{/* Tab content */}
+			{activeTab === "dashboard" && renderDashboardTab()}
+			{activeTab === "failed" && renderFailedTab()}
+			{activeTab === "activity" && renderActivityTab()}
+		</div>
+	);
+}

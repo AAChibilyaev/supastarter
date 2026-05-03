@@ -24,14 +24,19 @@ import { randomUUID } from "node:crypto";
 
 import { ORPCError } from "@orpc/server";
 import {
+  type CommitAiUsageInput,
+  type CommitAiUsageResult,
   type ReserveAiCreditsInput,
   type ReserveAiCreditsResult,
   AiWalletInsufficientFundsError,
   AiWalletFrozenError,
   WalletNotFoundError,
+  commitAiUsage,
+  releaseAiReservation,
   reserveAiCredits,
 } from "@repo/billing-wallet";
 import { getAiWalletByEntity } from "@repo/database";
+import { logger } from "@repo/logs";
 
 /**
  * Context extension injected by creditGate on successful reservation.
@@ -42,6 +47,75 @@ export interface CreditGateContext {
 	creditWalletId: string;
 	creditOperation: string;
 	creditEstimatedKopecks: bigint;
+}
+
+/**
+ * Flat-fee commit input for fixed-price operations (RAG, AI Answer, etc.).
+ * These operations have a flat fee per call with no token-based costs.
+ */
+export interface FlatFeeCommitInput {
+	reservationId: string;
+	operation: string;
+	provider: string;
+	model: string;
+	flatFeeKopecks: bigint;
+	status?: CommitAiUsageInput["status"];
+	requestId?: string;
+	metadata?: Record<string, unknown>;
+}
+
+/**
+ * Commit a flat-fee AI usage reservation on success.
+ * Handles kopecks-to-BigInt conversion and logging.
+ */
+export async function commitFlatFeeUsage(
+	input: FlatFeeCommitInput,
+): Promise<CommitAiUsageResult> {
+	const markupBps = 2000; // 20% default markup
+	const totalChargeKopecks =
+		input.flatFeeKopecks + (input.flatFeeKopecks * BigInt(markupBps)) / BigInt(10000);
+
+	return commitAiUsage({
+		reservationId: input.reservationId,
+		idempotencyKey: `commit:${input.reservationId}`,
+		provider: input.provider,
+		model: input.model,
+		pricingRuleId: null,
+		promptTokens: 0,
+		completionTokens: 0,
+		inputCostKopecks: 0n,
+		outputCostKopecks: 0n,
+		flatFeeKopecks: input.flatFeeKopecks,
+		markupBps,
+		totalChargeKopecks,
+		providerCostUsdMicros: 0n,
+		fxRateRubPerUsdMicros: 0n,
+		requestId: input.requestId ?? null,
+		status: input.status ?? "success",
+		metadata: input.metadata ?? { operation: input.operation },
+	});
+}
+
+/**
+ * Release a credit reservation on error.
+ * Fire-and-forget: logs but does not throw (avoids masking the original error).
+ */
+export async function releaseCreditReservation(
+	reservationId: string,
+	reason: "error" | "cancelled" = "error",
+): Promise<void> {
+	try {
+		await releaseAiReservation({
+			reservationId,
+			idempotencyKey: `release:${reservationId}`,
+			reason,
+		});
+	} catch (releaseErr) {
+		logger.error(
+			{ reservationId, reason, error: releaseErr },
+			"releaseCreditReservation: failed to release reservation",
+		);
+	}
 }
 
 /**
@@ -80,8 +154,7 @@ export function creditGate(operation: string, estimatedCostKopecks: bigint) {
 
 		if (!wallet) {
 			throw new ORPCError("FAILED_PRECONDITION", {
-				message:
-					"AI Wallet not initialized. Visit Settings > Billing to activate.",
+				message: "AI Wallet not initialized. Visit Settings > Billing to activate.",
 			});
 		}
 
@@ -114,8 +187,7 @@ export function creditGate(operation: string, estimatedCostKopecks: bigint) {
 			}
 			if (err instanceof WalletNotFoundError) {
 				throw new ORPCError("FAILED_PRECONDITION", {
-					message:
-						"AI Wallet not found. Visit Settings > Billing to activate.",
+					message: "AI Wallet not found. Visit Settings > Billing to activate.",
 				});
 			}
 			// Unexpected error — let it propagate for 500-level handling

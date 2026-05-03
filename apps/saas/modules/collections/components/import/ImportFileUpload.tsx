@@ -60,7 +60,8 @@ function parseJSON(text: string): ParsedImportData {
 		const row: Record<string, string> = {};
 		columns.forEach((col) => {
 			const val = item[col];
-			row[col] = val == null ? "" : typeof val === "object" ? JSON.stringify(val) : String(val);
+			row[col] =
+				val == null ? "" : typeof val === "object" ? JSON.stringify(val) : String(val);
 		});
 		return row;
 	});

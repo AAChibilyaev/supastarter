@@ -1,8 +1,8 @@
+import { JobsDashboardPage } from "@search/components/pages/JobsDashboardPage";
 import {
 	getSearchOrganizationMetadataTitle,
 	getSearchOrganizationRouteContext,
 } from "@search/lib/server";
-import { JobsDashboardPage } from "@search/components/pages/JobsDashboardPage";
 import { PageHeader } from "@shared/components/PageHeader";
 import { getTranslations } from "next-intl/server";
 

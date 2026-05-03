@@ -560,7 +560,14 @@
 			"latencyP95": "p95",
 			"latencyP99": "p99",
 			"noLatencyData": "Les données de latence apparaîtront après le traitement des requêtes de recherche.",
-			"ctrTrendDesc": "Taux de clics dans le temps"
+			"ctrTrendDesc": "Taux de clics dans le temps",
+			"tabTopQueries": "Requêtes principales",
+			"topQueriesTitle": "Requêtes de recherche",
+			"topQueriesDescription": "Les requêtes de recherche les plus populaires dans vos index.",
+			"exportReport": "Exporter le rapport",
+			"exportReportTooltip": "Télécharger les données analytiques en CSV",
+			"geoMap": "Carte géographique",
+			"geoMapDescription": "Géographie des requêtes de recherche — bientôt disponible"
 		},
 		"importJobs": {
 			"tab": "Tâches d'import",

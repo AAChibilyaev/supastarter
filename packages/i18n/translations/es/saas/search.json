@@ -167,7 +167,14 @@
 			"noActivity": "No hay actividad reciente.",
 			"allIndexes": "Todos los índices",
 			"searchesColumn": "Búsquedas",
-			"ctrColumn": "CTR"
+			"ctrColumn": "CTR",
+			"tabTopQueries": "Consultas principales",
+			"topQueriesTitle": "Consultas de búsqueda",
+			"topQueriesDescription": "Las consultas de búsqueda más populares en sus índices.",
+			"exportReport": "Exportar informe",
+			"exportReportTooltip": "Descargar datos analíticos como CSV",
+			"geoMap": "Mapa geográfico",
+			"geoMapDescription": "Geografía de consultas de búsqueda — próximamente"
 		},
 		"widget": {
 			"description": "Configure y personalice su widget de búsqueda. Establezca filtros, autocompletado, búsqueda por voz y emblébelo en su sitio.",

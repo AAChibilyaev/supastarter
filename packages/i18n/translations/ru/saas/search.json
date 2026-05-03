@@ -168,7 +168,14 @@
 			"noActivity": "Нет недавней активности.",
 			"allIndexes": "Все индексы",
 			"searchesColumn": "Поиски",
-			"ctrColumn": "CTR"
+			"ctrColumn": "CTR",
+			"tabTopQueries": "Топ запросов",
+			"topQueriesTitle": "Поисковые запросы",
+			"topQueriesDescription": "Самые популярные поисковые запросы в ваших индексах.",
+			"exportReport": "Экспорт отчёта",
+			"exportReportTooltip": "Скачать данные аналитики в CSV",
+			"geoMap": "Гео-карта",
+			"geoMapDescription": "География поисковых запросов — скоро"
 		},
 		"widget": {
 			"description": "Настройте и кастомизируйте виджет поиска. Установите фильтры, автодополнение, голосовой поиск и встройте его на свой сайт.",

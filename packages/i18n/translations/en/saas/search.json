@@ -168,7 +168,14 @@
 			"recentActivity": "Recent Activity",
 			"noActivity": "No recent activity to display.",
 			"searchesColumn": "Searches",
-			"ctrColumn": "CTR"
+			"ctrColumn": "CTR",
+			"tabTopQueries": "Top Queries",
+			"topQueriesTitle": "Search Queries",
+			"topQueriesDescription": "Most popular search queries across your indexes.",
+			"exportReport": "Export Report",
+			"exportReportTooltip": "Download analytics data as CSV",
+			"geoMap": "Geo Map",
+			"geoMapDescription": "Search query geography — coming soon"
 		},
 		"widget": {
 			"description": "Configure and customize your search widget. Set up filters, autocomplete, voice search, and embed it on your site.",

@@ -168,7 +168,14 @@
 			"noActivity": "Keine aktuellen Aktivitäten.",
 			"allIndexes": "Alle Indizes",
 			"searchesColumn": "Suchanfragen",
-			"ctrColumn": "CTR"
+			"ctrColumn": "CTR",
+			"tabTopQueries": "Top-Anfragen",
+			"topQueriesTitle": "Suchanfragen",
+			"topQueriesDescription": "Die beliebtesten Suchanfragen in Ihren Indizes.",
+			"exportReport": "Bericht exportieren",
+			"exportReportTooltip": "Analytikdaten als CSV herunterladen",
+			"geoMap": "Geo-Karte",
+			"geoMapDescription": "Geografie der Suchanfragen — bald verfügbar"
 		},
 		"widget": {
 			"description": "Konfigurieren und passen Sie Ihr Such-Widget an. Richten Sie Filter, Autovervollständigung, Sprachsuche ein und betten Sie es in Ihre Website ein.",

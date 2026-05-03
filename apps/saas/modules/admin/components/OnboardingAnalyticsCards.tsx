@@ -47,10 +47,24 @@ interface CohortRow {
 	firstPayment: number;
 }
 
+interface HealthScoreBucket {
+	label: string;
+	minScore: number;
+	maxScore: number;
+	count: number;
+}
+
+interface HealthScoreDistribution {
+	totalOrgs: number;
+	activeOrgs: number;
+	buckets: HealthScoreBucket[];
+}
+
 interface AnalyticsData {
 	funnel: FunnelStep[];
 	timeToFirstValue: TimeToFirstValue;
 	cohorts: CohortRow[];
+	healthScoreDistribution: HealthScoreDistribution;
 }
 
 const FUNNEL_COLORS = [
@@ -65,7 +79,7 @@ const FUNNEL_COLORS = [
 ];
 
 function formatHours(hours: number | null): string {
-	if (hours === null) return "—";
+	if (hours === null) return "\u2014";
 	if (hours < 1) return `${Math.round(hours * 60)} min`;
 	if (hours < 24) return `${Math.round(hours)} h`;
 	const days = Math.round((hours / 24) * 10) / 10;
@@ -135,6 +149,20 @@ function downloadCsv(data: AnalyticsData) {
 				cohort.firstTeamMember,
 				cohort.firstIntegration,
 				cohort.firstPayment,
+			].join(","),
+		);
+	}
+
+	rows.push("");
+	rows.push("Health Score Distribution");
+	rows.push(["Bucket", "Orgs", "Active", "Total"].join(","));
+	for (const bucket of data.healthScoreDistribution.buckets) {
+		rows.push(
+			[
+				bucket.label,
+				bucket.count,
+				data.healthScoreDistribution.activeOrgs,
+				data.healthScoreDistribution.totalOrgs,
 			].join(","),
 		);
 	}
@@ -242,7 +270,7 @@ function TimeToFirstValueCard({ ttfv }: { ttfv: TimeToFirstValue }) {
 			<CardContent>
 				{ttfv.count === 0 ? (
 					<div className="py-8 text-sm text-center text-muted-foreground">
-						No data yet — waiting for first searches
+						No data yet \u2014 waiting for first searches
 					</div>
 				) : (
 					<div className="gap-4 sm:grid-cols-4 grid grid-cols-2">
@@ -328,7 +356,7 @@ function CohortTable({ cohorts }: { cohorts: CohortRow[] }) {
 								const rate = (val: number) =>
 									row.orgCount > 0
 										? `${Math.round((val / row.orgCount) * 100)}%`
-										: "—";
+										: "\u2014";
 								return (
 									<tr key={row.week} className="border-b hover:bg-muted/50">
 										<td className="p-2 font-medium whitespace-nowrap">
@@ -345,6 +373,75 @@ function CohortTable({ cohorts }: { cohorts: CohortRow[] }) {
 							})}
 						</tbody>
 					</table>
+				</div>
+			</CardContent>
+		</Card>
+	);
+}
+
+function HealthScoreChart({ distribution }: { distribution: HealthScoreDistribution }) {
+	if (distribution.buckets.length === 0) {
+		return (
+			<Card>
+				<CardHeader>
+					<CardTitle className="text-base">Health Score Distribution</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<div className="py-8 text-sm text-center text-muted-foreground">
+						No data available yet
+					</div>
+				</CardContent>
+			</Card>
+		);
+	}
+
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle className="text-base">Health Score Distribution</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<div className="mb-2 text-sm text-muted-foreground">
+					{distribution.activeOrgs} active / {distribution.totalOrgs} total organizations
+				</div>
+				<div style={{ width: "100%", height: 250 }}>
+					<ResponsiveContainer width="100%" height="100%">
+						<BarChart
+							data={distribution.buckets}
+							margin={{ top: 8, right: 24, left: 8, bottom: 8 }}
+						>
+							<CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+							<XAxis
+								dataKey="label"
+								tick={{ fontSize: 12 }}
+								className="text-muted-foreground"
+							/>
+							<YAxis
+								tick={{ fontSize: 12 }}
+								className="text-muted-foreground"
+								allowDecimals={false}
+							/>
+							<Tooltip
+								formatter={(
+									value: number,
+									_name: string,
+									props: { payload: HealthScoreBucket },
+								) => {
+									const bucket = props.payload;
+									return [
+										`${bucket.count} org${bucket.count !== 1 ? "s" : ""} (score ${bucket.label})`,
+										"Orgs",
+									];
+								}}
+							/>
+							<Bar
+								dataKey="count"
+								radius={[4, 4, 0, 0]}
+								fill="#6366f1"
+								maxBarSize={48}
+							/>
+						</BarChart>
+					</ResponsiveContainer>
 				</div>
 			</CardContent>
 		</Card>
@@ -393,6 +490,7 @@ export function OnboardingAnalyticsCards() {
 			</div>
 
 			<TimeToFirstValueCard ttfv={data.timeToFirstValue} />
+			<HealthScoreChart distribution={data.healthScoreDistribution} />
 			<FunnelChart funnel={data.funnel} />
 			<CohortTable cohorts={data.cohorts} />
 		</div>

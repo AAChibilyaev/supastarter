@@ -25,6 +25,7 @@
 		"@repo/i18n": "workspace:*",
 		"@repo/logs": "workspace:*",
 		"@repo/mail": "workspace:*",
+		"@repo/nlp": "workspace:*",
 		"@repo/notifications": "workspace:*",
 		"@repo/payments": "workspace:*",
 		"@repo/search": "workspace:*",

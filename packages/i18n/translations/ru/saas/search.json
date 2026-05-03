@@ -970,6 +970,10 @@
 			"queryByPlaceholder": "Поиск по полям…",
 			"filterByPlaceholder": "Выражение фильтра…",
 			"clear": "Очистить фильтры",
+			"deleteByFilter": "Удалить по фильтру",
+			"deleteByFilterTitle": "Удалить документы по фильтру",
+			"deleteByFilterMessage": "Вы уверены, что хотите удалить все документы, соответствующие \"{filterBy}\"? Это действие нельзя отменить.",
+			"deleteByFilterSuccess": "{count} документ(ов) удалено",
 			"columnId": "ID"
 		},
 		"files": {

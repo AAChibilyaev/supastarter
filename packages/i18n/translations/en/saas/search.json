@@ -970,6 +970,10 @@
 			"queryByPlaceholder": "Query by fields…",
 			"filterByPlaceholder": "Filter by expression…",
 			"clear": "Clear filters",
+			"deleteByFilter": "Delete by Filter",
+			"deleteByFilterTitle": "Delete documents by filter",
+			"deleteByFilterMessage": "Are you sure you want to delete all documents matching \"{filterBy}\"? This action cannot be undone.",
+			"deleteByFilterSuccess": "{count} document(s) deleted",
 			"columnId": "ID"
 		},
 		"files": {

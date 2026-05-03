@@ -179,8 +179,6 @@ function getOperatorsForType(type: string) {
 	return FILTER_OPERATORS_BY_TYPE[normalized] ?? FILTER_OPERATORS_BY_TYPE.default;
 }
 
-type FilterOperator = string;
-
 // ─── Field-type to Zod mapping ──────────────────────────────────────────────
 
 function buildFieldSchema(fields: SchemaField[]) {
@@ -369,6 +367,7 @@ function InlineCellEditor({
 				onChange={(e) => setEditValue(e.target.value)}
 				onKeyDown={handleKeyDown}
 				onBlur={commit}
+				// oxlint-disable-next-line jsx-a11y/no-autofocus
 				autoFocus
 			>
 				<option value="">---</option>
@@ -568,6 +567,22 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 		},
 		onError: (error) => {
 			toastError(error instanceof Error ? error.message : t("search.documents.saveError"));
+		},
+	});
+
+	const deleteByFilterMutation = useMutation({
+		...orpc.search.deleteDocumentsByFilter.mutationOptions(),
+		onSuccess: (data) => {
+			toastSuccess(t("search.documents.deleteByFilterSuccess", { count: data.deleted }));
+			void queryClient.invalidateQueries({
+				queryKey: orpc.search.listDocuments.key(),
+			});
+			setFilterField("");
+			setFilterOperator("contains");
+			setFilterValue("");
+		},
+		onError: (error) => {
+			toastError(error instanceof Error ? error.message : t("search.documents.deleteError"));
 		},
 	});
 
@@ -870,6 +885,53 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 	const handleClearSelection = () => {
 		setRowSelection({});
 	};
+
+	// ── Delete by filter ────────────────────────────────────────────
+
+	const buildFilterByExpression = useCallback(() => {
+		if (!filterField || !filterOperator) return "";
+		switch (filterOperator) {
+			case "contains":
+				return `${filterField}:contains(${filterValue})`;
+			case "equals":
+				return `${filterField}:=${filterValue}`;
+			case "starts_with":
+				return `${filterField}:startswith(${filterValue})`;
+			case "ends_with":
+				return `${filterField}:endswith(${filterValue})`;
+			case "gt":
+				return `${filterField}:>${filterValue}`;
+			case "gte":
+				return `${filterField}:>=${filterValue}`;
+			case "lt":
+				return `${filterField}:<${filterValue}`;
+			case "lte":
+				return `${filterField}:<=${filterValue}`;
+			case "not_empty":
+				return `${filterField}:!=`;
+			case "is_empty":
+				return `${filterField}:`;
+			default:
+				return `${filterField}:=${filterValue}`;
+		}
+	}, [filterField, filterOperator, filterValue]);
+
+	const handleDeleteByFilter = useCallback(() => {
+		const filterBy = buildFilterByExpression();
+		if (!filterBy) return;
+		confirm({
+			title: t("search.documents.deleteByFilterTitle"),
+			message: t("search.documents.deleteByFilterMessage", { filterBy }),
+			destructive: true,
+			onConfirm: () => {
+				deleteByFilterMutation.mutate({
+					organizationId,
+					slug,
+					filterBy,
+				});
+			},
+		});
+	}, [buildFilterByExpression, confirm, t, deleteByFilterMutation, organizationId, slug]);
 
 	// ── Edit sheet ───────────────────────────────────────────────────────────
 
@@ -1195,6 +1257,18 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 							<XIcon className="size-3.5" />
 							{t("search.documents.clear")}
 						</Button>
+						<Button
+							variant="destructive"
+							size="sm"
+							disabled={
+								!filterField || !filterOperator || deleteByFilterMutation.isPending
+							}
+							loading={deleteByFilterMutation.isPending}
+							onClick={handleDeleteByFilter}
+						>
+							<Trash2Icon className="size-3.5" />
+							{t("search.documents.deleteByFilter")}
+						</Button>
 					</div>
 				)}
 			</div>
@@ -1274,7 +1348,9 @@ export function DocumentsTable({ organizationId, slug, fields: fieldsProp }: Doc
 																	)}
 															</div>
 															{header.column.getCanResize() && (
+																// oxlint-disable-next-line jsx-a11y/no-static-element-interactions
 																<div
+																	role="separator"
 																	onDoubleClick={() =>
 																		header.column.resetSize()
 																	}

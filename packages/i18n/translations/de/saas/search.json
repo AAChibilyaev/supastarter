@@ -1085,6 +1085,10 @@
 			"queryByPlaceholder": "Felder durchsuchen…",
 			"filterByPlaceholder": "Filterausdruck…",
 			"clear": "Filter zurücksetzen",
+			"deleteByFilter": "Nach Filter löschen",
+			"deleteByFilterTitle": "Dokumente nach Filter löschen",
+			"deleteByFilterMessage": "Sind Sie sicher, dass Sie alle Dokumente löschen möchten, die \"{filterBy}\" entsprechen? Diese Aktion kann nicht rückgängig gemacht werden.",
+			"deleteByFilterSuccess": "{count} Dokument(e) gelöscht",
 			"columnId": "ID"
 		},
 		"files": {

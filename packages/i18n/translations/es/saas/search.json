@@ -1085,6 +1085,10 @@
 			"queryByPlaceholder": "Buscar por campos…",
 			"filterByPlaceholder": "Expresión de filtro…",
 			"clear": "Limpiar filtros",
+			"deleteByFilter": "Eliminar por filtro",
+			"deleteByFilterTitle": "Eliminar documentos por filtro",
+			"deleteByFilterMessage": "¿Está seguro de que desea eliminar todos los documentos que coinciden con \"{filterBy}\"? Esta acción no se puede deshacer.",
+			"deleteByFilterSuccess": "{count} documento(s) eliminado(s)",
 			"columnId": "ID"
 		},
 		"files": {

@@ -20,6 +20,7 @@ import { createIndex } from "./procedures/create-index";
 import { createScopedToken } from "./procedures/create-scoped-token";
 import { ctrAnalytics } from "./procedures/ctr-analytics";
 import { getCurations, updateCurations } from "./procedures/curations";
+import { deleteDocumentsByFilter } from "./procedures/delete-documents-by-filter";
 import { deleteIndex } from "./procedures/delete-index";
 import { dynamicSearch } from "./procedures/dynamic-search";
 import { exportIndexDocuments } from "./procedures/export-documents";

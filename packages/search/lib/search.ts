@@ -11,6 +11,7 @@ interface TypesenseSearchParams {
 	per_page?: number;
 	page?: number;
 	highlight_fields?: string;
+	vector_query?: string;
 }
 
 export interface SearchDocumentsInput {
@@ -24,6 +25,10 @@ export interface SearchDocumentsInput {
 	perPage?: number;
 	page?: number;
 	highlightFields?: string;
+	/** Per-search HNSW ef parameter — controls recall quality for vector search (higher = better recall, slower). */
+	vectorQueryEf?: number;
+	/** Vector query string in Typesense format, e.g. "vec:([0.1, 0.2, ...], k:10)". */
+	vectorQuery?: string;
 }
 
 export interface SearchDocumentsResult {
@@ -51,6 +56,12 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		config.maxPerPage,
 	);
 
+	let vectorQuery = input.vectorQuery;
+	if (vectorQuery !== undefined && input.vectorQueryEf !== undefined) {
+		// Append ef parameter to the vector query string, e.g. "vec:([...], k:10, ef:200)"
+		vectorQuery = vectorQuery.replace(/\)$/, `, ef:${input.vectorQueryEf})`);
+	}
+
 	const params: TypesenseSearchParams = {
 		q: input.q,
 		query_by: input.queryBy ?? "",
@@ -60,6 +71,7 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 		per_page: perPage,
 		page: input.page ?? 1,
 		highlight_fields: input.highlightFields,
+		vector_query: vectorQuery,
 	};
 
 	const response = await client.collections(input.alias).documents().search(params);
@@ -93,6 +105,10 @@ export async function multiSearchDocuments(
 			Math.max(entry.perPage ?? config.defaultPerPage, 1),
 			config.maxPerPage,
 		);
+		let vectorQuery = entry.vectorQuery;
+		if (vectorQuery !== undefined && entry.vectorQueryEf !== undefined) {
+			vectorQuery = vectorQuery.replace(/\)$/, `, ef:${entry.vectorQueryEf})`);
+		}
 		return {
 			collection: entry.alias,
 			q: entry.q,
@@ -103,6 +119,7 @@ export async function multiSearchDocuments(
 			per_page: perPage,
 			page: entry.page ?? 1,
 			highlight_fields: entry.highlightFields,
+			vector_query: vectorQuery,
 		};
 	});
 

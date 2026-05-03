@@ -41,6 +41,8 @@ export const facetSearch = protectedProcedure
 			facetSamplePercent: z.number().int().min(1).max(100).optional(),
 			facetQuery: z.string().optional(),
 			facetQueryNumTypos: z.number().int().min(0).max(2).optional(),
+			facetSampleSlope: z.number().min(0).max(1).optional(),
+			facetSampleThreshold: z.number().int().min(0).optional(),
 		}),
 	)
 	.output(
@@ -73,6 +75,12 @@ export const facetSearch = protectedProcedure
 		if (input.facetQuery) searchParams.facet_query = input.facetQuery;
 		if (input.facetQueryNumTypos !== undefined) {
 			searchParams.facet_query_num_typos = input.facetQueryNumTypos;
+		}
+		if (input.facetSampleSlope !== undefined) {
+			searchParams.facet_sample_slope = input.facetSampleSlope;
+		}
+		if (input.facetSampleThreshold !== undefined) {
+			searchParams.facet_sample_threshold = input.facetSampleThreshold;
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any

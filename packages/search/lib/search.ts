@@ -93,7 +93,7 @@ export async function searchDocuments(input: SearchDocumentsInput): Promise<Sear
 	const params: TypesenseSearchParams = {
 		q: input.q,
 		query_by: input.queryBy ?? "",
-		filter_by: combineTenantFilter(input.tenantId, combinedUserFilter),
+		filter_by: combineTenantFilter(input.tenantId, input.filterBy),
 		facet_by: input.facetBy,
 		sort_by: input.sortBy,
 		per_page: perPage,
@@ -144,7 +144,7 @@ export async function multiSearchDocuments(
 			collection: entry.alias,
 			q: entry.q,
 			query_by: entry.queryBy ?? "",
-			filter_by: combineTenantFilter(entry.tenantId, combinedMultiFilter),
+			filter_by: combineTenantFilter(entry.tenantId, entry.filterBy),
 			facet_by: entry.facetBy,
 			sort_by: entry.sortBy,
 			per_page: perPage,

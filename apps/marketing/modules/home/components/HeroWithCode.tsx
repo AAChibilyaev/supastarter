@@ -43,7 +43,7 @@ export function HeroWithCode() {
 			<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_30%_20%,oklch(0.45_0_0/0.08),transparent_55%)]" />
 			<div className="inset-0 absolute -z-10 bg-[radial-gradient(circle_at_85%_80%,oklch(0.45_0_0/0.05),transparent_50%)]" />
 
-			<div className="gap-10 py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-24 container grid">
+			<div className="gap-10 py-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-24 container grid">
 				{/* Left column: text + CTAs */}
 				<div className="flex flex-col justify-center">
 					{/* Announcement badge */}
@@ -53,7 +53,7 @@ export function HeroWithCode() {
 					</div>
 
 					{/* Gradient heading */}
-					<h1 className="font-bold text-5xl tracking-tight leading-[1.05] text-balance md:text-6xl lg:text-7xl">
+					<h1 className="font-bold text-4xl tracking-tight sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-balance">
 						<span className="bg-gradient-to-r from-primary via-primary/80 to-foreground bg-clip-text text-transparent">
 							{t("home.hero.title")}
 						</span>
@@ -63,10 +63,10 @@ export function HeroWithCode() {
 						{t("home.hero.subtitle")}
 					</p>
 
-					{/* CTA buttons — single row; scroll on narrow widths */}
-					<div className="mt-8 min-w-0 gap-3 flex items-center overflow-x-auto">
+					{/* CTA buttons — wrap on narrow widths */}
+					<div className="mt-8 gap-3 flex flex-wrap items-center">
 						<Button
-							className={cn(marketingCtaButtonClassName(true), "shrink-0")}
+							className={cn(marketingCtaButtonClassName(true), "sm:w-auto w-full")}
 							size="lg"
 							variant="primary"
 							asChild
@@ -77,19 +77,19 @@ export function HeroWithCode() {
 							</a>
 						</Button>
 						{config.docsUrl && (
-							<Button className="shrink-0" variant="ghost" size="lg" asChild>
+							<Button className="sm:w-auto w-full" variant="ghost" size="lg" asChild>
 								<a href={config.docsUrl}>{t("home.hero.documentation")}</a>
 							</Button>
 						)}
 					</div>
 
-					{/* Feature badge row — single line; scroll on narrow widths */}
-					<div className="mt-6 min-w-0 gap-2 flex items-center overflow-x-auto">
+					{/* Feature badge row — wrap on narrow widths */}
+					<div className="mt-6 gap-2 flex flex-wrap items-center">
 						{featureBadges.map(({ icon: Icon, label }) => (
 							<Badge
 								key={label}
 								status="info"
-								className="gap-1.5 px-3 py-1 text-xs font-medium shrink-0 whitespace-nowrap normal-case"
+								className="gap-1.5 px-3 py-1 text-xs font-medium whitespace-nowrap normal-case"
 							>
 								<Icon className="size-3" />
 								{label}

@@ -31,4 +31,11 @@
 	::file-selector-button {
 		border-color: var(--border);
 	}
+
+	p,
+	li,
+	blockquote {
+		overflow-wrap: break-word;
+		word-break: break-word;
+	}
 }

@@ -25,13 +25,13 @@ export function PricingPlans() {
 	const [interval, setInterval] = useState<BillingInterval>("monthly");
 
 	return (
-		<section id="pricing" className="py-24 border-b border-border/60">
+		<section id="pricing" className="border-b border-border/60 py-14 md:py-24">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
 					<Badge status="info" className="mb-4">
 						{t("home.pricing.badge")}
 					</Badge>
-					<h2 className="font-semibold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
+					<h2 className="font-semibold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
 						{t("home.pricing.title")}
 					</h2>
 					<p className="mt-4 text-lg leading-relaxed text-muted-foreground">
@@ -61,7 +61,7 @@ export function PricingPlans() {
 					</Tabs>
 				</div>
 
-				<div className="mt-12 gap-6 lg:grid-cols-3 grid">
+				<div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 					{plans.map((plan) => {
 						const features = Array.from({ length: plan.featuresCount }, (_, i) =>
 							t(`home.pricing.plans.${plan.key}.features.${i}`),

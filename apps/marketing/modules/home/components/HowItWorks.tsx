@@ -6,17 +6,20 @@ export function HowItWorks() {
 	const t = useTranslations();
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="py-14 md:py-24 border-b border-border/60">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-semibold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
+					<h2 className="font-semibold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
 						{t("home.howItWorks.title")}
 					</h2>
 				</div>
 
-				<div className="mt-20 lg:grid-cols-3 gap-0 grid grid-cols-1">
+				<div className="mt-12 gap-0 md:mt-20 lg:grid-cols-3 grid grid-cols-1">
 					{steps.map((step, i) => (
-						<div key={step} className="relative flex flex-col items-center text-center">
+						<div
+							key={step}
+							className="pb-12 last:pb-0 lg:pb-0 relative flex flex-col items-center text-center"
+						>
 							{/* Timeline line — top half connects to previous, bottom half to next */}
 							<div className="mb-6 relative flex w-full items-center justify-center">
 								{/* Left connector line (hidden on first) */}

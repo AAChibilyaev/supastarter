@@ -45,10 +45,10 @@ export function FeaturesGrid() {
 	const t = useTranslations();
 
 	return (
-		<section id="features" className="py-24 border-b border-border/60">
+		<section id="features" className="py-14 md:py-24 border-b border-border/60">
 			<div className="container">
 				<div className="max-w-2xl mx-auto text-center">
-					<h2 className="font-semibold text-3xl tracking-tight leading-tight text-balance md:text-4xl">
+					<h2 className="font-semibold text-3xl tracking-tight leading-tight md:text-4xl text-balance">
 						{t("home.features.title")}
 					</h2>
 					<p className="mt-4 text-lg leading-relaxed text-muted-foreground">
@@ -56,7 +56,7 @@ export function FeaturesGrid() {
 					</p>
 				</div>
 
-				<div className="mt-16 gap-4 md:grid-cols-4 grid grid-cols-1">
+				<div className="mt-10 grid grid-cols-1 gap-4 md:mt-16 md:grid-cols-4">
 					{items.map(({ key, icon: Icon }) => (
 						<Card
 							key={key}

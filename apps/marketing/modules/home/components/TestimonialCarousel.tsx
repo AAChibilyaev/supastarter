@@ -61,9 +61,9 @@ export function TestimonialCarousel() {
 	const testimonial = TESTIMONIALS[activeIndex]!;
 
 	return (
-		<section className="py-24 border-b border-border/60">
+		<section className="border-b border-border/60 py-14 md:py-24">
 			<div className="container">
-				<h2 className="font-semibold text-3xl tracking-tight leading-tight text-center text-balance md:text-4xl">
+				<h2 className="font-semibold text-3xl tracking-tight leading-tight md:text-4xl text-center text-balance">
 					{t("testimonials.title")}
 				</h2>
 				<p className="mt-4 text-lg leading-relaxed text-center text-muted-foreground">
@@ -75,7 +75,7 @@ export function TestimonialCarousel() {
 					onMouseEnter={() => setIsPaused(true)}
 					onMouseLeave={() => setIsPaused(false)}
 				>
-					<div className="p-10 relative rounded-3xl border bg-card transition-all duration-300">
+					<div className="relative rounded-3xl border bg-card p-6 transition-all duration-300 sm:p-10">
 						{/* Quote icon */}
 						<div className="mb-4 text-6xl leading-none text-primary/20 select-none">
 							&ldquo;

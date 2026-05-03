@@ -19,13 +19,13 @@ export function LogosWall() {
 	const t = useTranslations("home");
 
 	return (
-		<section className="py-20 border-b border-border/60">
+		<section className="border-b border-border/60 py-12 md:py-20">
 			<div className="container">
 				<p className="text-sm font-semibold tracking-wider text-center text-muted-foreground uppercase">
 					{t("logos.title")}
 				</p>
 
-				<div className="mt-10 gap-x-16 gap-y-8 flex flex-wrap items-center justify-center">
+				<div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-6 md:gap-x-16 md:gap-y-8">
 					{LOGOS.map((logo) => (
 						<div
 							key={logo.name}

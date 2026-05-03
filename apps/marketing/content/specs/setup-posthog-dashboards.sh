@@ -6,7 +6,7 @@
 # Prerequisites: POSTHOG_PERSONAL_API_KEY and POSTHOG_PROJECT_ID set.
 #
 # Usage:
-#   export POSTHOG_PERSONAL_API_KEY="phx_xxx"
+#   export POSTHOG_PERSONAL_API_KEY="***"
 #   export POSTHOG_PROJECT_ID="12345"
 #   bash setup-posthog-dashboards.sh
 # ============================================================

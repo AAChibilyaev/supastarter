@@ -425,7 +425,8 @@
 		"roles": {
 			"admin": "Admin",
 			"member": "Miembro",
-			"owner": "Propietario"
+			"owner": "Propietario",
+			"viewer": "Espectador"
 		},
 		"settings": {
 			"changeName": {
@@ -2024,7 +2025,57 @@
 		"uploadProgress": "Progreso de carga",
 		"estimatedTime": "Tiempo estimado: unos segundos",
 		"completed": "Completado",
-		"failed": "Falló"
+		"failed": "Falló",
+		"files": {
+			"name": "Nombre",
+			"type": "Tipo",
+			"size": "Tamaño",
+			"words": "Palabras",
+			"uploaded": "Subido",
+			"count": "{{count}} archivos",
+			"empty": "Aún no hay archivos. Suba documentos para comenzar a buscar.",
+			"columns": "Columnas",
+			"toggleColumns": "Alternar columnas",
+			"delete": "Eliminar",
+			"deleteTitle": "Eliminar archivo",
+			"deleteDescription": "¿Está seguro de que desea eliminar \"{{name}}\"? Esta acción no se puede deshacer.",
+			"deleted": "{{name}} eliminado",
+			"deleteError": "Error al eliminar el archivo",
+			"cancel": "Cancelar",
+			"close": "Cerrar",
+			"previewImage": "Haga clic para abrir la imagen en una nueva pestaña",
+			"previewUrl": "Haga clic para abrir la página web",
+			"previewGeneric": "La vista previa no está disponible para este tipo de archivo"
+		}
 	},
-	"__test": {}
+	"feedback": {
+		"nps": {
+			"title": "¿Qué tan probable es que recomiendes AACsearch?",
+			"question": "En una escala del 0 al 10, ¿qué tan probable es que recomiendes AACsearch a un amigo o colega?",
+			"notLikely": "Poco probable",
+			"extremelyLikely": "Muy probable",
+			"followUp": {
+				"detractor": "¿Qué podríamos hacer mejor?",
+				"passive": "¿Qué te impide recomendarnos?",
+				"promoter": "¿Qué es lo que más te gusta?"
+			},
+			"placeholder": "Tus comentarios nos ayudan a mejorar...",
+			"submit": "Enviar comentarios",
+			"dismiss": "Quizás después",
+			"thankYou": "¡Gracias por tus comentarios!",
+			"remindLater": "Recordarme en 3 meses"
+		},
+		"csat": {
+			"title": "¿Cómo fue tu experiencia de soporte?",
+			"question": "¿Qué tan satisfecho estás con el soporte que recibiste?",
+			"veryDissatisfied": "Muy insatisfecho",
+			"dissatisfied": "Insatisfecho",
+			"neutral": "Neutral",
+			"satisfied": "Satisfecho",
+			"verySatisfied": "Muy satisfecho",
+			"submit": "Enviar",
+			"thankYou": "¡Gracias por tus comentarios!",
+			"skip": "Saltar"
+		}
+	}
 }

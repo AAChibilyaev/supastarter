@@ -425,7 +425,8 @@
 		"roles": {
 			"admin": "Admin",
 			"member": "Member",
-			"owner": "Owner"
+			"owner": "Owner",
+			"viewer": "Viewer"
 		},
 		"settings": {
 			"changeName": {
@@ -2024,7 +2025,57 @@
 		"uploadProgress": "Upload progress",
 		"estimatedTime": "Estimated time: a few seconds",
 		"completed": "Completed",
-		"failed": "Failed"
+		"failed": "Failed",
+		"files": {
+			"name": "Name",
+			"type": "Type",
+			"size": "Size",
+			"words": "Words",
+			"uploaded": "Uploaded",
+			"count": "{{count}} files",
+			"empty": "No files yet. Upload documents to start searching.",
+			"columns": "Columns",
+			"toggleColumns": "Toggle columns",
+			"delete": "Delete",
+			"deleteTitle": "Delete file",
+			"deleteDescription": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+			"deleted": "{{name}} deleted",
+			"deleteError": "Failed to delete file",
+			"cancel": "Cancel",
+			"close": "Close",
+			"previewImage": "Click to open the image in a new tab",
+			"previewUrl": "Click to open the web page",
+			"previewGeneric": "Preview is not available for this file type"
+		}
 	},
-	"__test": {}
+	"feedback": {
+		"nps": {
+			"title": "How likely are you to recommend AACsearch?",
+			"question": "On a scale of 0-10, how likely are you to recommend AACsearch to a friend or colleague?",
+			"notLikely": "Not likely",
+			"extremelyLikely": "Extremely likely",
+			"followUp": {
+				"detractor": "What could we do better?",
+				"passive": "What keeps you from recommending us?",
+				"promoter": "What do you love most?"
+			},
+			"placeholder": "Your feedback helps us improve...",
+			"submit": "Submit feedback",
+			"dismiss": "Maybe later",
+			"thankYou": "Thank you for your feedback!",
+			"remindLater": "Remind me in 3 months"
+		},
+		"csat": {
+			"title": "How was your support experience?",
+			"question": "How satisfied were you with the support you received?",
+			"veryDissatisfied": "Very dissatisfied",
+			"dissatisfied": "Dissatisfied",
+			"neutral": "Neutral",
+			"satisfied": "Satisfied",
+			"verySatisfied": "Very satisfied",
+			"submit": "Submit",
+			"thankYou": "Thank you for your feedback!",
+			"skip": "Skip"
+		}
+	}
 }

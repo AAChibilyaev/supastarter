@@ -425,7 +425,8 @@
 		"roles": {
 			"admin": "Administrateur",
 			"member": "Membre",
-			"owner": "Propriétaire"
+			"owner": "Propriétaire",
+			"viewer": "Observateur"
 		},
 		"settings": {
 			"changeName": {
@@ -2049,7 +2050,57 @@
 		"uploadProgress": "Progression du téléchargement",
 		"estimatedTime": "Temps estimé: quelques secondes",
 		"completed": "Terminé",
-		"failed": "Échoué"
+		"failed": "Échoué",
+		"files": {
+			"name": "Nom",
+			"type": "Type",
+			"size": "Taille",
+			"words": "Mots",
+			"uploaded": "Téléchargé",
+			"count": "{{count}} fichiers",
+			"empty": "Pas encore de fichiers. Téléchargez des documents pour commencer la recherche.",
+			"columns": "Colonnes",
+			"toggleColumns": "Afficher/Masquer les colonnes",
+			"delete": "Supprimer",
+			"deleteTitle": "Supprimer le fichier",
+			"deleteDescription": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible.",
+			"deleted": "{{name}} supprimé",
+			"deleteError": "Échec de la suppression du fichier",
+			"cancel": "Annuler",
+			"close": "Fermer",
+			"previewImage": "Cliquez pour ouvrir l'image dans un nouvel onglet",
+			"previewUrl": "Cliquez pour ouvrir la page web",
+			"previewGeneric": "L'aperçu n'est pas disponible pour ce type de fichier"
+		}
 	},
-	"__test": {}
+	"feedback": {
+		"nps": {
+			"title": "Quelle est la probabilité que vous recommandiez AACsearch ?",
+			"question": "Sur une échelle de 0 à 10, quelle est la probabilité que vous recommandiez AACsearch à un ami ou un collègue ?",
+			"notLikely": "Peu probable",
+			"extremelyLikely": "Extrêmement probable",
+			"followUp": {
+				"detractor": "Que pourrions-nous améliorer ?",
+				"passive": "Qu'est-ce qui vous empêche de nous recommander ?",
+				"promoter": "Qu'est-ce que vous aimez le plus ?"
+			},
+			"placeholder": "Vos commentaires nous aident à progresser...",
+			"submit": "Envoyer votre avis",
+			"dismiss": "Peut-être plus tard",
+			"thankYou": "Merci pour votre retour !",
+			"remindLater": "Me rappeler dans 3 mois"
+		},
+		"csat": {
+			"title": "Comment s'est passée votre expérience de support ?",
+			"question": "À quel point êtes-vous satisfait du support que vous avez reçu ?",
+			"veryDissatisfied": "Très insatisfait",
+			"dissatisfied": "Insatisfait",
+			"neutral": "Neutre",
+			"satisfied": "Satisfait",
+			"verySatisfied": "Très satisfait",
+			"submit": "Envoyer",
+			"thankYou": "Merci pour votre retour !",
+			"skip": "Passer"
+		}
+	}
 }

@@ -425,7 +425,8 @@
 		"roles": {
 			"admin": "Administration",
 			"member": "Mitglied",
-			"owner": "Eigentumer"
+			"owner": "Eigentumer",
+			"viewer": "Betrachter"
 		},
 		"settings": {
 			"changeName": {
@@ -2024,7 +2025,57 @@
 		"uploadProgress": "Upload-Fortschritt",
 		"estimatedTime": "Geschätzte Zeit: wenige Sekunden",
 		"completed": "Abgeschlossen",
-		"failed": "Fehlgeschlagen"
+		"failed": "Fehlgeschlagen",
+		"files": {
+			"name": "Name",
+			"type": "Typ",
+			"size": "Größe",
+			"words": "Wörter",
+			"uploaded": "Hochgeladen",
+			"count": "{{count}} Dateien",
+			"empty": "Noch keine Dateien. Laden Sie Dokumente hoch, um mit der Suche zu beginnen.",
+			"columns": "Spalten",
+			"toggleColumns": "Spalten umschalten",
+			"delete": "Löschen",
+			"deleteTitle": "Datei löschen",
+			"deleteDescription": "Sind Sie sicher, dass Sie \"{{name}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+			"deleted": "{{name}} gelöscht",
+			"deleteError": "Fehler beim Löschen der Datei",
+			"cancel": "Abbrechen",
+			"close": "Schließen",
+			"previewImage": "Klicken Sie, um das Bild in einem neuen Tab zu öffnen",
+			"previewUrl": "Klicken Sie, um die Webseite zu öffnen",
+			"previewGeneric": "Für diesen Dateityp ist keine Vorschau verfügbar"
+		}
 	},
-	"__test": {}
+	"feedback": {
+		"nps": {
+			"title": "Wie wahrscheinlich ist es, dass Sie AACsearch weiterempfehlen?",
+			"question": "Auf einer Skala von 0-10: Wie wahrscheinlich würden Sie AACsearch einem Freund oder Kollegen weiterempfehlen?",
+			"notLikely": "Nicht wahrscheinlich",
+			"extremelyLikely": "Äußerst wahrscheinlich",
+			"followUp": {
+				"detractor": "Was könnten wir besser machen?",
+				"passive": "Was hält Sie davon ab, uns zu empfehlen?",
+				"promoter": "Was gefällt Ihnen am besten?"
+			},
+			"placeholder": "Ihr Feedback hilft uns, besser zu werden...",
+			"submit": "Feedback absenden",
+			"dismiss": "Vielleicht später",
+			"thankYou": "Vielen Dank für Ihr Feedback!",
+			"remindLater": "In 3 Monaten erinnern"
+		},
+		"csat": {
+			"title": "Wie war Ihre Support-Erfahrung?",
+			"question": "Wie zufrieden waren Sie mit dem Support, den Sie erhalten haben?",
+			"veryDissatisfied": "Sehr unzufrieden",
+			"dissatisfied": "Unzufrieden",
+			"neutral": "Neutral",
+			"satisfied": "Zufrieden",
+			"verySatisfied": "Sehr zufrieden",
+			"submit": "Absenden",
+			"thankYou": "Vielen Dank für Ihr Feedback!",
+			"skip": "Überspringen"
+		}
+	}
 }
